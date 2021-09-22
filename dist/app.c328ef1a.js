@@ -37681,6 +37681,7 @@ var wrap = document.querySelector('.wrap');
 
 var elems = _toConsumableArray(document.querySelectorAll('.n'));
 
+var ps = document.querySelectorAll('.text > p');
 var sketch = new _module.default();
 window.addEventListener('wheel', function (e) {
   speed += e.deltaY * 0.0003;
@@ -37691,16 +37692,27 @@ var objs = Array(5).fill({
 
 var raf = function raf() {
   position += speed;
-  speed *= 0.8;
-  console.log(position);
+  speed *= 0.8; // console.log(position)
+
   objs.forEach(function (o, i) {
     o.dist = Math.min(Math.abs(position - -i), 1);
     o.dist = 1 - Math.pow(o.dist, 2);
     elems[i].style.transform = "scale(".concat(1 + 0.1 * o.dist, ")");
     var scale = 1 + 0.1 * o.dist;
     sketch.meshes[i].scale.set(scale, scale, scale);
-  });
+  }); // console.log(objs[0].dist, objs[1].dist, objs[2].dist, objs[3].dist, objs[4].dist)
+  // console.log(position)
+
   rounded = Math.round(position);
+  console.log(rounded);
+  ps.forEach(function (p, i) {
+    if (-rounded == i) {
+      ps.forEach(function (pp) {
+        return pp.style.display = 'none';
+      });
+      p.style.display = 'block';
+    }
+  });
   var diff = rounded - position;
   position += Math.sign(diff) * Math.pow(Math.abs(diff), 0.7) * 0.015;
   block.style.transform = "translateY(".concat(-position * 100, "px)");
@@ -37739,7 +37751,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37919" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44023" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
