@@ -19,6 +19,14 @@ let objs = Array(5).fill({dist: 0})
 let raf = () => {
     position += speed
     speed *= 0.8
+    if(position >= 0.3){
+        speed *= 0.3
+        position = 0.3
+    }
+    if(position < -4.3){
+        speed *= 0.3
+        position = -4.3
+    }
     objs.forEach((o, i) => {
         o.dist = Math.min(Math.abs(position - (-i)), 1)
         o.dist = 1 - o.dist**2

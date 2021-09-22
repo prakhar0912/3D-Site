@@ -37694,6 +37694,17 @@ var objs = Array(5).fill({
 var raf = function raf() {
   position += speed;
   speed *= 0.8;
+
+  if (position >= 0.3) {
+    speed *= 0.3;
+    position = 0.3;
+  }
+
+  if (position < -4.3) {
+    speed *= 0.3;
+    position = -4.3;
+  }
+
   objs.forEach(function (o, i) {
     o.dist = Math.min(Math.abs(position - -i), 1);
     o.dist = 1 - Math.pow(o.dist, 2);
