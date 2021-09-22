@@ -6,7 +6,7 @@ let rounded = 0
 let block = document.querySelector('.block')
 let wrap = document.querySelector('.wrap')
 let elems = [...document.querySelectorAll('.n')]
-let ps = document.querySelectorAll('.text > p')
+let ps = document.querySelectorAll('.text > div')
 
 let sketch = new Sketch()
 
@@ -19,7 +19,6 @@ let objs = Array(5).fill({dist: 0})
 let raf = () => {
     position += speed
     speed *= 0.8
-    // console.log(position)
     objs.forEach((o, i) => {
         o.dist = Math.min(Math.abs(position - (-i)), 1)
         o.dist = 1 - o.dist**2
@@ -28,12 +27,9 @@ let raf = () => {
         let scale = 1+0.1*o.dist
         sketch.meshes[i].scale.set(scale, scale, scale)
     })
-    // console.log(objs[0].dist, objs[1].dist, objs[2].dist, objs[3].dist, objs[4].dist)
-    // console.log(position)
     
 
     rounded = Math.round(position)
-    console.log(rounded)
     ps.forEach((p, i) => {
         if(-rounded == i){
             ps.forEach(pp => pp.style.display = 'none')

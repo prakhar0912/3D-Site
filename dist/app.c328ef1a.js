@@ -37492,7 +37492,7 @@ var Sketch = /*#__PURE__*/function () {
     value: function handleImages() {
       var _this = this;
 
-      var images = _toConsumableArray(document.querySelectorAll('img'));
+      var images = _toConsumableArray(document.querySelectorAll('.wrap > div > img'));
 
       images.forEach(function (im, i) {
         var mat = _this.material.clone();
@@ -37504,6 +37504,7 @@ var Sketch = /*#__PURE__*/function () {
         mat.uniforms.texture1.value.needsUpdate = true;
         var geo = new THREE.PlaneBufferGeometry(1.7, 1, 20, 20);
         var mesh = new THREE.Mesh(geo, mat);
+        mesh.position.x = 0.2;
         mesh.position.y = -(i * 1.2);
         mesh.rotation.y = -0.5;
 
@@ -37681,7 +37682,7 @@ var wrap = document.querySelector('.wrap');
 
 var elems = _toConsumableArray(document.querySelectorAll('.n'));
 
-var ps = document.querySelectorAll('.text > p');
+var ps = document.querySelectorAll('.text > div');
 var sketch = new _module.default();
 window.addEventListener('wheel', function (e) {
   speed += e.deltaY * 0.0003;
@@ -37692,19 +37693,15 @@ var objs = Array(5).fill({
 
 var raf = function raf() {
   position += speed;
-  speed *= 0.8; // console.log(position)
-
+  speed *= 0.8;
   objs.forEach(function (o, i) {
     o.dist = Math.min(Math.abs(position - -i), 1);
     o.dist = 1 - Math.pow(o.dist, 2);
     elems[i].style.transform = "scale(".concat(1 + 0.1 * o.dist, ")");
     var scale = 1 + 0.1 * o.dist;
     sketch.meshes[i].scale.set(scale, scale, scale);
-  }); // console.log(objs[0].dist, objs[1].dist, objs[2].dist, objs[3].dist, objs[4].dist)
-  // console.log(position)
-
+  });
   rounded = Math.round(position);
-  console.log(rounded);
   ps.forEach(function (p, i) {
     if (-rounded == i) {
       ps.forEach(function (pp) {

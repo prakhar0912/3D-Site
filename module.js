@@ -41,7 +41,7 @@ export default class Sketch {
     }
 
     handleImages() {
-        let images = [...document.querySelectorAll('img')]
+        let images = [...document.querySelectorAll('.wrap > div > img')]
         images.forEach((im, i) => {
             let mat = this.material.clone()
             this.materials.push(mat)
@@ -50,6 +50,7 @@ export default class Sketch {
             mat.uniforms.texture1.value.needsUpdate = true
             let geo = new THREE.PlaneBufferGeometry(1.7, 1, 20, 20)
             let mesh = new THREE.Mesh(geo, mat)
+            mesh.position.x = 0.2
             mesh.position.y = -(i*1.2)
             mesh.rotation.y = -0.5;
             this.meshes.push(mesh)
