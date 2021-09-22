@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            position: relative;
+            height: auto 
+        }
+        .block {
+            height: 5px;
+            width: 100px;
+            position: absolute;
+            background: red;
+        }
+
+        .n {
+            position: absolute;
+        }
+
+        .n0 {
+            top: 0px;
+        }
+
+        .n1 {
+            top: 100px;
+        }
+
+        .n2 {
+            top: 200px;
+        }
+
+        .n3 {
+            top: 300px;
+        }
+
+        .n4 {
+            top: 400px;
+        }
+
+        .n5 {
+            top: 500px;
+        }
+
+        #container{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <body>
+        <!-- <div class="text">
+            <p>11</p>
+            <p>22</p>
+            <p>33</p>
+            <p>44</p>
+            <p>55</p>
+        </div> -->
+        <div class="wrap">
+            <div class="n n0">
+                <img src="./img/1.jpg" width="60" alt="">
+            </div>
+            <div class="n n1">
+                <img src="./img/2.jpg" width="60" alt="">
+            </div>
+            <div class="n n2">
+                <img src="./img/3.jpg" width="60" alt="">
+            </div>
+            <div class="n n3">
+                <img src="./img/4.jpg" width="60" alt="">
+            </div>
+            <div class="n n4">
+                <img src="./img/dos1.jpg" width="60" alt="">
+            </div>
+        </div>
+        <div class="block"></div>
+        <div id="container">
+
+        </div>
+        <script src="app.js"></script>
+    </body>
+
+</html>
