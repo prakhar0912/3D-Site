@@ -47980,6 +47980,7 @@ var showcase = new _Showcase.Showcase(slidesData, {
     var activeIndex = _ref3.activeIndex;
     cursor.leave();
     slides.disperse(activeIndex);
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
     document.querySelector('.content').style.overflow = 'hidden';
     showcase.inTab = false;
   },
