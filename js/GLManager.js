@@ -60,7 +60,7 @@ GLManager.prototype.calculateAspectRatioFactor = function (index, texture) {
   const windowRatio = window.innerWidth / window.innerHeight;
   const rectRatio = (plane.width / plane.height) * windowRatio;
   const imageRatio = texture.image.width / texture.image.height;
-  console.log(imageRatio, rectRatio)
+  // console.log(imageRatio, rectRatio)
 
   let factorX = 1;
   let factorY = 1;
