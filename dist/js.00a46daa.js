@@ -41862,13 +41862,7 @@ Showcase.prototype.snapCurrentToActiveIndex = function () {
 Showcase.prototype.titleClickEnd = function () {
   var _this6 = this;
 
-  if (this.options.onClickEnd) {
-    this.options.onClickEnd({
-      activeIndex: this.index.active
-    });
-  } // this.slides.disperse(this.index.active);
-
-
+  // this.slides.disperse(this.index.active);
   this.snapCurrentToActiveIndex();
 
   if (this.GLStickPop) {
@@ -47634,17 +47628,25 @@ var Slides = /*#__PURE__*/function () {
       this.slides.forEach(function (slide) {
         slide.querySelector('.slide-more').addEventListener('click', function () {
           _this2.options.onTitleClickStart();
+
+          _this2.showDesc();
         });
         slide.querySelector('.slide-more').addEventListener('touchend', function () {
           _this2.options.onTitleClickStart();
+
+          _this2.showDesc();
         });
       });
       this.slides.forEach(function (slide) {
         slide.querySelector('.close').addEventListener('click', function () {
           _this2.options.onTitleClickEnd();
+
+          _this2.hideDesc();
         });
         slide.querySelector('.close').addEventListener('touchend', function () {
           _this2.options.onTitleClickEnd();
+
+          _this2.hideDesc();
         });
       });
     }
@@ -47653,8 +47655,7 @@ var Slides = /*#__PURE__*/function () {
     value: function showDesc(activeIndex) {
       var _this3 = this;
 
-      this.currentIdx = activeIndex;
-      var header = this.slides[this.currentIdx].querySelectorAll('.slide-header');
+      var header = this.slides[this.currentIdx].querySelector('.slide-header');
       var desc = this.slides[this.currentIdx].querySelector('.slide-desc');
 
       var tl = _gsap.default.timeline();
@@ -47687,15 +47688,15 @@ var Slides = /*#__PURE__*/function () {
     value: function hideDesc(activeIndex) {
       var _this4 = this;
 
-      this.currentIdx = activeIndex;
       var desc = this.slides[this.currentIdx].querySelector('.slide-desc');
       var header = this.slides[this.currentIdx].querySelectorAll('.slide-header');
 
       var tl = _gsap.default.timeline();
 
+      console.log('tl');
       tl.to(desc, {
         opacity: 0,
-        duration: 1,
+        duration: 0.3,
         height: 0,
         onComplete: function onComplete() {
           _this4.slides.forEach(function (slide, i) {
@@ -47708,13 +47709,12 @@ var Slides = /*#__PURE__*/function () {
           _this4.slides[_this4.currentIdx].style.left = 'auto';
           _this4.slides[_this4.currentIdx].style.position = 'relative';
           _this4.slides[_this4.currentIdx].style.display = 'grid';
-          desc.style.height = '0';
         }
       });
       tl.to(header, {
         opacity: 1,
         height: "auto",
-        duration: 2
+        duration: 1
       });
     }
   }, {
@@ -47955,7 +47955,7 @@ var slides = new _Slides.Slides(slidesData, {
   },
   onTitleClickEnd: function onTitleClickEnd() {
     showcase.titleClickEnd();
-    showcase.inTab = false;
+    console.log('bb');
   }
 });
 var showcase = new _Showcase.Showcase(slidesData, {
@@ -47974,15 +47974,14 @@ var showcase = new _Showcase.Showcase(slidesData, {
     var activeIndex = _ref2.activeIndex;
     cursor.enter();
     slides.disperse(activeIndex);
-    slides.showDesc(activeIndex);
     document.querySelector('.content').style.overflowY = 'auto';
   },
   onClickEnd: function onClickEnd(_ref3) {
     var activeIndex = _ref3.activeIndex;
     cursor.leave();
     slides.disperse(activeIndex);
-    slides.hideDesc(activeIndex);
     document.querySelector('.content').style.overflow = 'hidden';
+    showcase.inTab = false;
   },
   onZoomOutFinish: function onZoomOutFinish(_ref4) {
     var activeIndex = _ref4.activeIndex;

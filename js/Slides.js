@@ -47,23 +47,26 @@ class Slides {
     this.slides.forEach((slide) => {
       slide.querySelector('.slide-more').addEventListener('click', () => {
         this.options.onTitleClickStart()
+        this.showDesc()
       })
       slide.querySelector('.slide-more').addEventListener('touchend', () => {
         this.options.onTitleClickStart()
+        this.showDesc()
       })
     })
     this.slides.forEach((slide) => {
       slide.querySelector('.close').addEventListener('click', () => {
         this.options.onTitleClickEnd()
+        this.hideDesc()
       })
       slide.querySelector('.close').addEventListener('touchend', () => {
         this.options.onTitleClickEnd()
+        this.hideDesc()
       })
     })
   }
   showDesc(activeIndex) {
-    this.currentIdx = activeIndex;
-    let header = this.slides[this.currentIdx].querySelectorAll('.slide-header')
+    let header = this.slides[this.currentIdx].querySelector('.slide-header')
     let desc = this.slides[this.currentIdx].querySelector('.slide-desc')
     let tl = gsap.timeline()
     tl.to(header, {
@@ -83,12 +86,12 @@ class Slides {
     tl.to(desc, { opacity: 1, duration: 0.1 })
   }
   hideDesc(activeIndex) {
-    this.currentIdx = activeIndex;
     let desc = this.slides[this.currentIdx].querySelector('.slide-desc')
     let header = this.slides[this.currentIdx].querySelectorAll('.slide-header')
     let tl = gsap.timeline()
+    console.log('tl')
     tl.to(desc, {
-      opacity: 0, duration: 1, height: 0, onComplete: () => {
+      opacity: 0, duration: 0.3, height: 0, onComplete: () => {
         this.slides.forEach((slide, i) => {
           if (i != this.currentIdx) {
             slide.style.display = 'grid'
@@ -98,10 +101,9 @@ class Slides {
         this.slides[this.currentIdx].style.left = 'auto';
         this.slides[this.currentIdx].style.position = 'relative'
         this.slides[this.currentIdx].style.display = 'grid'
-        desc.style.height = '0'
       }
     })
-    tl.to(header, { opacity: 1, height: "auto",  duration: 2 })
+    tl.to(header, { opacity: 1, height: "auto", duration: 1, })
   }
   onActiveIndexChange(activeIndex) {
     this.currentIdx = activeIndex;

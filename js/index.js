@@ -118,7 +118,7 @@ const slides = new Slides(slidesData, {
   },
   onTitleClickEnd: () => {
     showcase.titleClickEnd()
-    showcase.inTab = false
+    console.log('bb')
   }
 });
 const showcase = new Showcase(slidesData, {
@@ -135,14 +135,13 @@ const showcase = new Showcase(slidesData, {
   onClickStart: ({ activeIndex }) => {
     cursor.enter();
     slides.disperse(activeIndex)
-    slides.showDesc(activeIndex)
     document.querySelector('.content').style.overflowY = 'auto'
   },
   onClickEnd: ({ activeIndex }) => {
     cursor.leave();
     slides.disperse(activeIndex)
-    slides.hideDesc(activeIndex)
     document.querySelector('.content').style.overflow = 'hidden'
+    showcase.inTab = false
   },
   onZoomOutFinish: ({ activeIndex }) => {},
   onFullscreenStart: ({ activeIndex }) => {

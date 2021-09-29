@@ -346,11 +346,6 @@ Showcase.prototype.snapCurrentToActiveIndex = function () {
 };
 
 Showcase.prototype.titleClickEnd = function () {
-  if (this.options.onClickEnd) {
-    this.options.onClickEnd({
-      activeIndex: this.index.active
-    });
-  }
   // this.slides.disperse(this.index.active);
 
   this.snapCurrentToActiveIndex();
