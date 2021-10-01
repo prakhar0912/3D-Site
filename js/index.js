@@ -118,7 +118,6 @@ const slides = new Slides(slidesData, {
   },
   onTitleClickEnd: () => {
     showcase.titleClickEnd()
-    console.log('bb')
   }
 });
 const showcase = new Showcase(slidesData, {
@@ -140,8 +139,6 @@ const showcase = new Showcase(slidesData, {
   onClickEnd: ({ activeIndex }) => {
     cursor.leave();
     slides.disperse(activeIndex)
-    document.body.scrollTop = document.documentElement.scrollTop = 0;
-    document.querySelector('.content').style.overflow = 'hidden'
     showcase.inTab = false
   },
   onZoomOutFinish: ({ activeIndex }) => {},

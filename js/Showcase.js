@@ -3,7 +3,8 @@ import {
 } from "./GLManager";
 import {
   spring,
-  parallel
+  parallel,
+  timeline
 } from "popmotion";
 import {
   Grab
@@ -11,6 +12,8 @@ import {
 import {
   reach
 } from "./reach";
+
+import gsap from "gsap";
 
 // onFullscreenStart
 // onFullscreenFinish
@@ -20,14 +23,18 @@ import {
 // onIndexChange
 function Showcase(data, options = {}) {
   this.GL = new GLManager(data);
-  this.GL.createPlane();
+  this.GL.createPlane(0)
+  this.GL.createPlane(1)
 
   this.data = data;
 
   this.progress = 0;
+  this.initialProgress = 10
+  this.initialDirection = 5
   this.direction = 1;
   this.waveIntensity = 0;
   this.inTab = false
+  this.part = 0
 
   this.options = options;
 
@@ -104,7 +111,8 @@ Showcase.prototype.onMouseMove = function (ev) {
       };
       this.GL.updateRgbEffect({
         position,
-        velocity
+        velocity,
+        part: this.part
       });
       this.follower = {
         x: position.x,
@@ -119,7 +127,8 @@ Showcase.prototype.onMouseMove = function (ev) {
         velocity: {
           x: 0,
           y: 0
-        }
+        },
+        part: this.part
       });
       this.follower.vx = 0;
       this.follower.vy = 0;
@@ -129,198 +138,357 @@ Showcase.prototype.onMouseMove = function (ev) {
 };
 
 Showcase.prototype.onGrabMove = function (scroll) {
-  if(this.inTab){
-    return
-  }
-  this.index.target = clamp(
-    this.index.initial + scroll.delta / this.index.scrollSize,
-    -this.data.length + 0.51,
-    0.49
-  );
-
-  const index = clamp(Math.round(-this.index.target), 0, this.data.length - 1);
-
-  if (this.index.active !== index) {
-    this.index.active = index;
-    if (this.options.onActiveIndexChange) {
-      this.options.onActiveIndexChange(this.index.active);
+  if (this.part === 1) {
+    if (this.inTab) {
+      return
     }
-    // this.slides.onActiveIndexChange(this.index.active);
+    this.index.target = clamp(
+      this.index.initial + scroll.delta / this.index.scrollSize,
+      -this.data.length + 0.51,
+      0.49
+    );
 
-    this.GL.updateTexture(index);
-    if (this.textureProgressSpring) {
-      this.textureProgressSpring.stop();
-      this.textureProgressSpring = null;
+    const index = clamp(Math.round(-this.index.target), 0, this.data.length - 1);
+
+    if (this.index.active !== index) {
+      this.index.active = index;
+      if (this.options.onActiveIndexChange) {
+        this.options.onActiveIndexChange(this.index.active);
+      }
+      // this.slides.onActiveIndexChange(this.index.active);
+
+      this.GL.updateTexture(index);
+      if (this.textureProgressSpring) {
+        this.textureProgressSpring.stop();
+        this.textureProgressSpring = null;
+      }
+      this.textureProgressSpring = spring({
+        from: 0,
+        to: 1,
+        stiffness: 400,
+        damping: 30
+      }).start(val => {
+        this.GL.updateTexture(null, val);
+      });
     }
-    this.textureProgressSpring = spring({
-      from: 0,
-      to: 1,
-      stiffness: 400,
-      damping: 30
-    }).start(val => {
-      this.GL.updateTexture(null, val);
+
+    if (this.slidesPop) {
+      this.slidesPop.stop();
+    }
+    this.slidesPop = reach({
+      from: {
+        index: this.index.current
+      },
+      to: {
+        index: this.index.target
+      },
+      restDelta: 0.001
+    }).start({
+      update: val => {
+        // this.slides.onMove(index);
+        if (this.options.onIndexChange) {
+          this.options.onIndexChange(val.index);
+        }
+        this.index.current = val.index;
+      },
+      complete: val => {
+        if (this.options.onIndexChange) {
+          this.options.onIndexChange(val.index);
+        }
+        this.index.current = val.index;
+      }
     });
   }
-
-  if (this.slidesPop) {
-    this.slidesPop.stop();
-  }
-  this.slidesPop = reach({
-    from: {
-      index: this.index.current
-    },
-    to: {
-      index: this.index.target
-    },
-    restDelta: 0.001
-  }).start({
-    update: val => {
-      // this.slides.onMove(index);
-      if (this.options.onIndexChange) {
-        this.options.onIndexChange(val.index);
-      }
-      this.index.current = val.index;
-    },
-    complete: val => {
-      if (this.options.onIndexChange) {
-        this.options.onIndexChange(val.index);
-      }
-      this.index.current = val.index;
-    }
-  });
 };
 
 
 Showcase.prototype.titleClickStart = function () {
-  if (this.options.onZoomOutStart) {
-    this.options.onClickStart({
-      activeIndex: this.index.active
+  if(this.part === 1){
+    if (this.options.onZoomOutStart) {
+      this.options.onClickStart({
+        activeIndex: this.index.active
+      });
+    }
+    // this.slides.appear();
+    this.index.initial = this.index.current;
+  
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
+    }
+    this.GL.scheduleLoop();
+  
+    const directionSpring = spring({
+      from: this.progress === 0 ? 0 : this.direction,
+      to: 0,
+      mass: 1,
+      stiffness: 800,
+      damping: 2000
+    });
+    const progressSpring = spring({
+      from: this.progress,
+      to: 1,
+      mass: 5,
+      stiffness: 350,
+      damping: 500
+    });
+  
+    const waveIntensitySpring = spring({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[1],
+      mass: 5,
+      stiffness: 10,
+      damping: 200
+    });
+    this.GLStickPop = parallel(
+      progressSpring,
+      directionSpring,
+      waveIntensitySpring
+    ).start({
+      update: values => {
+        if (this.progress !== values[0]) { }
+        this.progress = values[0];
+        this.direction = values[1];
+        this.waveIntensity = values[2];
+  
+        this.GL.updateStickEffect({
+          progress: this.progress,
+          direction: this.direction,
+          waveIntensity: this.waveIntensity,
+          part: this.part
+        });
+      },
+      complete: () => {
+        if (this.options.onZoomOutFinish) {
+          this.options.onZoomOutFinish({
+            activeIndex: this.index.active
+          });
+        }
+      }
     });
   }
-  // this.slides.appear();
-  this.index.initial = this.index.current;
-
-  if (this.GLStickPop) {
-    this.GLStickPop.stop();
-  }
-  this.GL.scheduleLoop();
-
-  const directionSpring = spring({
-    from: this.progress === 0 ? 0 : this.direction,
-    to: 0,
-    mass: 1,
-    stiffness: 800,
-    damping: 2000
-  });
-  const progressSpring = spring({
-    from: this.progress,
-    to: 1,
-    mass: 5,
-    stiffness: 350,
-    damping: 500
-  });
-
-  const waveIntensitySpring = spring({
-    from: this.waveIntensity,
-    to: this.waveIntensityRange[1],
-    mass: 5,
-    stiffness: 10,
-    damping: 200
-  });
-  this.GLStickPop = parallel(
-    progressSpring,
-    directionSpring,
-    waveIntensitySpring
-  ).start({
-    update: values => {
-      if (this.progress !== values[0]) { }
-      this.progress = values[0];
-      this.direction = values[1];
-      this.waveIntensity = values[2];
-
-      this.GL.updateStickEffect({
-        progress: this.progress,
-        direction: this.direction,
-        waveIntensity: this.waveIntensity
-      });
-    },
-    complete: () => {
-      if (this.options.onZoomOutFinish) {
-        this.options.onZoomOutFinish({
-          activeIndex: this.index.active
-        });
-      }
-    }
-  });
 };
 
 
 
 Showcase.prototype.onGrabStart = function () {
-  if(this.inTab){
-    return
+  if (this.part === 0) {
+    if (this.zoom01) {
+      this.zoom01.kill();
+    }
+    this.GL.scheduleLoop();
+
+    this.zoom01 = gsap.timeline()
+    this.zoom01.to(this.GL.camera.position,{
+      z: 15, duration: 2, ease: "power4.in",
+    })
+    this.zoom01.to(this.GL.camera.position,{
+      z: 5, duration: 1.2, ease: "power4.in", onComplete: () => {
+        console.log('start complete')
+        this.part = 1
+        if (this.GLStickPop) {
+          this.GLStickPop.stop();
+        }
+      }
+    },"<1.6")
+
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
+    }
+    // this.GL.scheduleLoop();
+    const waveIntensitySpring = spring({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[1],
+      mass: 5,
+      stiffness: 10,
+      damping: 200
+    });
+    this.GLStickPop = parallel(
+      waveIntensitySpring
+    ).start({
+      update: values => {
+        this.waveIntensity = values[0];
+        this.GL.updateStickEffect({
+          waveIntensity: this.waveIntensity,
+          part: this.part
+        });
+      },
+    });
+
   }
-  if (this.options.onZoomOutStart) {
-    this.options.onZoomOutStart({
-      activeIndex: this.index.active
+  else if (this.part === 1) {
+    if (this.inTab) {
+      return
+    }
+    if (this.options.onZoomOutStart) {
+      this.options.onZoomOutStart({
+        activeIndex: this.index.active
+      });
+    }
+    // this.slides.appear();
+    this.index.initial = this.index.current;
+
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
+    }
+    this.GL.scheduleLoop();
+
+    const directionSpring = spring({
+      from: this.progress === 0 ? 0 : this.direction,
+      to: 0,
+      mass: 1,
+      stiffness: 800,
+      damping: 2000
+    });
+    const progressSpring = spring({
+      from: this.progress,
+      to: 1,
+      mass: 5,
+      stiffness: 350,
+      damping: 500
+    });
+
+    const waveIntensitySpring = spring({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[1],
+      mass: 5,
+      stiffness: 10,
+      damping: 200
+    });
+    this.GLStickPop = parallel(
+      progressSpring,
+      directionSpring,
+      waveIntensitySpring
+    ).start({
+      update: values => {
+        if (this.progress !== values[0]) { }
+        this.progress = values[0];
+        this.direction = values[1];
+        this.waveIntensity = values[2];
+
+        this.GL.updateStickEffect({
+          progress: this.progress,
+          direction: this.direction,
+          waveIntensity: this.waveIntensity,
+          part: this.part
+        });
+      },
+      complete: () => {
+        if (this.options.onZoomOutFinish) {
+          this.options.onZoomOutFinish({
+            activeIndex: this.index.active
+          });
+        }
+      }
     });
   }
-  // this.slides.appear();
-  this.index.initial = this.index.current;
-
-  if (this.GLStickPop) {
-    this.GLStickPop.stop();
-  }
-  this.GL.scheduleLoop();
-
-  const directionSpring = spring({
-    from: this.progress === 0 ? 0 : this.direction,
-    to: 0,
-    mass: 1,
-    stiffness: 800,
-    damping: 2000
-  });
-  const progressSpring = spring({
-    from: this.progress,
-    to: 1,
-    mass: 5,
-    stiffness: 350,
-    damping: 500
-  });
-
-  const waveIntensitySpring = spring({
-    from: this.waveIntensity,
-    to: this.waveIntensityRange[1],
-    mass: 5,
-    stiffness: 10,
-    damping: 200
-  });
-  this.GLStickPop = parallel(
-    progressSpring,
-    directionSpring,
-    waveIntensitySpring
-  ).start({
-    update: values => {
-      if (this.progress !== values[0]) { }
-      this.progress = values[0];
-      this.direction = values[1];
-      this.waveIntensity = values[2];
-
-      this.GL.updateStickEffect({
-        progress: this.progress,
-        direction: this.direction,
-        waveIntensity: this.waveIntensity
-      });
-    },
-    complete: () => {
-      if (this.options.onZoomOutFinish) {
-        this.options.onZoomOutFinish({
-          activeIndex: this.index.active
-        });
-      }
-    }
-  });
 };
+
+Showcase.prototype.onGrabEnd = function () {
+  if (this.part === 0) {
+    if (this.zoom01) {
+      console.log('stop')
+      this.zoom01.kill();
+    }
+    this.GL.scheduleLoop();
+    this.zoom01 = gsap.timeline()
+    this.zoom01.to(this.GL.camera.position,{
+      z: 10, duration: 1, ease: "power2.in", onComplete: () => {
+        console.log('end complete')
+        this.part = 0
+      }
+    })
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
+    }
+    const waveIntensitySpring = spring({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[0],
+      mass: 0.1,
+      stiffness: 800,
+      damping: 50
+    });
+    this.GLStickPop = parallel(
+      waveIntensitySpring
+    ).start({
+      update: values => {
+        this.waveIntensity = values[0];
+        this.GL.updateStickEffect({
+          waveIntensity: this.waveIntensity,
+          part: this.part
+        });
+      },
+    });
+    
+  }
+  else if (this.part === 1) {
+    if (this.inTab) {
+      return
+    }
+    if (this.options.onFullscreenStart) {
+      this.options.onFullscreenStart({
+        activeIndex: this.index.active
+      });
+    }
+    // this.slides.disperse(this.index.active);
+
+    this.snapCurrentToActiveIndex();
+
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
+    }
+    const directionSpring = spring({
+      from: this.progress === 1 ? 1 : this.direction,
+      to: 1,
+      mass: 1,
+      stiffness: 800,
+      damping: 2000
+    });
+    const progressSpring = spring({
+      from: this.progress,
+      to: 0,
+      mass: 4,
+      stiffness: 400,
+      damping: 70,
+      restDelta: 0.0001
+    });
+    const waveIntensitySpring = spring({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[0],
+      mass: 0.1,
+      stiffness: 800,
+      damping: 50
+    });
+
+    this.GLStickPop = parallel(
+      progressSpring,
+      directionSpring,
+      waveIntensitySpring
+    ).start({
+      update: values => {
+        this.progress = values[0];
+        this.direction = values[1];
+        this.waveIntensity = values[2];
+        this.GL.updateStickEffect({
+          progress: this.progress,
+          direction: this.direction,
+          waveIntensity: this.waveIntensity,
+          part: this.part
+        });
+      },
+      complete: () => {
+        if (this.options.onFullscreenFinish) {
+          this.options.onFullscreenFinish({
+            activeIndex: this.index.active
+          });
+        }
+        this.GL.cancelLoop();
+      }
+    });
+  }
+};
+
+
+
 Showcase.prototype.snapCurrentToActiveIndex = function () {
   if (this.slidesPop) {
     this.slidesPop.stop();
@@ -347,8 +515,8 @@ Showcase.prototype.snapCurrentToActiveIndex = function () {
 
 Showcase.prototype.titleClickEnd = function () {
   // this.slides.disperse(this.index.active);
-
-  this.snapCurrentToActiveIndex();
+  if(this.part === 1){
+    this.snapCurrentToActiveIndex();
 
   if (this.GLStickPop) {
     this.GLStickPop.stop();
@@ -388,7 +556,8 @@ Showcase.prototype.titleClickEnd = function () {
       this.GL.updateStickEffect({
         progress: this.progress,
         direction: this.direction,
-        waveIntensity: this.waveIntensity
+        waveIntensity: this.waveIntensity,
+        part: this.part
       });
     },
     complete: () => {
@@ -400,74 +569,12 @@ Showcase.prototype.titleClickEnd = function () {
       this.GL.cancelLoop();
     }
   });
+  }
 };
 
 
 
-Showcase.prototype.onGrabEnd = function () {
-  if(this.inTab){
-    return
-  }
-  if (this.options.onFullscreenStart) {
-    this.options.onFullscreenStart({
-      activeIndex: this.index.active
-    });
-  }
-  // this.slides.disperse(this.index.active);
 
-  this.snapCurrentToActiveIndex();
-
-  if (this.GLStickPop) {
-    this.GLStickPop.stop();
-  }
-  const directionSpring = spring({
-    from: this.progress === 1 ? 1 : this.direction,
-    to: 1,
-    mass: 1,
-    stiffness: 800,
-    damping: 2000
-  });
-  const progressSpring = spring({
-    from: this.progress,
-    to: 0,
-    mass: 4,
-    stiffness: 400,
-    damping: 70,
-    restDelta: 0.0001
-  });
-  const waveIntensitySpring = spring({
-    from: this.waveIntensity,
-    to: this.waveIntensityRange[0],
-    mass: 0.1,
-    stiffness: 800,
-    damping: 50
-  });
-
-  this.GLStickPop = parallel(
-    progressSpring,
-    directionSpring,
-    waveIntensitySpring
-  ).start({
-    update: values => {
-      this.progress = values[0];
-      this.direction = values[1];
-      this.waveIntensity = values[2];
-      this.GL.updateStickEffect({
-        progress: this.progress,
-        direction: this.direction,
-        waveIntensity: this.waveIntensity
-      });
-    },
-    complete: () => {
-      if (this.options.onFullscreenFinish) {
-        this.options.onFullscreenFinish({
-          activeIndex: this.index.active
-        });
-      }
-      this.GL.cancelLoop();
-    }
-  });
-};
 
 Showcase.prototype.onResize = function () {
   this.GL.onResize();

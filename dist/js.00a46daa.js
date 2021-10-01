@@ -36545,6 +36545,8 @@ var fragment = "\nuniform vec2 u_resolution;\n\nuniform sampler2D u_texture;\nun
 exports.fragment = fragment;
 var vertex = "\n#define PI 3.14159265359\nuniform float u_offset;\nuniform float u_progress;\nuniform float u_direction;\nuniform float u_time;\nuniform float u_waveIntensity;\nvarying vec2 vUv;\nvoid main(){\n    vec3 pos = position.xyz;\n\n    float distance = length(uv.xy - 0.5 );\n    float sizeDist = length(vec2(0.5,0.5));\n    float normalizedDistance = distance/sizeDist ;\n\n    float stickOutEffect = normalizedDistance ;\n    float stickInEffect = -normalizedDistance ;\n\n    \n    float stickEffect = mix(stickOutEffect,stickInEffect, u_direction);\n\n    // Backwards V wave.\n    float stick = 0.5;\n\n    float waveIn = u_progress*(1. / stick); \n    float waveOut =  -( u_progress - 1.) * (1./(1.-stick) );\n    waveOut = pow(smoothstep(0.,1.,waveOut),0.7);\n\n    float stickProgress = min(waveIn, waveOut);\n\n\n\n\n\n    // We can re-use stick Influcse because this oen starts at the same position\n    float offsetInProgress = clamp(waveIn,0.,1.);\n\n    // Invert stickout to get the slope moving upwards to the right\n    // and move it left by 1\n    float offsetOutProgress = clamp(1.-waveOut,0.,1.);\n\n    float offsetProgress = mix(offsetInProgress,offsetOutProgress,u_direction);\n\n\n    float stickOffset = u_offset;\n    pos.z += stickEffect * stickOffset * stickProgress  - u_offset * offsetProgress;\n\n    \n    pos.z += sin(distance * 8. - u_time * 2. )  * u_waveIntensity;\n\n    gl_Position =   \n        projectionMatrix * \n        modelViewMatrix * \n         vec4(pos, 1.0);\n\n    vUv = uv;\n}\n";
 exports.vertex = vertex;
+},{}],"images/landing.jpg":[function(require,module,exports) {
+module.exports = "/landing.10726b6b.jpg";
 },{}],"js/GLManager.js":[function(require,module,exports) {
 "use strict";
 
@@ -36557,6 +36559,10 @@ var THREE = _interopRequireWildcard(require("three"));
 
 var _shaders = require("./shaders");
 
+var _landing = _interopRequireDefault(require("../images/landing.jpg"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -36564,10 +36570,12 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 function GLManager(data) {
   var _this = this;
 
-  this.totalEntries = data.length;
+  this.totalEntries = data.length + 1;
   this.loadedEntries = 0;
   var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
-  camera.position.z = 5;
+  camera.position.z = 10;
+  this.mesh = null;
+  this.initialMesh = null;
   var scene = new THREE.Scene();
   camera.lookAt = scene.position;
   var renderer = new THREE.WebGLRenderer({
@@ -36580,12 +36588,15 @@ function GLManager(data) {
   this.textures = data.map(function (entry, i) {
     return new THREE.TextureLoader().load(entry.image, _this.calculateAspectRatioFactor.bind(_this, i));
   });
+  this.initialTexture = new THREE.TextureLoader().load(_landing.default, this.calculateAspectRatioFactor.bind(this, -1));
   this.factors = data.map(function (d) {
     return new THREE.Vector2(1, 1);
   });
+  this.initialFactors = new THREE.Vector2(1, 1);
   this.currentIndex = 0;
   this.nextIndex = 0;
   this.textureProgress = 0;
+  this.initialTextureProgress = 0;
   this.camera = camera;
   this.scene = scene;
   this.renderer = renderer;
@@ -36597,7 +36608,7 @@ function GLManager(data) {
 
 GLManager.prototype.getViewSize = function () {
   var fovInRadians = this.camera.fov * Math.PI / 180;
-  var viewSize = Math.abs(this.camera.position.z * Math.tan(fovInRadians / 2) * 2);
+  var viewSize = Math.abs((this.camera.position.z - 5) * Math.tan(fovInRadians / 2) * 2);
   return viewSize;
 };
 
@@ -36626,16 +36637,25 @@ GLManager.prototype.calculateAspectRatioFactor = function (index, texture) {
     factorY = 1;
   }
 
-  this.factors[index] = new THREE.Vector2(factorX, factorY);
+  if (index != -1) {
+    this.factors[index] = new THREE.Vector2(factorX, factorY);
 
-  if (this.currentIndex === index) {
-    this.mesh.material.uniforms.u_textureFactor.value = this.factors[index];
-    this.mesh.material.uniforms.u_textureFactor.needsUpdate = true;
-  }
+    if (this.currentIndex === index) {
+      this.mesh.material.uniforms.u_textureFactor.value = this.factors[index];
+      this.mesh.material.uniforms.u_textureFactor.needsUpdate = true;
+    }
 
-  if (this.nextIndex === index) {
-    this.mesh.material.uniforms.u_texture2Factor.value = this.factors[index];
-    this.mesh.material.uniforms.u_texture2Factor.needsUpdate = true;
+    if (this.nextIndex === index) {
+      this.mesh.material.uniforms.u_texture2Factor.value = this.factors[index];
+      this.mesh.material.uniforms.u_texture2Factor.needsUpdate = true;
+    }
+  } else {
+    this.initialFactors = new THREE.Vector2(factorX, factorY);
+
+    if (this.initialMesh) {
+      this.initialMesh.material.uniforms.u_textureFactor.value = this.initialFactors;
+      this.initialMesh.material.uniforms.u_textureFactor.needsUpdate = true;
+    }
   }
 
   if (this.initialRender) {
@@ -36643,6 +36663,7 @@ GLManager.prototype.calculateAspectRatioFactor = function (index, texture) {
 
     if (this.loadedEntries === this.totalEntries) {
       document.body.classList.remove('loading');
+      console.log('loaded all');
     }
 
     this.render();
@@ -36650,86 +36671,180 @@ GLManager.prototype.calculateAspectRatioFactor = function (index, texture) {
 }; // Plane Stuff
 
 
-GLManager.prototype.createPlane = function () {
+GLManager.prototype.createPlane = function (index) {
   // Calculate bas of Isoceles triangle(camera)
-  var viewSize = this.getViewSize();
+  if (index === 0) {
+    var viewSize = this.getViewSize();
 
-  var _this$getPlaneSize = this.getPlaneSize(),
-      width = _this$getPlaneSize.width,
-      height = _this$getPlaneSize.height;
+    var _this$getPlaneSize = this.getPlaneSize(),
+        width = _this$getPlaneSize.width,
+        height = _this$getPlaneSize.height;
 
-  var segments = 60;
-  var geometry = new THREE.PlaneBufferGeometry(width, height, segments, segments);
-  var material = new THREE.ShaderMaterial({
-    uniforms: {
-      u_texture: {
-        type: "t",
-        value: this.textures[this.currentIndex]
+    var segments = 60;
+    var geometry = new THREE.PlaneBufferGeometry(width, height, segments, segments);
+    var material = new THREE.ShaderMaterial({
+      uniforms: {
+        u_texture: {
+          type: "t",
+          value: this.initialTexture
+        },
+        u_textureFactor: {
+          type: "f",
+          value: this.initialFactors
+        },
+        // u_texture2: {
+        //   type: "t",
+        //   value: this.textures[this.nextIndex]
+        // },
+        // u_texture2Factor: {
+        //   type: "f",
+        //   value: this.factors[this.nextIndex]
+        // },
+        u_textureProgress: {
+          type: "f",
+          value: this.initialTextureProgress
+        },
+        u_offset: {
+          type: "f",
+          value: 8
+        },
+        u_progress: {
+          type: "f",
+          value: 0
+        },
+        u_direction: {
+          type: "f",
+          value: 1
+        },
+        u_effect: {
+          type: "f",
+          value: 0
+        },
+        u_time: {
+          type: "f",
+          value: this.time
+        },
+        u_waveIntensity: {
+          type: "f",
+          value: 0
+        },
+        u_resolution: {
+          type: "v2",
+          value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+        },
+        u_rgbPosition: {
+          type: "v2",
+          value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
+        },
+        u_rgbVelocity: {
+          type: "v2",
+          value: new THREE.Vector2(0, 0)
+        }
       },
-      u_textureFactor: {
-        type: "f",
-        value: this.factors[this.currentIndex]
+      vertexShader: _shaders.vertex,
+      fragmentShader: _shaders.fragment,
+      side: THREE.DoubleSide
+    });
+    var mesh2 = new THREE.Mesh(geometry, material);
+    mesh2.position.z = 5;
+    this.scene.add(mesh2);
+    this.initialMesh = mesh2;
+  } else if (index == 1) {
+    var _viewSize = this.getViewSize();
+
+    var _this$getPlaneSize2 = this.getPlaneSize(),
+        _width = _this$getPlaneSize2.width,
+        _height = _this$getPlaneSize2.height;
+
+    var _segments = 60;
+
+    var _geometry = new THREE.PlaneBufferGeometry(_width, _height, _segments, _segments);
+
+    var _material = new THREE.ShaderMaterial({
+      uniforms: {
+        u_texture: {
+          type: "t",
+          value: this.textures[this.currentIndex]
+        },
+        u_textureFactor: {
+          type: "f",
+          value: this.factors[this.currentIndex]
+        },
+        u_texture2: {
+          type: "t",
+          value: this.textures[this.nextIndex]
+        },
+        u_texture2Factor: {
+          type: "f",
+          value: this.factors[this.nextIndex]
+        },
+        u_textureProgress: {
+          type: "f",
+          value: this.textureProgress
+        },
+        u_offset: {
+          type: "f",
+          value: 8
+        },
+        u_progress: {
+          type: "f",
+          value: 0
+        },
+        u_direction: {
+          type: "f",
+          value: 1
+        },
+        u_effect: {
+          type: "f",
+          value: 0
+        },
+        u_time: {
+          type: "f",
+          value: this.time
+        },
+        u_waveIntensity: {
+          type: "f",
+          value: 0
+        },
+        u_resolution: {
+          type: "v2",
+          value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+        },
+        u_rgbPosition: {
+          type: "v2",
+          value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
+        },
+        u_rgbVelocity: {
+          type: "v2",
+          value: new THREE.Vector2(0, 0)
+        }
       },
-      u_texture2: {
-        type: "t",
-        value: this.textures[this.nextIndex]
-      },
-      u_texture2Factor: {
-        type: "f",
-        value: this.factors[this.nextIndex]
-      },
-      u_textureProgress: {
-        type: "f",
-        value: this.textureProgress
-      },
-      u_offset: {
-        type: "f",
-        value: 8
-      },
-      u_progress: {
-        type: "f",
-        value: 0
-      },
-      u_direction: {
-        type: "f",
-        value: 1
-      },
-      u_effect: {
-        type: "f",
-        value: 0
-      },
-      u_time: {
-        type: "f",
-        value: this.time
-      },
-      u_waveIntensity: {
-        type: "f",
-        value: 0
-      },
-      u_resolution: {
-        type: "v2",
-        value: new THREE.Vector2(window.innerWidth, window.innerHeight)
-      },
-      u_rgbPosition: {
-        type: "v2",
-        value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
-      },
-      u_rgbVelocity: {
-        type: "v2",
-        value: new THREE.Vector2(0, 0)
-      }
-    },
-    vertexShader: _shaders.vertex,
-    fragmentShader: _shaders.fragment,
-    side: THREE.DoubleSide
-  });
-  var mesh = new THREE.Mesh(geometry, material);
-  this.scene.add(mesh);
-  this.mesh = mesh;
+      vertexShader: _shaders.vertex,
+      fragmentShader: _shaders.fragment,
+      side: THREE.DoubleSide
+    });
+
+    var mesh = new THREE.Mesh(_geometry, _material);
+    this.scene.add(mesh);
+    this.mesh = mesh;
+  }
+};
+
+GLManager.prototype.updateCameraPosition = function (position) {
+  if (position >= 4 && position <= 11) {
+    this.camera.position.z = position;
+  }
 };
 
 GLManager.prototype.updateTexture = function (newIndex, progress) {
   var didChange = false;
+
+  if (newIndex == -1) {
+    this.initialTextureProgress = 0;
+    this.initialMesh.material.uniforms.u_textureProgress.value = 0;
+    this.initialMesh.material.uniforms.u_texture.value = this.initialTexture;
+    this.initialMesh.material.uniforms.u_textureFactor.value = this.initialFactors;
+  }
 
   if (newIndex != null && this.newIndex !== this.currentIndex) {
     this.currentIndex = this.nextIndex;
@@ -36749,6 +36864,12 @@ GLManager.prototype.updateTexture = function (newIndex, progress) {
     didChange = true;
   }
 
+  if (progress != null && progress !== this.initialTextureProgress && newIndex == -1) {
+    this.mesh.material.uniforms.u_textureProgress.value = progress;
+    this.initialTextureProgress = progress;
+    didChange = true;
+  }
+
   if (!this.loopRaf && didChange) {
     this.render();
   }
@@ -36757,17 +36878,32 @@ GLManager.prototype.updateTexture = function (newIndex, progress) {
 GLManager.prototype.updateStickEffect = function (_ref) {
   var progress = _ref.progress,
       direction = _ref.direction,
-      waveIntensity = _ref.waveIntensity;
-  this.mesh.material.uniforms.u_progress.value = progress;
-  this.mesh.material.uniforms.u_direction.value = direction;
-  this.mesh.material.uniforms.u_waveIntensity.value = waveIntensity; // this.render();
+      waveIntensity = _ref.waveIntensity,
+      part = _ref.part;
+
+  if (part === 0) {
+    this.initialMesh.material.uniforms.u_waveIntensity.value = waveIntensity;
+  } else if (part === 1) {
+    this.mesh.material.uniforms.u_progress.value = progress;
+    this.mesh.material.uniforms.u_direction.value = direction;
+    this.mesh.material.uniforms.u_waveIntensity.value = waveIntensity;
+  } // this.render();
+  // this.render();
+
 };
 
 GLManager.prototype.updateRgbEffect = function (_ref2) {
   var position = _ref2.position,
-      velocity = _ref2.velocity;
-  this.mesh.material.uniforms.u_rgbPosition.value = new THREE.Vector2(position.x, position.y);
-  this.mesh.material.uniforms.u_rgbVelocity.value = new THREE.Vector2(velocity.x, velocity.y);
+      velocity = _ref2.velocity,
+      part = _ref2.part;
+
+  if (part === 1) {
+    this.mesh.material.uniforms.u_rgbPosition.value = new THREE.Vector2(position.x, position.y);
+    this.mesh.material.uniforms.u_rgbVelocity.value = new THREE.Vector2(velocity.x, velocity.y);
+  } else if (part === 0) {
+    this.initialMesh.material.uniforms.u_rgbPosition.value = new THREE.Vector2(position.x, position.y);
+    this.initialMesh.material.uniforms.u_rgbVelocity.value = new THREE.Vector2(velocity.x, velocity.y);
+  }
 
   if (!this.loopRaf) {
     this.render();
@@ -36790,6 +36926,9 @@ GLManager.prototype.mount = function (container) {
 GLManager.prototype.unmount = function () {
   this.mesh.material.dispose();
   this.mesh.geometry.dispose();
+  this.initialMesh.material.dispose();
+  this.initialMesh.geometry.dispose();
+  this.initialMesh = null;
   this.mesh = null;
   this.renderer = null;
   this.camera = null;
@@ -36799,7 +36938,8 @@ GLManager.prototype.unmount = function () {
 
 GLManager.prototype.onResize = function () {
   this.renderer.setSize(window.innerWidth, window.innerHeight);
-  this.mesh.material.uniforms.u_resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight); // this.camera.aspect = window.inenrWidth / window.innerHeight;
+  this.mesh.material.uniforms.u_resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight);
+  this.initialMesh.material.uniforms.u_resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight); // this.camera.aspect = window.inenrWidth / window.innerHeight;
   // this.camera.updateProjectionMatrix();
 
   for (var i = 0; i < this.textures.length; i++) {
@@ -36808,6 +36948,7 @@ GLManager.prototype.onResize = function () {
     }
   }
 
+  this.calculateAspectRatioFactor(-1, this.initialTexture);
   this.render();
 };
 
@@ -36820,6 +36961,7 @@ GLManager.prototype.loop = function () {
   this.render();
   this.time += 0.1;
   this.mesh.material.uniforms.u_time.value = this.time;
+  this.initialMesh.material.uniforms.u_time.value = this.time;
   this.loopRaf = requestAnimationFrame(this.loop);
 };
 
@@ -36827,7 +36969,7 @@ GLManager.prototype.cancelLoop = function () {
   cancelAnimationFrame(this.loopRaf);
   this.loopRaf = null;
 };
-},{"three":"node_modules/three/build/three.module.js","./shaders":"js/shaders.js"}],"node_modules/tslib/tslib.es6.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","./shaders":"js/shaders.js","../images/landing.jpg":"images/landing.jpg"}],"node_modules/tslib/tslib.es6.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -41511,480 +41653,7 @@ var reach = function reach(_ref) {
 };
 
 exports.reach = reach;
-},{}],"js/Showcase.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Showcase = Showcase;
-
-var _GLManager = require("./GLManager");
-
-var _popmotion = require("popmotion");
-
-var _Grab = require("./Grab");
-
-var _reach = require("./reach");
-
-// onFullscreenStart
-// onFullscreenFinish
-// onZoomOutStart
-// onZoomOutFinish
-// onAciveIndexChange
-// onIndexChange
-function Showcase(data) {
-  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  this.GL = new _GLManager.GLManager(data);
-  this.GL.createPlane();
-  this.data = data;
-  this.progress = 0;
-  this.direction = 1;
-  this.waveIntensity = 0;
-  this.inTab = false;
-  this.options = options;
-  this.index = {
-    target: 0,
-    current: 0,
-    initial: 0,
-    scrollSize: window.innerHeight / 6,
-    active: 0
-  };
-  this.follower = {
-    x: 0,
-    y: 0
-  };
-  this.followerSpring = null;
-  this.slidesSpring = null;
-  this.waveIntensityRange = [0, 0.1]; // this.slides = new Slides(data);
-
-  this.grab = new _Grab.Grab({
-    onGrabStart: this.onGrabStart.bind(this),
-    onGrabMove: this.onGrabMove.bind(this),
-    onGrabEnd: this.onGrabEnd.bind(this)
-  });
-}
-
-Showcase.prototype.mount = function (container) {
-  this.GL.mount(container); // this.slides.mount(container);
-  // container.appendChild(this.slidesContainer);
-};
-
-Showcase.prototype.render = function () {
-  this.GL.render();
-};
-
-function clamp(num, min, max) {
-  return Math.max(min, Math.min(num, max));
-}
-
-Showcase.prototype.onMouseMove = function (ev) {
-  var _this = this;
-
-  if (this.followerSpring) {
-    this.followerSpring.stop();
-    this.followerSpring = null; // this.follower.vx = 0;
-    // this.follower.vy = 0;
-  }
-
-  this.followerSpring = (0, _reach.reach)({
-    from: {
-      x: this.follower.x,
-      y: this.follower.y
-    },
-    to: {
-      x: ev.clientX,
-      y: ev.clientY
-    },
-    velocity: {
-      x: this.follower.vx,
-      y: this.follower.vy
-    },
-    stiffness: 500,
-    damping: 50,
-    mass: 1
-  }).start({
-    update: function update(position) {
-      var velocity = {
-        x: position.x - _this.follower.x,
-        y: position.y - _this.follower.y
-      };
-
-      _this.GL.updateRgbEffect({
-        position: position,
-        velocity: velocity
-      });
-
-      _this.follower = {
-        x: position.x,
-        y: position.y,
-        vx: velocity.x,
-        vy: velocity.y
-      };
-    },
-    complete: function complete() {
-      _this.GL.updateRgbEffect({
-        position: _this.follower,
-        velocity: {
-          x: 0,
-          y: 0
-        }
-      });
-
-      _this.follower.vx = 0;
-      _this.follower.vy = 0;
-    }
-  }); // this.GL.updateRgbEffect({ position, velocity });
-};
-
-Showcase.prototype.onGrabMove = function (scroll) {
-  var _this2 = this;
-
-  if (this.inTab) {
-    return;
-  }
-
-  this.index.target = clamp(this.index.initial + scroll.delta / this.index.scrollSize, -this.data.length + 0.51, 0.49);
-  var index = clamp(Math.round(-this.index.target), 0, this.data.length - 1);
-
-  if (this.index.active !== index) {
-    this.index.active = index;
-
-    if (this.options.onActiveIndexChange) {
-      this.options.onActiveIndexChange(this.index.active);
-    } // this.slides.onActiveIndexChange(this.index.active);
-
-
-    this.GL.updateTexture(index);
-
-    if (this.textureProgressSpring) {
-      this.textureProgressSpring.stop();
-      this.textureProgressSpring = null;
-    }
-
-    this.textureProgressSpring = (0, _popmotion.spring)({
-      from: 0,
-      to: 1,
-      stiffness: 400,
-      damping: 30
-    }).start(function (val) {
-      _this2.GL.updateTexture(null, val);
-    });
-  }
-
-  if (this.slidesPop) {
-    this.slidesPop.stop();
-  }
-
-  this.slidesPop = (0, _reach.reach)({
-    from: {
-      index: this.index.current
-    },
-    to: {
-      index: this.index.target
-    },
-    restDelta: 0.001
-  }).start({
-    update: function update(val) {
-      // this.slides.onMove(index);
-      if (_this2.options.onIndexChange) {
-        _this2.options.onIndexChange(val.index);
-      }
-
-      _this2.index.current = val.index;
-    },
-    complete: function complete(val) {
-      if (_this2.options.onIndexChange) {
-        _this2.options.onIndexChange(val.index);
-      }
-
-      _this2.index.current = val.index;
-    }
-  });
-};
-
-Showcase.prototype.titleClickStart = function () {
-  var _this3 = this;
-
-  if (this.options.onZoomOutStart) {
-    this.options.onClickStart({
-      activeIndex: this.index.active
-    });
-  } // this.slides.appear();
-
-
-  this.index.initial = this.index.current;
-
-  if (this.GLStickPop) {
-    this.GLStickPop.stop();
-  }
-
-  this.GL.scheduleLoop();
-  var directionSpring = (0, _popmotion.spring)({
-    from: this.progress === 0 ? 0 : this.direction,
-    to: 0,
-    mass: 1,
-    stiffness: 800,
-    damping: 2000
-  });
-  var progressSpring = (0, _popmotion.spring)({
-    from: this.progress,
-    to: 1,
-    mass: 5,
-    stiffness: 350,
-    damping: 500
-  });
-  var waveIntensitySpring = (0, _popmotion.spring)({
-    from: this.waveIntensity,
-    to: this.waveIntensityRange[1],
-    mass: 5,
-    stiffness: 10,
-    damping: 200
-  });
-  this.GLStickPop = (0, _popmotion.parallel)(progressSpring, directionSpring, waveIntensitySpring).start({
-    update: function update(values) {
-      if (_this3.progress !== values[0]) {}
-
-      _this3.progress = values[0];
-      _this3.direction = values[1];
-      _this3.waveIntensity = values[2];
-
-      _this3.GL.updateStickEffect({
-        progress: _this3.progress,
-        direction: _this3.direction,
-        waveIntensity: _this3.waveIntensity
-      });
-    },
-    complete: function complete() {
-      if (_this3.options.onZoomOutFinish) {
-        _this3.options.onZoomOutFinish({
-          activeIndex: _this3.index.active
-        });
-      }
-    }
-  });
-};
-
-Showcase.prototype.onGrabStart = function () {
-  var _this4 = this;
-
-  if (this.inTab) {
-    return;
-  }
-
-  if (this.options.onZoomOutStart) {
-    this.options.onZoomOutStart({
-      activeIndex: this.index.active
-    });
-  } // this.slides.appear();
-
-
-  this.index.initial = this.index.current;
-
-  if (this.GLStickPop) {
-    this.GLStickPop.stop();
-  }
-
-  this.GL.scheduleLoop();
-  var directionSpring = (0, _popmotion.spring)({
-    from: this.progress === 0 ? 0 : this.direction,
-    to: 0,
-    mass: 1,
-    stiffness: 800,
-    damping: 2000
-  });
-  var progressSpring = (0, _popmotion.spring)({
-    from: this.progress,
-    to: 1,
-    mass: 5,
-    stiffness: 350,
-    damping: 500
-  });
-  var waveIntensitySpring = (0, _popmotion.spring)({
-    from: this.waveIntensity,
-    to: this.waveIntensityRange[1],
-    mass: 5,
-    stiffness: 10,
-    damping: 200
-  });
-  this.GLStickPop = (0, _popmotion.parallel)(progressSpring, directionSpring, waveIntensitySpring).start({
-    update: function update(values) {
-      if (_this4.progress !== values[0]) {}
-
-      _this4.progress = values[0];
-      _this4.direction = values[1];
-      _this4.waveIntensity = values[2];
-
-      _this4.GL.updateStickEffect({
-        progress: _this4.progress,
-        direction: _this4.direction,
-        waveIntensity: _this4.waveIntensity
-      });
-    },
-    complete: function complete() {
-      if (_this4.options.onZoomOutFinish) {
-        _this4.options.onZoomOutFinish({
-          activeIndex: _this4.index.active
-        });
-      }
-    }
-  });
-};
-
-Showcase.prototype.snapCurrentToActiveIndex = function () {
-  var _this5 = this;
-
-  if (this.slidesPop) {
-    this.slidesPop.stop();
-  }
-
-  this.slidesPop = (0, _reach.reach)({
-    from: {
-      index: this.index.current
-    },
-    to: {
-      index: Math.round(this.index.target)
-    },
-    restDelta: 0.001
-  }).start({
-    complete: function complete() {},
-    update: function update(val) {
-      // this.slides.onMove(val);
-      if (_this5.options.onIndexChange) {
-        _this5.options.onIndexChange(val.index);
-      }
-
-      _this5.index.current = val.index;
-    }
-  });
-};
-
-Showcase.prototype.titleClickEnd = function () {
-  var _this6 = this;
-
-  // this.slides.disperse(this.index.active);
-  this.snapCurrentToActiveIndex();
-
-  if (this.GLStickPop) {
-    this.GLStickPop.stop();
-  }
-
-  var directionSpring = (0, _popmotion.spring)({
-    from: this.progress === 1 ? 1 : this.direction,
-    to: 1,
-    mass: 1,
-    stiffness: 800,
-    damping: 2000
-  });
-  var progressSpring = (0, _popmotion.spring)({
-    from: this.progress,
-    to: 0,
-    mass: 4,
-    stiffness: 400,
-    damping: 70,
-    restDelta: 0.0001
-  });
-  var waveIntensitySpring = (0, _popmotion.spring)({
-    from: this.waveIntensity,
-    to: this.waveIntensityRange[0],
-    mass: 0.1,
-    stiffness: 800,
-    damping: 50
-  });
-  this.GLStickPop = (0, _popmotion.parallel)(progressSpring, directionSpring, waveIntensitySpring).start({
-    update: function update(values) {
-      _this6.progress = values[0];
-      _this6.direction = values[1];
-      _this6.waveIntensity = values[2];
-
-      _this6.GL.updateStickEffect({
-        progress: _this6.progress,
-        direction: _this6.direction,
-        waveIntensity: _this6.waveIntensity
-      });
-    },
-    complete: function complete() {
-      if (_this6.options.onClickEnd) {
-        _this6.options.onClickEnd({
-          activeIndex: _this6.index.active
-        });
-      }
-
-      _this6.GL.cancelLoop();
-    }
-  });
-};
-
-Showcase.prototype.onGrabEnd = function () {
-  var _this7 = this;
-
-  if (this.inTab) {
-    return;
-  }
-
-  if (this.options.onFullscreenStart) {
-    this.options.onFullscreenStart({
-      activeIndex: this.index.active
-    });
-  } // this.slides.disperse(this.index.active);
-
-
-  this.snapCurrentToActiveIndex();
-
-  if (this.GLStickPop) {
-    this.GLStickPop.stop();
-  }
-
-  var directionSpring = (0, _popmotion.spring)({
-    from: this.progress === 1 ? 1 : this.direction,
-    to: 1,
-    mass: 1,
-    stiffness: 800,
-    damping: 2000
-  });
-  var progressSpring = (0, _popmotion.spring)({
-    from: this.progress,
-    to: 0,
-    mass: 4,
-    stiffness: 400,
-    damping: 70,
-    restDelta: 0.0001
-  });
-  var waveIntensitySpring = (0, _popmotion.spring)({
-    from: this.waveIntensity,
-    to: this.waveIntensityRange[0],
-    mass: 0.1,
-    stiffness: 800,
-    damping: 50
-  });
-  this.GLStickPop = (0, _popmotion.parallel)(progressSpring, directionSpring, waveIntensitySpring).start({
-    update: function update(values) {
-      _this7.progress = values[0];
-      _this7.direction = values[1];
-      _this7.waveIntensity = values[2];
-
-      _this7.GL.updateStickEffect({
-        progress: _this7.progress,
-        direction: _this7.direction,
-        waveIntensity: _this7.waveIntensity
-      });
-    },
-    complete: function complete() {
-      if (_this7.options.onFullscreenFinish) {
-        _this7.options.onFullscreenFinish({
-          activeIndex: _this7.index.active
-        });
-      }
-
-      _this7.GL.cancelLoop();
-    }
-  });
-};
-
-Showcase.prototype.onResize = function () {
-  this.GL.onResize();
-};
-},{"./GLManager":"js/GLManager.js","popmotion":"node_modules/popmotion/dist/popmotion.es.js","./Grab":"js/Grab.js","./reach":"js/reach.js"}],"node_modules/gsap/gsap-core.js":[function(require,module,exports) {
+},{}],"node_modules/gsap/gsap-core.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -47549,7 +47218,595 @@ TweenMaxWithCSS = gsapWithCSS.core.Tween;
 
 exports.TweenMax = TweenMaxWithCSS;
 exports.default = exports.gsap = gsapWithCSS;
-},{"./gsap-core.js":"node_modules/gsap/gsap-core.js","./CSSPlugin.js":"node_modules/gsap/CSSPlugin.js"}],"js/Slides.js":[function(require,module,exports) {
+},{"./gsap-core.js":"node_modules/gsap/gsap-core.js","./CSSPlugin.js":"node_modules/gsap/CSSPlugin.js"}],"js/Showcase.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Showcase = Showcase;
+
+var _GLManager = require("./GLManager");
+
+var _popmotion = require("popmotion");
+
+var _Grab = require("./Grab");
+
+var _reach = require("./reach");
+
+var _gsap = _interopRequireDefault(require("gsap"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// onFullscreenStart
+// onFullscreenFinish
+// onZoomOutStart
+// onZoomOutFinish
+// onAciveIndexChange
+// onIndexChange
+function Showcase(data) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  this.GL = new _GLManager.GLManager(data);
+  this.GL.createPlane(0);
+  this.GL.createPlane(1);
+  this.data = data;
+  this.progress = 0;
+  this.initialProgress = 10;
+  this.initialDirection = 5;
+  this.direction = 1;
+  this.waveIntensity = 0;
+  this.inTab = false;
+  this.part = 0;
+  this.options = options;
+  this.index = {
+    target: 0,
+    current: 0,
+    initial: 0,
+    scrollSize: window.innerHeight / 6,
+    active: 0
+  };
+  this.follower = {
+    x: 0,
+    y: 0
+  };
+  this.followerSpring = null;
+  this.slidesSpring = null;
+  this.waveIntensityRange = [0, 0.1]; // this.slides = new Slides(data);
+
+  this.grab = new _Grab.Grab({
+    onGrabStart: this.onGrabStart.bind(this),
+    onGrabMove: this.onGrabMove.bind(this),
+    onGrabEnd: this.onGrabEnd.bind(this)
+  });
+}
+
+Showcase.prototype.mount = function (container) {
+  this.GL.mount(container); // this.slides.mount(container);
+  // container.appendChild(this.slidesContainer);
+};
+
+Showcase.prototype.render = function () {
+  this.GL.render();
+};
+
+function clamp(num, min, max) {
+  return Math.max(min, Math.min(num, max));
+}
+
+Showcase.prototype.onMouseMove = function (ev) {
+  var _this = this;
+
+  if (this.followerSpring) {
+    this.followerSpring.stop();
+    this.followerSpring = null; // this.follower.vx = 0;
+    // this.follower.vy = 0;
+  }
+
+  this.followerSpring = (0, _reach.reach)({
+    from: {
+      x: this.follower.x,
+      y: this.follower.y
+    },
+    to: {
+      x: ev.clientX,
+      y: ev.clientY
+    },
+    velocity: {
+      x: this.follower.vx,
+      y: this.follower.vy
+    },
+    stiffness: 500,
+    damping: 50,
+    mass: 1
+  }).start({
+    update: function update(position) {
+      var velocity = {
+        x: position.x - _this.follower.x,
+        y: position.y - _this.follower.y
+      };
+
+      _this.GL.updateRgbEffect({
+        position: position,
+        velocity: velocity,
+        part: _this.part
+      });
+
+      _this.follower = {
+        x: position.x,
+        y: position.y,
+        vx: velocity.x,
+        vy: velocity.y
+      };
+    },
+    complete: function complete() {
+      _this.GL.updateRgbEffect({
+        position: _this.follower,
+        velocity: {
+          x: 0,
+          y: 0
+        },
+        part: _this.part
+      });
+
+      _this.follower.vx = 0;
+      _this.follower.vy = 0;
+    }
+  }); // this.GL.updateRgbEffect({ position, velocity });
+};
+
+Showcase.prototype.onGrabMove = function (scroll) {
+  var _this2 = this;
+
+  if (this.part === 1) {
+    if (this.inTab) {
+      return;
+    }
+
+    this.index.target = clamp(this.index.initial + scroll.delta / this.index.scrollSize, -this.data.length + 0.51, 0.49);
+    var index = clamp(Math.round(-this.index.target), 0, this.data.length - 1);
+
+    if (this.index.active !== index) {
+      this.index.active = index;
+
+      if (this.options.onActiveIndexChange) {
+        this.options.onActiveIndexChange(this.index.active);
+      } // this.slides.onActiveIndexChange(this.index.active);
+
+
+      this.GL.updateTexture(index);
+
+      if (this.textureProgressSpring) {
+        this.textureProgressSpring.stop();
+        this.textureProgressSpring = null;
+      }
+
+      this.textureProgressSpring = (0, _popmotion.spring)({
+        from: 0,
+        to: 1,
+        stiffness: 400,
+        damping: 30
+      }).start(function (val) {
+        _this2.GL.updateTexture(null, val);
+      });
+    }
+
+    if (this.slidesPop) {
+      this.slidesPop.stop();
+    }
+
+    this.slidesPop = (0, _reach.reach)({
+      from: {
+        index: this.index.current
+      },
+      to: {
+        index: this.index.target
+      },
+      restDelta: 0.001
+    }).start({
+      update: function update(val) {
+        // this.slides.onMove(index);
+        if (_this2.options.onIndexChange) {
+          _this2.options.onIndexChange(val.index);
+        }
+
+        _this2.index.current = val.index;
+      },
+      complete: function complete(val) {
+        if (_this2.options.onIndexChange) {
+          _this2.options.onIndexChange(val.index);
+        }
+
+        _this2.index.current = val.index;
+      }
+    });
+  }
+};
+
+Showcase.prototype.titleClickStart = function () {
+  var _this3 = this;
+
+  if (this.part === 1) {
+    if (this.options.onZoomOutStart) {
+      this.options.onClickStart({
+        activeIndex: this.index.active
+      });
+    } // this.slides.appear();
+
+
+    this.index.initial = this.index.current;
+
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
+    }
+
+    this.GL.scheduleLoop();
+    var directionSpring = (0, _popmotion.spring)({
+      from: this.progress === 0 ? 0 : this.direction,
+      to: 0,
+      mass: 1,
+      stiffness: 800,
+      damping: 2000
+    });
+    var progressSpring = (0, _popmotion.spring)({
+      from: this.progress,
+      to: 1,
+      mass: 5,
+      stiffness: 350,
+      damping: 500
+    });
+    var waveIntensitySpring = (0, _popmotion.spring)({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[1],
+      mass: 5,
+      stiffness: 10,
+      damping: 200
+    });
+    this.GLStickPop = (0, _popmotion.parallel)(progressSpring, directionSpring, waveIntensitySpring).start({
+      update: function update(values) {
+        if (_this3.progress !== values[0]) {}
+
+        _this3.progress = values[0];
+        _this3.direction = values[1];
+        _this3.waveIntensity = values[2];
+
+        _this3.GL.updateStickEffect({
+          progress: _this3.progress,
+          direction: _this3.direction,
+          waveIntensity: _this3.waveIntensity,
+          part: _this3.part
+        });
+      },
+      complete: function complete() {
+        if (_this3.options.onZoomOutFinish) {
+          _this3.options.onZoomOutFinish({
+            activeIndex: _this3.index.active
+          });
+        }
+      }
+    });
+  }
+};
+
+Showcase.prototype.onGrabStart = function () {
+  var _this4 = this;
+
+  if (this.part === 0) {
+    if (this.zoom01) {
+      this.zoom01.kill();
+    }
+
+    this.GL.scheduleLoop();
+    this.zoom01 = _gsap.default.timeline();
+    this.zoom01.to(this.GL.camera.position, {
+      z: 15,
+      duration: 2,
+      ease: "power4.in"
+    });
+    this.zoom01.to(this.GL.camera.position, {
+      z: 5,
+      duration: 1.2,
+      ease: "power4.in",
+      onComplete: function onComplete() {
+        console.log('start complete');
+        _this4.part = 1;
+
+        if (_this4.GLStickPop) {
+          _this4.GLStickPop.stop();
+        }
+      }
+    }, "<1.6");
+
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
+    } // this.GL.scheduleLoop();
+
+
+    var waveIntensitySpring = (0, _popmotion.spring)({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[1],
+      mass: 5,
+      stiffness: 10,
+      damping: 200
+    });
+    this.GLStickPop = (0, _popmotion.parallel)(waveIntensitySpring).start({
+      update: function update(values) {
+        _this4.waveIntensity = values[0];
+
+        _this4.GL.updateStickEffect({
+          waveIntensity: _this4.waveIntensity,
+          part: _this4.part
+        });
+      }
+    });
+  } else if (this.part === 1) {
+    if (this.inTab) {
+      return;
+    }
+
+    if (this.options.onZoomOutStart) {
+      this.options.onZoomOutStart({
+        activeIndex: this.index.active
+      });
+    } // this.slides.appear();
+
+
+    this.index.initial = this.index.current;
+
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
+    }
+
+    this.GL.scheduleLoop();
+    var directionSpring = (0, _popmotion.spring)({
+      from: this.progress === 0 ? 0 : this.direction,
+      to: 0,
+      mass: 1,
+      stiffness: 800,
+      damping: 2000
+    });
+    var progressSpring = (0, _popmotion.spring)({
+      from: this.progress,
+      to: 1,
+      mass: 5,
+      stiffness: 350,
+      damping: 500
+    });
+
+    var _waveIntensitySpring = (0, _popmotion.spring)({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[1],
+      mass: 5,
+      stiffness: 10,
+      damping: 200
+    });
+
+    this.GLStickPop = (0, _popmotion.parallel)(progressSpring, directionSpring, _waveIntensitySpring).start({
+      update: function update(values) {
+        if (_this4.progress !== values[0]) {}
+
+        _this4.progress = values[0];
+        _this4.direction = values[1];
+        _this4.waveIntensity = values[2];
+
+        _this4.GL.updateStickEffect({
+          progress: _this4.progress,
+          direction: _this4.direction,
+          waveIntensity: _this4.waveIntensity,
+          part: _this4.part
+        });
+      },
+      complete: function complete() {
+        if (_this4.options.onZoomOutFinish) {
+          _this4.options.onZoomOutFinish({
+            activeIndex: _this4.index.active
+          });
+        }
+      }
+    });
+  }
+};
+
+Showcase.prototype.onGrabEnd = function () {
+  var _this5 = this;
+
+  if (this.part === 0) {
+    if (this.zoom01) {
+      console.log('stop');
+      this.zoom01.kill();
+    }
+
+    this.GL.scheduleLoop();
+    this.zoom01 = _gsap.default.timeline();
+    this.zoom01.to(this.GL.camera.position, {
+      z: 10,
+      duration: 1,
+      ease: "power2.in",
+      onComplete: function onComplete() {
+        console.log('end complete');
+        _this5.part = 0;
+      }
+    });
+
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
+    }
+
+    var waveIntensitySpring = (0, _popmotion.spring)({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[0],
+      mass: 0.1,
+      stiffness: 800,
+      damping: 50
+    });
+    this.GLStickPop = (0, _popmotion.parallel)(waveIntensitySpring).start({
+      update: function update(values) {
+        _this5.waveIntensity = values[0];
+
+        _this5.GL.updateStickEffect({
+          waveIntensity: _this5.waveIntensity,
+          part: _this5.part
+        });
+      }
+    });
+  } else if (this.part === 1) {
+    if (this.inTab) {
+      return;
+    }
+
+    if (this.options.onFullscreenStart) {
+      this.options.onFullscreenStart({
+        activeIndex: this.index.active
+      });
+    } // this.slides.disperse(this.index.active);
+
+
+    this.snapCurrentToActiveIndex();
+
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
+    }
+
+    var directionSpring = (0, _popmotion.spring)({
+      from: this.progress === 1 ? 1 : this.direction,
+      to: 1,
+      mass: 1,
+      stiffness: 800,
+      damping: 2000
+    });
+    var progressSpring = (0, _popmotion.spring)({
+      from: this.progress,
+      to: 0,
+      mass: 4,
+      stiffness: 400,
+      damping: 70,
+      restDelta: 0.0001
+    });
+
+    var _waveIntensitySpring2 = (0, _popmotion.spring)({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[0],
+      mass: 0.1,
+      stiffness: 800,
+      damping: 50
+    });
+
+    this.GLStickPop = (0, _popmotion.parallel)(progressSpring, directionSpring, _waveIntensitySpring2).start({
+      update: function update(values) {
+        _this5.progress = values[0];
+        _this5.direction = values[1];
+        _this5.waveIntensity = values[2];
+
+        _this5.GL.updateStickEffect({
+          progress: _this5.progress,
+          direction: _this5.direction,
+          waveIntensity: _this5.waveIntensity,
+          part: _this5.part
+        });
+      },
+      complete: function complete() {
+        if (_this5.options.onFullscreenFinish) {
+          _this5.options.onFullscreenFinish({
+            activeIndex: _this5.index.active
+          });
+        }
+
+        _this5.GL.cancelLoop();
+      }
+    });
+  }
+};
+
+Showcase.prototype.snapCurrentToActiveIndex = function () {
+  var _this6 = this;
+
+  if (this.slidesPop) {
+    this.slidesPop.stop();
+  }
+
+  this.slidesPop = (0, _reach.reach)({
+    from: {
+      index: this.index.current
+    },
+    to: {
+      index: Math.round(this.index.target)
+    },
+    restDelta: 0.001
+  }).start({
+    complete: function complete() {},
+    update: function update(val) {
+      // this.slides.onMove(val);
+      if (_this6.options.onIndexChange) {
+        _this6.options.onIndexChange(val.index);
+      }
+
+      _this6.index.current = val.index;
+    }
+  });
+};
+
+Showcase.prototype.titleClickEnd = function () {
+  var _this7 = this;
+
+  // this.slides.disperse(this.index.active);
+  if (this.part === 1) {
+    this.snapCurrentToActiveIndex();
+
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
+    }
+
+    var directionSpring = (0, _popmotion.spring)({
+      from: this.progress === 1 ? 1 : this.direction,
+      to: 1,
+      mass: 1,
+      stiffness: 800,
+      damping: 2000
+    });
+    var progressSpring = (0, _popmotion.spring)({
+      from: this.progress,
+      to: 0,
+      mass: 4,
+      stiffness: 400,
+      damping: 70,
+      restDelta: 0.0001
+    });
+    var waveIntensitySpring = (0, _popmotion.spring)({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[0],
+      mass: 0.1,
+      stiffness: 800,
+      damping: 50
+    });
+    this.GLStickPop = (0, _popmotion.parallel)(progressSpring, directionSpring, waveIntensitySpring).start({
+      update: function update(values) {
+        _this7.progress = values[0];
+        _this7.direction = values[1];
+        _this7.waveIntensity = values[2];
+
+        _this7.GL.updateStickEffect({
+          progress: _this7.progress,
+          direction: _this7.direction,
+          waveIntensity: _this7.waveIntensity,
+          part: _this7.part
+        });
+      },
+      complete: function complete() {
+        if (_this7.options.onClickEnd) {
+          _this7.options.onClickEnd({
+            activeIndex: _this7.index.active
+          });
+        }
+
+        _this7.GL.cancelLoop();
+      }
+    });
+  }
+};
+
+Showcase.prototype.onResize = function () {
+  this.GL.onResize();
+};
+},{"./GLManager":"js/GLManager.js","popmotion":"node_modules/popmotion/dist/popmotion.es.js","./Grab":"js/Grab.js","./reach":"js/reach.js","gsap":"node_modules/gsap/index.js"}],"js/Slides.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -47693,7 +47950,6 @@ var Slides = /*#__PURE__*/function () {
 
       var tl = _gsap.default.timeline();
 
-      console.log('tl');
       tl.to(desc, {
         opacity: 0,
         duration: 0.3,
@@ -47709,6 +47965,12 @@ var Slides = /*#__PURE__*/function () {
           _this4.slides[_this4.currentIdx].style.left = 'auto';
           _this4.slides[_this4.currentIdx].style.position = 'relative';
           _this4.slides[_this4.currentIdx].style.display = 'grid';
+
+          if (document.querySelector('.content').scrollTop > 0) {
+            document.querySelector('.content').scrollTop = 0;
+          }
+
+          document.querySelector('.content').style.overflow = 'hidden';
         }
       });
       tl.to(header, {
@@ -47955,7 +48217,6 @@ var slides = new _Slides.Slides(slidesData, {
   },
   onTitleClickEnd: function onTitleClickEnd() {
     showcase.titleClickEnd();
-    console.log('bb');
   }
 });
 var showcase = new _Showcase.Showcase(slidesData, {
@@ -47980,8 +48241,6 @@ var showcase = new _Showcase.Showcase(slidesData, {
     var activeIndex = _ref3.activeIndex;
     cursor.leave();
     slides.disperse(activeIndex);
-    document.body.scrollTop = document.documentElement.scrollTop = 0;
-    document.querySelector('.content').style.overflow = 'hidden';
     showcase.inTab = false;
   },
   onZoomOutFinish: function onZoomOutFinish(_ref4) {
@@ -48033,7 +48292,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38733" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41123" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

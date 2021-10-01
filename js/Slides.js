@@ -89,7 +89,6 @@ class Slides {
     let desc = this.slides[this.currentIdx].querySelector('.slide-desc')
     let header = this.slides[this.currentIdx].querySelectorAll('.slide-header')
     let tl = gsap.timeline()
-    console.log('tl')
     tl.to(desc, {
       opacity: 0, duration: 0.3, height: 0, onComplete: () => {
         this.slides.forEach((slide, i) => {
@@ -101,6 +100,10 @@ class Slides {
         this.slides[this.currentIdx].style.left = 'auto';
         this.slides[this.currentIdx].style.position = 'relative'
         this.slides[this.currentIdx].style.display = 'grid'
+        if(document.querySelector('.content').scrollTop > 0){
+          document.querySelector('.content').scrollTop = 0
+        }
+        document.querySelector('.content').style.overflow = 'hidden'
       }
     })
     tl.to(header, { opacity: 1, height: "auto", duration: 1, })
