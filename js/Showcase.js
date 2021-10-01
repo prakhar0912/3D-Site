@@ -392,7 +392,7 @@ Showcase.prototype.onGrabEnd = function () {
     this.GL.scheduleLoop();
     this.zoom01 = gsap.timeline()
     this.zoom01.to(this.GL.camera.position,{
-      z: 10, duration: 1, ease: "power2.in", onComplete: () => {
+      z: 10, duration: 0.8, ease: "power2.in", onComplete: () => {
         console.log('end complete')
         this.part = 0
       }
