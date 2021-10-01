@@ -279,17 +279,17 @@ Showcase.prototype.onGrabStart = function () {
 
     this.zoom01 = gsap.timeline()
     this.zoom01.to(this.GL.camera.position,{
-      z: 15, duration: 2, ease: "power4.in",
+      z: 15, duration: 1, ease: "power4.in",
     })
     this.zoom01.to(this.GL.camera.position,{
-      z: 5, duration: 1.2, ease: "power4.in", onComplete: () => {
+      z: 5, duration: 1.2, delay:-0.1, ease: "power4.in", onComplete: () => {
         console.log('start complete')
         this.part = 1
         if (this.GLStickPop) {
           this.GLStickPop.stop();
         }
       }
-    },"<1.6")
+    })
 
     if (this.GLStickPop) {
       this.GLStickPop.stop();
