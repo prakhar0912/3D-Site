@@ -26,7 +26,11 @@ class Slides {
       slide.classList.add(index !== 0 ? "next" : "show-meta");
       meta.innerHTML = entry.meta;
       title.innerHTML = entry.title;
+      
       more.innerHTML = 'Click Here to Read more';
+      if(index == 0){
+        more.innerHTML = 'Click and hold to continue';
+      }
       desc.innerHTML = entry.desc
       slide.appendChild(container)
       container.appendChild(header)
