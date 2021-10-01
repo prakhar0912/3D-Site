@@ -47857,6 +47857,11 @@ var Slides = /*#__PURE__*/function () {
       meta.innerHTML = entry.meta;
       title.innerHTML = entry.title;
       more.innerHTML = 'Click Here to Read more';
+
+      if (index == 0) {
+        more.innerHTML = 'Click and hold to continue';
+      }
+
       desc.innerHTML = entry.desc;
       slide.appendChild(container);
       container.appendChild(header);
@@ -48293,7 +48298,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41123" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33061" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
