@@ -17,6 +17,7 @@ class Slides {
     this.slides = this.createSlides()
     console.log(this.slides)
     this.options = options
+    this.tl = null;
     this.addClickEvents()
   }
 
@@ -24,7 +25,7 @@ class Slides {
     let slides = []
     for (let i = 0; i < this.data.length; i++) {
       let Mastercontainer = createEleWithClass("div", "master-slide-container")
-      if(i == 0){
+      if (i == 0) {
         Mastercontainer = createEleWithClass("div", "master-slide-container current")
       }
       let innerSlides = []
@@ -58,7 +59,7 @@ class Slides {
     return slides
   }
 
-  updatePart(part){
+  updatePart(part) {
     this.part = part
   }
 
@@ -67,32 +68,40 @@ class Slides {
   }
 
   startTransitionParts(from, to) {
-    if(this.tl){
+    if (this.tl) {
       this.tl.kill()
     }
     this.tl = gsap.timeline()
-    this.tl.to(this.masterSlides[from], {opacity: 0, duration: 1.8, onComplete: () => {
-      this.masterSlides[from].classList.remove('current')
-    }})
-    this.tl.to(this.masterSlides[to], {opacity: 1, duration: 0.7, delay: -0.5, onComplete: () => {
-      this.masterSlides[to].classList.add('current')
-      this.part = to
-    }})
+    this.tl.to(this.masterSlides[from], {
+      opacity: 0, duration: 2.3, onComplete: () => {
+        this.masterSlides[from].classList.remove('current')
+      }
+    })
+    this.tl.to(this.masterSlides[to], {
+      opacity: 1, duration: 0.7, delay: -0.1, onComplete: () => {
+        this.masterSlides[to].classList.add('current')
+        this.part = to
+      }
+    })
   }
 
   endTransitionParts(from, to) {
-    if(this.tl){
+    if (this.tl) {
       this.tl.kill()
     }
     this.tl = gsap.timeline()
-    this.tl.to(this.masterSlides[to], {opacity: 0, duration: 0.7, onComplete: () => {
-      this.masterSlides[to].classList.remove('current')
-    }})
-    this.tl.to(this.masterSlides[from], {opacity: 0, duration: 0.7, delay: -0.5, onComplete: () => {
-      this.masterSlides[from].classList.add('current')
-      this.part = from
-    }})
-    
+    this.tl.to(this.masterSlides[to], {
+      opacity: 0, duration: 0.7, onComplete: () => {
+        this.masterSlides[to].classList.remove('current')
+      }
+    })
+    this.tl.to(this.masterSlides[from], {
+      opacity: 1, duration: 0.7, delay: -0.1, onComplete: () => {
+        this.masterSlides[from].classList.add('current')
+        this.part = from
+      }
+    })
+
   }
 
 
@@ -187,18 +196,20 @@ class Slides {
   }
   disperse(activeIndex) {
     //this.currentIdx = activeIndex;
-    this.slides[this.part][this.currentIdx].classList.add("show-meta");
-    this.container.classList.remove("scrolling");
-    for (let index = 0; index < this.data[1].length; index++) {
-      if (index > activeIndex) {
-        this.slides[this.part][index].classList.add("next");
-        this.slides[this.part][index].classList.remove("prev");
-      } else if (index < activeIndex) {
-        this.slides[this.part][index].classList.remove("next");
-        this.slides[this.part][index].classList.add("prev");
-      } else {
-        this.slides[this.part][index].classList.remove("next");
-        this.slides[this.part][index].classList.remove("prev");
+    if (this.part === 1) {
+      this.slides[1][this.currentIdx].classList.add("show-meta");
+      this.container.classList.remove("scrolling");
+      for (let index = 0; index < this.data[1].length; index++) {
+        if (index > activeIndex) {
+          this.slides[1][index].classList.add("next");
+          this.slides[1][index].classList.remove("prev");
+        } else if (index < activeIndex) {
+          this.slides[1][index].classList.remove("next");
+          this.slides[1][index].classList.add("prev");
+        } else {
+          this.slides[1][index].classList.remove("next");
+          this.slides[1][index].classList.remove("prev");
+        }
       }
     }
   }

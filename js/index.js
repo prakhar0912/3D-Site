@@ -7,6 +7,8 @@ import image3 from "../images/3.jpg";
 import image4 from "../images/4.jpg";
 import image5 from "../images/5.jpg";
 import landingImage from "../images/landing.jpg"
+import landingLogo from "../images/landingLogo.svg"
+import landingStudio from "../images/studio.svg"
 
 const container = document.getElementById("app");
 const cursor = new Cursor(document.querySelector(".cursor"));
@@ -14,7 +16,7 @@ const slidesData = [
   [
     {
       image: landingImage,
-      title: "<p>Landing</p><p>App Design</p>",
+      title: `<img src='${landingLogo}'><img src='${landingStudio}'>`,
       desc: `
       <div class="desc-container">
       <h3>Description</h3>
@@ -173,12 +175,12 @@ const showcase = new Showcase(slidesData, {
     slides.disperse(activeIndex)
     showcase.inTab = false
   },
-  onZoomOutFinish: ({ activeIndex }) => {},
+  onZoomOutFinish: ({ activeIndex }) => { },
   onFullscreenStart: ({ activeIndex }) => {
     cursor.leave();
     slides.disperse(activeIndex);
   },
-  onFullscreenFinish: ({ activeIndex }) => {},
+  onFullscreenFinish: ({ activeIndex }) => { },
   startTransitionPage: (from, to) => {
     slides.startTransitionParts(from, to)
   },
@@ -191,10 +193,10 @@ showcase.mount(container);
 slides.mount(container);
 showcase.render();
 
-window.addEventListener("resize", function() {
+window.addEventListener("resize", function () {
   showcase.onResize();
 });
 
-window.addEventListener("mousemove", function(ev) {
+window.addEventListener("mousemove", function (ev) {
   showcase.onMouseMove(ev);
 });

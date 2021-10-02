@@ -4,7 +4,6 @@ import {
 import {
   spring,
   parallel,
-  timeline
 } from "popmotion";
 import {
   Grab
@@ -77,8 +76,6 @@ Showcase.prototype.calculateTotalEntries = function (data) {
 
 Showcase.prototype.mount = function (container) {
   this.GL.mount(container);
-  // this.slides.mount(container);
-  // container.appendChild(this.slidesContainer);
 };
 Showcase.prototype.render = function () {
   this.GL.render();
@@ -143,7 +140,6 @@ Showcase.prototype.onMouseMove = function (ev) {
       this.follower.vy = 0;
     }
   });
-  // this.GL.updateRgbEffect({ position, velocity });
 };
 
 Showcase.prototype.onGrabMove = function (scroll) {
@@ -297,11 +293,7 @@ Showcase.prototype.onGrabStart = function () {
       z: 5, duration: 1.2, delay: -0.1, ease: "power4.in", onComplete: () => {
         console.log('start complete')
         this.part = 1
-        // setTimeout(() => {
-        //   this.GL.camera.position.z = 11
-        // }, 3000)
-        // this.GL.updatePart(1)
-        // this.zoom01.kill()
+        this.GL.part = 1
         if (this.GLStickPop) {
           this.GLStickPop.stop();
         }
@@ -405,8 +397,8 @@ Showcase.prototype.onGrabEnd = function () {
     if (this.zoom01) {
       console.log('stop')
       this.zoom01.kill();
-      this.options.endTransitionPage(0,1)
     }
+    this.options.endTransitionPage(0,1)
     this.GL.scheduleLoop();
     this.zoom01 = gsap.timeline()
     this.zoom01.to(this.GL.camera.position, {

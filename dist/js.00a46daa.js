@@ -37329,37 +37329,40 @@ function GLManager(data) {
 
   this.totalEntries = this.calculateTotalEntries(data);
   this.loadedEntries = 0;
-  this.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
-  this.camera.position.z = 10;
-  this.meshes = []; // this.initialMesh = null;
+  var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
+  camera.position.z = 10; // this.mesh = null;
+  // this.initialMesh = null;
 
-  this.scene = new THREE.Scene();
-  this.camera.lookAt = this.scene.position;
-  this.renderer = new THREE.WebGLRenderer({
+  this.meshes = [];
+  var scene = new THREE.Scene();
+  camera.lookAt = scene.position;
+  var renderer = new THREE.WebGLRenderer({
     alpha: true,
     antialias: true
   });
-  this.renderer.setSize(window.innerWidth, window.innerHeight);
-  this.renderer.setPixelRatio(window.devicePixelRatio);
   this.part = 0;
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  this.camera = camera;
+  this.scene = scene;
+  this.renderer = renderer;
   this.render = this.render.bind(this);
   this.loadTextures(data).then(function (textures) {
     _this.textures = textures;
-    console.log(textures);
     _this.factors = _this.loadFactors(data);
-
-    _this.createPlanes(data);
-
-    _this.calcAspectRatios();
-
     _this.currentIndex = 0;
     _this.nextIndex = 0;
     _this.textureProgress = 0;
-    _this.initialTextureProgress = 0;
     _this.initialRender = false;
     _this.time = 0;
     _this.loopRaf = null;
     _this.loop = _this.loop.bind(_this);
+
+    _this.createPlane(0);
+
+    _this.createPlane(1);
+
+    _this.calcAspectRatios();
 
     if (!_this.loopRaf) {
       _this.render();
@@ -37367,15 +37370,29 @@ function GLManager(data) {
   });
 }
 
-GLManager.prototype.calculateTotalEntries = function (data) {
-  var total = 0;
+GLManager.prototype.loadFactors = function (data) {
+  var factorsMaster = [];
 
   for (var i = 0; i < data.length; i++) {
-    total += data[i].length;
+    var factors = [];
+
+    for (var j = 0; j < data[i].length; j++) {
+      factors.push(new THREE.Vector2(1, 1));
+    }
+
+    factorsMaster.push(factors);
   }
 
-  console.log(total);
-  return total;
+  console.log(factorsMaster);
+  return factorsMaster;
+};
+
+GLManager.prototype.calcAspectRatios = function () {
+  for (var i = 0; i < this.textures.length; i++) {
+    for (var j = 0; j < this.textures[i].length; j++) {
+      this.calculateAspectRatioFactor(i, j, this.textures[i][j]);
+    }
+  }
 };
 
 GLManager.prototype.loadTextures = /*#__PURE__*/function () {
@@ -37413,7 +37430,7 @@ GLManager.prototype.loadTextures = /*#__PURE__*/function () {
 
                         _context.t0 = textures;
                         _context.next = 9;
-                        return _this2.loadTexture(data[i][j]);
+                        return _this2.loadTexture(data[i][j], i, j);
 
                       case 9:
                         _context.t1 = _context.sent;
@@ -37462,14 +37479,15 @@ GLManager.prototype.loadTextures = /*#__PURE__*/function () {
   };
 }();
 
-GLManager.prototype.loadTexture = function (data) {
+GLManager.prototype.loadTexture = function (data, i, j) {
   var _this3 = this;
 
   return new Promise(function (res) {
     new THREE.TextureLoader().load(data.image, function (texture) {
       if (_this3.initialRender) {
-        console.log(_this3.totalEntries);
         _this3.loadedEntries++;
+
+        _this3.calculateAspectRatioFactor.bind(_this3, i, j);
 
         if (_this3.loadedEntries === _this3.totalEntries) {
           document.body.classList.remove('loading');
@@ -37484,33 +37502,15 @@ GLManager.prototype.loadTexture = function (data) {
   });
 };
 
-GLManager.prototype.calcAspectRatios = function () {
-  for (var i = 0; i < this.textures.length; i++) {
-    for (var j = 0; j < this.textures[i].length; j++) {
-      this.calculateAspectRatioFactor(i, j, this.textures[i][j]);
-    }
-  }
-};
-
-GLManager.prototype.loadFactors = function (data) {
-  var factorsMaster = [];
+GLManager.prototype.calculateTotalEntries = function (data) {
+  var total = 0;
 
   for (var i = 0; i < data.length; i++) {
-    var factors = [];
-
-    for (var j = 0; j < data[i].length; j++) {
-      factors.push(new THREE.Vector2(1, 1));
-    }
-
-    factorsMaster.push(factors);
+    total += data[i].length;
   }
 
-  console.log(factorsMaster);
-  return factorsMaster;
-};
-
-GLManager.prototype.onPartChange = function (part) {
-  this.part = part;
+  console.log(total);
+  return total;
 };
 
 GLManager.prototype.getViewSize = function () {
@@ -37527,7 +37527,7 @@ GLManager.prototype.getPlaneSize = function () {
   };
 };
 
-GLManager.prototype.calculateAspectRatioFactor = function (i, j, texture) {
+GLManager.prototype.calculateAspectRatioFactor = function (index, j, texture) {
   var plane = this.getPlaneSize();
   var windowRatio = window.innerWidth / window.innerHeight;
   var rectRatio = plane.width / plane.height * windowRatio;
@@ -37544,157 +37544,195 @@ GLManager.prototype.calculateAspectRatioFactor = function (i, j, texture) {
     factorY = 1;
   }
 
-  this.factors[i][j] = new THREE.Vector2(factorX, factorY);
+  this.factors[index][j] = new THREE.Vector2(factorX, factorY);
 
-  if (i === 1) {
+  if (index === 1) {
     if (this.currentIndex === j) {
-      this.meshes[i].material.uniforms.u_textureFactor.value = this.factors[i][j];
-      this.meshes[i].material.uniforms.u_textureFactor.needsUpdate = true;
+      this.meshes[1].material.uniforms.u_textureFactor.value = this.factors[1][j];
+      this.meshes[1].material.uniforms.u_textureFactor.needsUpdate = true;
     }
 
     if (this.nextIndex === j) {
-      this.meshes[i].material.uniforms.u_texture2Factor.value = this.factors[i][j];
-      this.meshes[i].material.uniforms.u_texture2Factor.needsUpdate = true;
+      this.meshes[1].material.uniforms.u_texture2Factor.value = this.factors[1][j];
+      this.meshes[1].material.uniforms.u_texture2Factor.needsUpdate = true;
     }
   } else {
-    this.meshes[i].material.uniforms.u_textureFactor.value = this.factors[i][j];
-    this.meshes[i].material.uniforms.u_textureFactor.needsUpdate = true;
+    if (this.meshes[0]) {
+      this.meshes[0].material.uniforms.u_textureFactor.value = this.factors[0][0];
+      this.meshes[0].material.uniforms.u_textureFactor.needsUpdate = true;
+    }
+  }
+
+  if (this.initialRender) {
+    this.loadedEntries++;
+
+    if (this.loadedEntries === this.totalEntries) {
+      document.body.classList.remove('loading');
+      console.log('loaded all');
+    }
+
+    this.render();
   }
 }; // Plane Stuff
 
 
-GLManager.prototype.createPlanes = function (data) {
+GLManager.prototype.createPlane = function (index) {
   // Calculate bas of Isoceles triangle(camera)
-  var viewSize = this.getViewSize();
+  if (index === 0) {
+    var viewSize = this.getViewSize();
 
-  var _this$getPlaneSize = this.getPlaneSize(),
-      width = _this$getPlaneSize.width,
-      height = _this$getPlaneSize.height;
+    var _this$getPlaneSize = this.getPlaneSize(),
+        width = _this$getPlaneSize.width,
+        height = _this$getPlaneSize.height;
 
-  var segments = 60;
-  var geometrya = new THREE.PlaneGeometry(width, height, segments, segments);
-  var materiala = new THREE.ShaderMaterial({
-    uniforms: {
-      u_texture: {
-        type: "t",
-        value: this.textures[0][0]
+    var segments = 60;
+    var geometry = new THREE.PlaneBufferGeometry(width, height, segments, segments);
+    var material = new THREE.ShaderMaterial({
+      uniforms: {
+        u_texture: {
+          type: "t",
+          value: this.textures[0][0]
+        },
+        u_textureFactor: {
+          type: "f",
+          value: this.factors[0][0]
+        },
+        // u_texture2: {
+        //   type: "t",
+        //   value: this.textures[this.nextIndex]
+        // },
+        // u_texture2Factor: {
+        //   type: "f",
+        //   value: this.factors[this.nextIndex]
+        // },
+        // u_textureProgress: {
+        //   type: "f",
+        //   value: this.initialTextureProgress
+        // },
+        u_offset: {
+          type: "f",
+          value: 8
+        },
+        u_progress: {
+          type: "f",
+          value: 0
+        },
+        u_direction: {
+          type: "f",
+          value: 1
+        },
+        u_effect: {
+          type: "f",
+          value: 0
+        },
+        u_time: {
+          type: "f",
+          value: this.time
+        },
+        u_waveIntensity: {
+          type: "f",
+          value: 0
+        },
+        u_resolution: {
+          type: "v2",
+          value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+        },
+        u_rgbPosition: {
+          type: "v2",
+          value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
+        },
+        u_rgbVelocity: {
+          type: "v2",
+          value: new THREE.Vector2(0, 0)
+        }
       },
-      u_textureFactor: {
-        type: "f",
-        value: this.factors[0][0]
-      },
-      u_offset: {
-        type: "f",
-        value: 8
-      },
-      u_effect: {
-        type: "f",
-        value: 0
-      },
-      u_time: {
-        type: "f",
-        value: this.time
-      },
-      u_waveIntensity: {
-        type: "f",
-        value: 0
-      },
-      u_resolution: {
-        type: "v2",
-        value: new THREE.Vector2(window.innerWidth, window.innerHeight)
-      },
-      u_rgbPosition: {
-        type: "v2",
-        value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
-      },
-      u_rgbVelocity: {
-        type: "v2",
-        value: new THREE.Vector2(0, 0)
-      }
-    },
-    vertexShader: _shaders.vertex,
-    fragmentShader: _shaders.fragment,
-    side: THREE.DoubleSide
-  });
-  var mesha = new THREE.Mesh(geometrya, materiala);
-  mesha.position.z = 5;
-  this.scene.add(mesha);
-  this.meshes.push(mesha); // const viewSize = this.getViewSize();
-  // const {
-  //   width,
-  //   height
-  // } = this.getPlaneSize();
-  // const segments = 60;
+      vertexShader: _shaders.vertex,
+      fragmentShader: _shaders.fragment,
+      side: THREE.DoubleSide
+    });
+    var mesh2 = new THREE.Mesh(geometry, material);
+    mesh2.position.z = 5;
+    this.scene.add(mesh2);
+    this.meshes.push(mesh2);
+  } else if (index == 1) {
+    var _viewSize = this.getViewSize();
 
-  var geometry = new THREE.PlaneGeometry(width, height, segments, segments);
-  var material = new THREE.ShaderMaterial({
-    uniforms: {
-      u_texture: {
-        type: "t",
-        value: this.textures[1][0]
+    var _this$getPlaneSize2 = this.getPlaneSize(),
+        _width = _this$getPlaneSize2.width,
+        _height = _this$getPlaneSize2.height;
+
+    var _segments = 60;
+
+    var _geometry = new THREE.PlaneBufferGeometry(_width, _height, _segments, _segments);
+
+    var _material = new THREE.ShaderMaterial({
+      uniforms: {
+        u_texture: {
+          type: "t",
+          value: this.textures[1][this.currentIndex]
+        },
+        u_textureFactor: {
+          type: "f",
+          value: this.factors[1][this.currentIndex]
+        },
+        u_texture2: {
+          type: "t",
+          value: this.textures[1][this.nextIndex]
+        },
+        u_texture2Factor: {
+          type: "f",
+          value: this.factors[1][this.nextIndex]
+        },
+        u_textureProgress: {
+          type: "f",
+          value: this.textureProgress
+        },
+        u_offset: {
+          type: "f",
+          value: 8
+        },
+        u_progress: {
+          type: "f",
+          value: 0
+        },
+        u_direction: {
+          type: "f",
+          value: 1
+        },
+        u_effect: {
+          type: "f",
+          value: 0
+        },
+        u_time: {
+          type: "f",
+          value: this.time
+        },
+        u_waveIntensity: {
+          type: "f",
+          value: 0
+        },
+        u_resolution: {
+          type: "v2",
+          value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+        },
+        u_rgbPosition: {
+          type: "v2",
+          value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
+        },
+        u_rgbVelocity: {
+          type: "v2",
+          value: new THREE.Vector2(0, 0)
+        }
       },
-      u_textureFactor: {
-        type: "f",
-        value: this.factors[1][0]
-      },
-      u_texture2: {
-        type: "t",
-        value: this.textures[1][0]
-      },
-      u_texture2Factor: {
-        type: "f",
-        value: this.factors[1][0]
-      },
-      u_textureProgress: {
-        type: "f",
-        value: this.textureProgress
-      },
-      u_offset: {
-        type: "f",
-        value: 8
-      },
-      u_progress: {
-        type: "f",
-        value: 0
-      },
-      u_direction: {
-        type: "f",
-        value: 1
-      },
-      u_effect: {
-        type: "f",
-        value: 0
-      },
-      u_time: {
-        type: "f",
-        value: this.time
-      },
-      u_waveIntensity: {
-        type: "f",
-        value: 0
-      },
-      u_resolution: {
-        type: "v2",
-        value: new THREE.Vector2(window.innerWidth, window.innerHeight)
-      },
-      u_rgbPosition: {
-        type: "v2",
-        value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
-      },
-      u_rgbVelocity: {
-        type: "v2",
-        value: new THREE.Vector2(0, 0)
-      }
-    },
-    vertexShader: _shaders.vertex,
-    fragmentShader: _shaders.fragment,
-    side: THREE.DoubleSide
-  });
-  var mesh = new THREE.Mesh(geometry, material);
-  mesh.position.z = 0;
-  this.scene.add(mesh);
-  this.meshes.push(mesh);
-  console.log(this.meshes[0].position.z, this.meshes[1].position.z);
+      vertexShader: _shaders.vertex,
+      fragmentShader: _shaders.fragment,
+      side: THREE.DoubleSide
+    });
+
+    var mesh = new THREE.Mesh(_geometry, _material);
+    this.scene.add(mesh);
+    this.meshes.push(mesh);
+  }
 };
 
 GLManager.prototype.updateCameraPosition = function (position) {
@@ -37704,35 +37742,28 @@ GLManager.prototype.updateCameraPosition = function (position) {
 };
 
 GLManager.prototype.updateTexture = function (newIndex, progress) {
-  if (this.part === 1) {
-    var didChange = false;
-    console.log(this.part);
+  var didChange = false;
 
-    if (newIndex != null && this.newIndex !== this.currentIndex) {
-      this.currentIndex = this.nextIndex;
-      this.nextIndex = newIndex;
-      this.textureProgress = 0;
-      this.meshes[this.part].material.uniforms.u_textureProgress.value = 0;
-      this.meshes[this.part].material.uniforms.u_texture.value = this.textures[this.part][this.currentIndex];
-      this.meshes[this.part].material.uniforms.u_textureFactor.value = this.factors[this.part][this.currentIndex];
+  if (newIndex != null && this.newIndex !== this.currentIndex) {
+    this.currentIndex = this.nextIndex;
+    this.nextIndex = newIndex;
+    this.textureProgress = 0;
+    this.meshes[this.part].material.uniforms.u_textureProgress.value = 0;
+    this.meshes[this.part].material.uniforms.u_texture.value = this.textures[1][this.currentIndex];
+    this.meshes[this.part].material.uniforms.u_textureFactor.value = this.factors[1][this.currentIndex];
+    this.meshes[this.part].material.uniforms.u_texture2.value = this.textures[1][newIndex];
+    this.meshes[this.part].material.uniforms.u_texture2Factor.value = this.factors[1][newIndex];
+    didChange = true;
+  }
 
-      if (this.part === 1) {
-        this.meshes[1].material.uniforms.u_texture2.value = this.textures[1][newIndex];
-        this.meshes[1].material.uniforms.u_texture2Factor.value = this.factors[1][newIndex];
-      }
+  if (progress != null && progress !== this.textureProgress) {
+    this.meshes[this.part].material.uniforms.u_textureProgress.value = progress;
+    this.textureProgress = progress;
+    didChange = true;
+  }
 
-      didChange = true;
-    }
-
-    if (progress != null && progress !== this.textureProgress) {
-      this.meshes[this.part].material.uniforms.u_textureProgress.value = progress;
-      this.textureProgress = progress;
-      didChange = true;
-    }
-
-    if (!this.loopRaf && didChange) {
-      this.render();
-    }
+  if (!this.loopRaf && didChange) {
+    this.render();
   }
 };
 
@@ -37742,17 +37773,12 @@ GLManager.prototype.updateStickEffect = function (_ref3) {
       waveIntensity = _ref3.waveIntensity,
       part = _ref3.part;
 
-  if (part === 0) {
-    this.meshes[0].material.uniforms.u_waveIntensity.value = waveIntensity;
-  } else if (part === 1) {
-    // console.log('here')
-    this.meshes[1].material.uniforms.u_progress.value = progress;
-    this.meshes[1].material.uniforms.u_direction.value = direction;
-    this.meshes[1].material.uniforms.u_waveIntensity.value = waveIntensity;
-  }
-
-  if (!this.loopRaf) {
-    this.render();
+  if (this.part === 0) {
+    this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;
+  } else if (this.part === 1) {
+    this.meshes[this.part].material.uniforms.u_progress.value = progress;
+    this.meshes[this.part].material.uniforms.u_direction.value = direction;
+    this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;
   }
 };
 
@@ -37760,11 +37786,14 @@ GLManager.prototype.updateRgbEffect = function (_ref4) {
   var position = _ref4.position,
       velocity = _ref4.velocity,
       part = _ref4.part;
-  this.meshes[this.part].material.uniforms.u_rgbPosition.value = new THREE.Vector2(position.x, position.y);
-  this.meshes[this.part].material.uniforms.u_rgbVelocity.value = new THREE.Vector2(velocity.x, velocity.y);
 
-  if (!this.loopRaf) {
-    this.render();
+  if (this.meshes[this.part]) {
+    this.meshes[this.part].material.uniforms.u_rgbPosition.value = new THREE.Vector2(position.x, position.y);
+    this.meshes[this.part].material.uniforms.u_rgbVelocity.value = new THREE.Vector2(velocity.x, velocity.y);
+
+    if (!this.loopRaf) {
+      this.render();
+    }
   }
 }; // Other stuff
 
@@ -37799,12 +37828,10 @@ GLManager.prototype.onResize = function () {
 
   for (var _i = 0; _i < this.meshes.length; _i++) {
     this.meshes[_i].material.uniforms.u_resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight);
-  } // this.camera.aspect = window.inenrWidth / window.innerHeight;
-  // this.camera.updateProjectionMatrix();
-
+  }
 
   for (var i = 0; i < this.textures.length; i++) {
-    for (var j = 0; j < this.textures[j].length; j++) {
+    for (var j = 0; j < this.textures[i].length; j++) {
       if (this.textures[i][j].image) {
         this.calculateAspectRatioFactor(i, j, this.textures[i][j]);
       }
@@ -37819,13 +37846,9 @@ GLManager.prototype.scheduleLoop = function () {
   this.loop();
 };
 
-GLManager.prototype.updatePart = function (part) {
-  this.part = part;
-};
-
 GLManager.prototype.loop = function () {
   this.render();
-  this.time += 0.1; // this.meshes.material.uniforms.u_time.value = this.time;
+  this.time += 0.1;
 
   for (var i = 0; i < this.meshes.length; i++) {
     this.meshes[i].material.uniforms.u_time.value = this.time;
@@ -48159,8 +48182,7 @@ Showcase.prototype.calculateTotalEntries = function (data) {
 };
 
 Showcase.prototype.mount = function (container) {
-  this.GL.mount(container); // this.slides.mount(container);
-  // container.appendChild(this.slidesContainer);
+  this.GL.mount(container);
 };
 
 Showcase.prototype.render = function () {
@@ -48229,7 +48251,7 @@ Showcase.prototype.onMouseMove = function (ev) {
       _this.follower.vx = 0;
       _this.follower.vy = 0;
     }
-  }); // this.GL.updateRgbEffect({ position, velocity });
+  });
 };
 
 Showcase.prototype.onGrabMove = function (scroll) {
@@ -48389,11 +48411,8 @@ Showcase.prototype.onGrabStart = function () {
       ease: "power4.in",
       onComplete: function onComplete() {
         console.log('start complete');
-        _this4.part = 1; // setTimeout(() => {
-        //   this.GL.camera.position.z = 11
-        // }, 3000)
-        // this.GL.updatePart(1)
-        // this.zoom01.kill()
+        _this4.part = 1;
+        _this4.GL.part = 1;
 
         if (_this4.GLStickPop) {
           _this4.GLStickPop.stop();
@@ -48498,9 +48517,9 @@ Showcase.prototype.onGrabEnd = function () {
     if (this.zoom01) {
       console.log('stop');
       this.zoom01.kill();
-      this.options.endTransitionPage(0, 1);
     }
 
+    this.options.endTransitionPage(0, 1);
     this.GL.scheduleLoop();
     this.zoom01 = _gsap.default.timeline();
     this.zoom01.to(this.GL.camera.position, {
@@ -48733,6 +48752,7 @@ var Slides = /*#__PURE__*/function () {
     this.slides = this.createSlides();
     console.log(this.slides);
     this.options = options;
+    this.tl = null;
     this.addClickEvents();
   }
 
@@ -48803,7 +48823,7 @@ var Slides = /*#__PURE__*/function () {
       this.tl = _gsap.default.timeline();
       this.tl.to(this.masterSlides[from], {
         opacity: 0,
-        duration: 1.8,
+        duration: 2.3,
         onComplete: function onComplete() {
           _this.masterSlides[from].classList.remove('current');
         }
@@ -48811,7 +48831,7 @@ var Slides = /*#__PURE__*/function () {
       this.tl.to(this.masterSlides[to], {
         opacity: 1,
         duration: 0.7,
-        delay: -0.5,
+        delay: -0.1,
         onComplete: function onComplete() {
           _this.masterSlides[to].classList.add('current');
 
@@ -48837,9 +48857,9 @@ var Slides = /*#__PURE__*/function () {
         }
       });
       this.tl.to(this.masterSlides[from], {
-        opacity: 0,
+        opacity: 1,
         duration: 0.7,
-        delay: -0.5,
+        delay: -0.1,
         onComplete: function onComplete() {
           _this2.masterSlides[from].classList.add('current');
 
@@ -48984,19 +49004,21 @@ var Slides = /*#__PURE__*/function () {
     key: "disperse",
     value: function disperse(activeIndex) {
       //this.currentIdx = activeIndex;
-      this.slides[this.part][this.currentIdx].classList.add("show-meta");
-      this.container.classList.remove("scrolling");
+      if (this.part === 1) {
+        this.slides[1][this.currentIdx].classList.add("show-meta");
+        this.container.classList.remove("scrolling");
 
-      for (var index = 0; index < this.data[1].length; index++) {
-        if (index > activeIndex) {
-          this.slides[this.part][index].classList.add("next");
-          this.slides[this.part][index].classList.remove("prev");
-        } else if (index < activeIndex) {
-          this.slides[this.part][index].classList.remove("next");
-          this.slides[this.part][index].classList.add("prev");
-        } else {
-          this.slides[this.part][index].classList.remove("next");
-          this.slides[this.part][index].classList.remove("prev");
+        for (var index = 0; index < this.data[1].length; index++) {
+          if (index > activeIndex) {
+            this.slides[1][index].classList.add("next");
+            this.slides[1][index].classList.remove("prev");
+          } else if (index < activeIndex) {
+            this.slides[1][index].classList.remove("next");
+            this.slides[1][index].classList.add("prev");
+          } else {
+            this.slides[1][index].classList.remove("next");
+            this.slides[1][index].classList.remove("prev");
+          }
         }
       }
     }
@@ -49138,6 +49160,10 @@ module.exports = "/4.d8cb7558.jpg";
 module.exports = "/5.044aff48.jpg";
 },{}],"images/landing.jpg":[function(require,module,exports) {
 module.exports = "/landing.10726b6b.jpg";
+},{}],"images/landingLogo.svg":[function(require,module,exports) {
+module.exports = "/landingLogo.9fdc7c6d.svg";
+},{}],"images/studio.svg":[function(require,module,exports) {
+module.exports = "/studio.db870bdb.svg";
 },{}],"js/index.js":[function(require,module,exports) {
 "use strict";
 
@@ -49159,13 +49185,17 @@ var _5 = _interopRequireDefault(require("../images/5.jpg"));
 
 var _landing = _interopRequireDefault(require("../images/landing.jpg"));
 
+var _landingLogo = _interopRequireDefault(require("../images/landingLogo.svg"));
+
+var _studio = _interopRequireDefault(require("../images/studio.svg"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var container = document.getElementById("app");
 var cursor = new _Cursor.Cursor(document.querySelector(".cursor"));
 var slidesData = [[{
   image: _landing.default,
-  title: "<p>Landing</p><p>App Design</p>",
+  title: "<img src='".concat(_landingLogo.default, "'><img src='").concat(_studio.default, "'>"),
   desc: "\n      <div class=\"desc-container\">\n      <h3>Description</h3>\n      <img src=\"".concat(_.default, "\" alt=\"\" class=\"desc-img\">\n      <div class=\"desc-content\">\n        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n        Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n        Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n      </div>\n      <p class='close'>Close</p>\n    </div>\n      "),
   more: 'Click and Hold!',
   position: 5
@@ -49256,7 +49286,7 @@ window.addEventListener("resize", function () {
 window.addEventListener("mousemove", function (ev) {
   showcase.onMouseMove(ev);
 });
-},{"./Showcase":"js/Showcase.js","./Slides":"js/Slides.js","./Cursor":"js/Cursor.js","../images/1.jpg":"images/1.jpg","../images/2.jpg":"images/2.jpg","../images/3.jpg":"images/3.jpg","../images/4.jpg":"images/4.jpg","../images/5.jpg":"images/5.jpg","../images/landing.jpg":"images/landing.jpg"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./Showcase":"js/Showcase.js","./Slides":"js/Slides.js","./Cursor":"js/Cursor.js","../images/1.jpg":"images/1.jpg","../images/2.jpg":"images/2.jpg","../images/3.jpg":"images/3.jpg","../images/4.jpg":"images/4.jpg","../images/5.jpg":"images/5.jpg","../images/landing.jpg":"images/landing.jpg","../images/landingLogo.svg":"images/landingLogo.svg","../images/studio.svg":"images/studio.svg"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
