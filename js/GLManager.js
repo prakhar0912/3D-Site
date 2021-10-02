@@ -3,47 +3,117 @@ import {
   fragment,
   vertex
 } from "./shaders";
-import landingImage from '../images/landing.jpg'
+import 'regenerator-runtime/runtime'
 
 function GLManager(data) {
-  this.totalEntries = data.length + 1;
+  this.totalEntries = this.calculateTotalEntries(data)
   this.loadedEntries = 0;
-  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
-  camera.position.z = 10;
-  this.mesh = null;
-  this.initialMesh = null;
-  const scene = new THREE.Scene();
-  camera.lookAt = scene.position;
+  this.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
+  this.camera.position.z = 10;
+  this.meshes = [];
+  // this.initialMesh = null;
+  this.scene = new THREE.Scene();
+  this.camera.lookAt = this.scene.position;
 
-  const renderer = new THREE.WebGLRenderer({
+  this.renderer = new THREE.WebGLRenderer({
     alpha: true,
     antialias: true
   });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
+  this.renderer.setSize(window.innerWidth, window.innerHeight);
+  this.renderer.setPixelRatio(window.devicePixelRatio);
+
+  this.part = 0
 
   this.render = this.render.bind(this);
-  this.textures = data.map((entry, i) =>
-    new THREE.TextureLoader().load(
-      entry.image,
-      this.calculateAspectRatioFactor.bind(this, i)
-    )
-  );
-  this.initialTexture = new THREE.TextureLoader().load(landingImage, this.calculateAspectRatioFactor.bind(this, -1))
-  this.factors = data.map(d => new THREE.Vector2(1, 1));
-  this.initialFactors = new THREE.Vector2(1, 1)
-  this.currentIndex = 0;
-  this.nextIndex = 0;
-  this.textureProgress = 0;
-  this.initialTextureProgress = 0;
-  this.camera = camera;
-  this.scene = scene;
-  this.renderer = renderer;
-  this.initialRender = false;
-  this.time = 0;
-  this.loopRaf = null;
-  this.loop = this.loop.bind(this);
+  this.loadTextures(data).then((textures) => {
+    this.textures = textures
+    console.log(textures)
+    this.factors = this.loadFactors(data)
+    this.createPlanes(data)
+    this.calcAspectRatios()
+    this.currentIndex = 0;
+    this.nextIndex = 0;
+    this.textureProgress = 0;
+    this.initialTextureProgress = 0;
+    this.initialRender = false;
+    this.time = 0;
+    this.loopRaf = null;
+    this.loop = this.loop.bind(this);
+    if (!this.loopRaf) {
+      this.render();
+    }
+  })
 }
+
+
+GLManager.prototype.calculateTotalEntries = function (data) {
+  let total = 0
+  for (let i = 0; i < data.length; i++) {
+    total += data[i].length
+  }
+  console.log(total)
+  return total
+}
+
+
+
+GLManager.prototype.loadTextures = async function (data) {
+  return new Promise(async (res, rej) => {
+    let texturesMaster = []
+    for (let i = 0; i < data.length; i++) {
+      let textures = []
+      for (let j = 0; j < data[i].length; j++) {
+        textures.push(await this.loadTexture(data[i][j]))
+      }
+      texturesMaster.push(textures)
+    }
+    res(texturesMaster)
+  })
+}
+
+GLManager.prototype.loadTexture = function (data) {
+  return new Promise(res => {
+    new THREE.TextureLoader().load(data.image, (texture) => {
+      if (this.initialRender) {
+        console.log(this.totalEntries)
+        this.loadedEntries++;
+        if (this.loadedEntries === this.totalEntries) {
+          document.body.classList.remove('loading');
+          console.log('loaded all')
+        }
+        this.render();
+        res(texture)
+      }
+    })
+  })
+}
+
+
+GLManager.prototype.calcAspectRatios = function () {
+  for (let i = 0; i < this.textures.length; i++) {
+    for (let j = 0; j < this.textures[i].length; j++) {
+      this.calculateAspectRatioFactor(i, j, this.textures[i][j])
+    }
+  }
+}
+
+GLManager.prototype.loadFactors = function (data) {
+  let factorsMaster = []
+  for (let i = 0; i < data.length; i++) {
+    let factors = []
+    for (let j = 0; j < data[i].length; j++) {
+      factors.push(new THREE.Vector2(1, 1))
+    }
+    factorsMaster.push(factors)
+  }
+  console.log(factorsMaster)
+  return factorsMaster
+}
+
+GLManager.prototype.onPartChange = function (part) {
+  this.part = part
+}
+
 GLManager.prototype.getViewSize = function () {
   const fovInRadians = (this.camera.fov * Math.PI) / 180;
   const viewSize = Math.abs(
@@ -60,7 +130,7 @@ GLManager.prototype.getPlaneSize = function () {
     height: viewSize
   };
 };
-GLManager.prototype.calculateAspectRatioFactor = function (index, texture) {
+GLManager.prototype.calculateAspectRatioFactor = function (i, j, texture) {
   const plane = this.getPlaneSize();
   const windowRatio = window.innerWidth / window.innerHeight;
   const rectRatio = (plane.width / plane.height) * windowRatio;
@@ -76,199 +146,167 @@ GLManager.prototype.calculateAspectRatioFactor = function (index, texture) {
     factorX = (1 * rectRatio) / imageRatio;
     factorY = 1;
   }
-  if (index != -1) {
-    this.factors[index] = new THREE.Vector2(factorX, factorY);
-    if (this.currentIndex === index) {
-      this.mesh.material.uniforms.u_textureFactor.value = this.factors[index];
-      this.mesh.material.uniforms.u_textureFactor.needsUpdate = true;
+  this.factors[i][j] = new THREE.Vector2(factorX, factorY);
+  if (i === 1) {
+    if (this.currentIndex === j) {
+      this.meshes[i].material.uniforms.u_textureFactor.value = this.factors[i][j];
+      this.meshes[i].material.uniforms.u_textureFactor.needsUpdate = true;
     }
-    if (this.nextIndex === index) {
-      this.mesh.material.uniforms.u_texture2Factor.value = this.factors[index];
-      this.mesh.material.uniforms.u_texture2Factor.needsUpdate = true;
+    if (this.nextIndex === j) {
+      this.meshes[i].material.uniforms.u_texture2Factor.value = this.factors[i][j];
+      this.meshes[i].material.uniforms.u_texture2Factor.needsUpdate = true;
     }
   }
   else {
-    this.initialFactors = new THREE.Vector2(factorX, factorY);
-    if (this.initialMesh) {
-      this.initialMesh.material.uniforms.u_textureFactor.value = this.initialFactors;
-      this.initialMesh.material.uniforms.u_textureFactor.needsUpdate = true;
-    }
-  }
-  if (this.initialRender) {
-    this.loadedEntries++;
-    if (this.loadedEntries === this.totalEntries) {
-      document.body.classList.remove('loading');
-      console.log('loaded all')
-    }
-    this.render();
+    this.meshes[i].material.uniforms.u_textureFactor.value = this.factors[i][j];
+    this.meshes[i].material.uniforms.u_textureFactor.needsUpdate = true;
   }
 };
 // Plane Stuff
-GLManager.prototype.createPlane = function (index) {
+GLManager.prototype.createPlanes = function (data) {
   // Calculate bas of Isoceles triangle(camera)
-  if (index === 0) {
-    const viewSize = this.getViewSize();
-    const {
-      width,
-      height
-    } = this.getPlaneSize();
+  const viewSize = this.getViewSize();
+  const {
+    width,
+    height
+  } = this.getPlaneSize();
 
-    const segments = 60;
-    const geometry = new THREE.PlaneBufferGeometry(
-      width,
-      height,
-      segments,
-      segments
-    );
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        u_texture: {
-          type: "t",
-          value: this.initialTexture
-        },
-        u_textureFactor: {
-          type: "f",
-          value: this.initialFactors
-        },
-        // u_texture2: {
-        //   type: "t",
-        //   value: this.textures[this.nextIndex]
-        // },
-        // u_texture2Factor: {
-        //   type: "f",
-        //   value: this.factors[this.nextIndex]
-        // },
-        u_textureProgress: {
-          type: "f",
-          value: this.initialTextureProgress
-        },
-        u_offset: {
-          type: "f",
-          value: 8
-        },
-        u_progress: {
-          type: "f",
-          value: 0
-        },
-        u_direction: {
-          type: "f",
-          value: 1
-        },
-        u_effect: {
-          type: "f",
-          value: 0
-        },
-        u_time: {
-          type: "f",
-          value: this.time
-        },
-        u_waveIntensity: {
-          type: "f",
-          value: 0
-        },
-        u_resolution: {
-          type: "v2",
-          value: new THREE.Vector2(window.innerWidth, window.innerHeight)
-        },
-        u_rgbPosition: {
-          type: "v2",
-          value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
-        },
-        u_rgbVelocity: {
-          type: "v2",
-          value: new THREE.Vector2(0, 0)
-        }
+  const segments = 60;
+  const geometrya = new THREE.PlaneGeometry(
+    width,
+    height,
+    segments,
+    segments
+  );
+  const materiala = new THREE.ShaderMaterial({
+    uniforms: {
+      u_texture: {
+        type: "t",
+        value: this.textures[0][0]
       },
-      vertexShader: vertex,
-      fragmentShader: fragment,
-      side: THREE.DoubleSide
-    });
-    const mesh2 = new THREE.Mesh(geometry, material);
-    mesh2.position.z = 5
-    this.scene.add(mesh2);
-    this.initialMesh = mesh2;
-  }
-  else if (index == 1) {
-    const viewSize = this.getViewSize();
-    const {
-      width,
-      height
-    } = this.getPlaneSize();
+      u_textureFactor: {
+        type: "f",
+        value: this.factors[0][0]
+      },
+      u_offset: {
+        type: "f",
+        value: 8
+      },
+      u_effect: {
+        type: "f",
+        value: 0
+      },
+      u_time: {
+        type: "f",
+        value: this.time
+      },
+      u_waveIntensity: {
+        type: "f",
+        value: 0
+      },
+      u_resolution: {
+        type: "v2",
+        value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+      },
+      u_rgbPosition: {
+        type: "v2",
+        value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
+      },
+      u_rgbVelocity: {
+        type: "v2",
+        value: new THREE.Vector2(0, 0)
+      }
+    },
+    vertexShader: vertex,
+    fragmentShader: fragment,
+    side: THREE.DoubleSide
+  });
+  const mesha = new THREE.Mesh(geometrya, materiala);
+  mesha.position.z = 5
+  this.scene.add(mesha);
+  this.meshes.push(mesha);
 
-    const segments = 60;
-    const geometry = new THREE.PlaneBufferGeometry(
-      width,
-      height,
-      segments,
-      segments
-    );
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        u_texture: {
-          type: "t",
-          value: this.textures[this.currentIndex]
-        },
-        u_textureFactor: {
-          type: "f",
-          value: this.factors[this.currentIndex]
-        },
-        u_texture2: {
-          type: "t",
-          value: this.textures[this.nextIndex]
-        },
-        u_texture2Factor: {
-          type: "f",
-          value: this.factors[this.nextIndex]
-        },
-        u_textureProgress: {
-          type: "f",
-          value: this.textureProgress
-        },
-        u_offset: {
-          type: "f",
-          value: 8
-        },
-        u_progress: {
-          type: "f",
-          value: 0
-        },
-        u_direction: {
-          type: "f",
-          value: 1
-        },
-        u_effect: {
-          type: "f",
-          value: 0
-        },
-        u_time: {
-          type: "f",
-          value: this.time
-        },
-        u_waveIntensity: {
-          type: "f",
-          value: 0
-        },
-        u_resolution: {
-          type: "v2",
-          value: new THREE.Vector2(window.innerWidth, window.innerHeight)
-        },
-        u_rgbPosition: {
-          type: "v2",
-          value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
-        },
-        u_rgbVelocity: {
-          type: "v2",
-          value: new THREE.Vector2(0, 0)
-        }
+  // const viewSize = this.getViewSize();
+  // const {
+  //   width,
+  //   height
+  // } = this.getPlaneSize();
+
+  // const segments = 60;
+  const geometry = new THREE.PlaneGeometry(
+    width,
+    height,
+    segments,
+    segments
+  );
+  const material = new THREE.ShaderMaterial({
+    uniforms: {
+      u_texture: {
+        type: "t",
+        value: this.textures[1][0]
       },
-      vertexShader: vertex,
-      fragmentShader: fragment,
-      side: THREE.DoubleSide
-    });
-    const mesh = new THREE.Mesh(geometry, material);
-    this.scene.add(mesh);
-    this.mesh = mesh;
-  }
+      u_textureFactor: {
+        type: "f",
+        value: this.factors[1][0]
+      },
+      u_texture2: {
+        type: "t",
+        value: this.textures[1][0]
+      },
+      u_texture2Factor: {
+        type: "f",
+        value: this.factors[1][0]
+      },
+      u_textureProgress: {
+        type: "f",
+        value: this.textureProgress
+      },
+      u_offset: {
+        type: "f",
+        value: 8
+      },
+      u_progress: {
+        type: "f",
+        value: 0
+      },
+      u_direction: {
+        type: "f",
+        value: 1
+      },
+      u_effect: {
+        type: "f",
+        value: 0
+      },
+      u_time: {
+        type: "f",
+        value: this.time
+      },
+      u_waveIntensity: {
+        type: "f",
+        value: 0
+      },
+      u_resolution: {
+        type: "v2",
+        value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+      },
+      u_rgbPosition: {
+        type: "v2",
+        value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
+      },
+      u_rgbVelocity: {
+        type: "v2",
+        value: new THREE.Vector2(0, 0)
+      }
+    },
+    vertexShader: vertex,
+    fragmentShader: fragment,
+    side: THREE.DoubleSide
+  });
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.position.z = 0
+  this.scene.add(mesh);
+  this.meshes.push(mesh);
+  console.log(this.meshes[0].position.z, this.meshes[1].position.z)
 };
 
 GLManager.prototype.updateCameraPosition = function (position) {
@@ -279,79 +317,52 @@ GLManager.prototype.updateCameraPosition = function (position) {
 
 
 GLManager.prototype.updateTexture = function (newIndex, progress) {
-  let didChange = false;
-  if (newIndex == -1) {
-    this.initialTextureProgress = 0
-    this.initialMesh.material.uniforms.u_textureProgress.value = 0;
-    this.initialMesh.material.uniforms.u_texture.value = this.initialTexture;
-    this.initialMesh.material.uniforms.u_textureFactor.value = this.initialFactors;
-  }
-  if (newIndex != null && this.newIndex !== this.currentIndex) {
-    this.currentIndex = this.nextIndex;
-    this.nextIndex = newIndex;
-    this.textureProgress = 0;
-    this.mesh.material.uniforms.u_textureProgress.value = 0;
-    this.mesh.material.uniforms.u_texture.value = this.textures[
-      this.currentIndex
-    ];
-    this.mesh.material.uniforms.u_textureFactor.value = this.factors[
-      this.currentIndex
-    ];
-    this.mesh.material.uniforms.u_texture2.value = this.textures[newIndex];
+  if (this.part === 1) {
+    let didChange = false;
+    console.log(this.part)
+    if (newIndex != null && this.newIndex !== this.currentIndex) {
+      this.currentIndex = this.nextIndex;
+      this.nextIndex = newIndex;
+      this.textureProgress = 0;
+      this.meshes[this.part].material.uniforms.u_textureProgress.value = 0;
+      this.meshes[this.part].material.uniforms.u_texture.value = this.textures[this.part][this.currentIndex];
+      this.meshes[this.part].material.uniforms.u_textureFactor.value = this.factors[this.part][this.currentIndex];
 
-    this.mesh.material.uniforms.u_texture2Factor.value = this.factors[newIndex];
+      if (this.part === 1) {
+        this.meshes[1].material.uniforms.u_texture2.value = this.textures[1][newIndex];
+        this.meshes[1].material.uniforms.u_texture2Factor.value = this.factors[1][newIndex];
+      }
+      didChange = true;
+    }
+    if (progress != null && progress !== this.textureProgress) {
+      this.meshes[this.part].material.uniforms.u_textureProgress.value = progress;
+      this.textureProgress = progress;
+      didChange = true;
+    }
+    if (!this.loopRaf && didChange) {
+      this.render();
+    }
+  }
+};
 
-    didChange = true;
+GLManager.prototype.updateStickEffect = function ({ progress, direction, waveIntensity, part }) {
+  if (part === 0) {
+    this.meshes[0].material.uniforms.u_waveIntensity.value = waveIntensity;
   }
-  if (progress != null && progress !== this.textureProgress) {
-    this.mesh.material.uniforms.u_textureProgress.value = progress;
-    this.textureProgress = progress;
-    didChange = true;
+  else if (part === 1) {
+    // console.log('here')
+    this.meshes[1].material.uniforms.u_progress.value = progress;
+    this.meshes[1].material.uniforms.u_direction.value = direction;
+    this.meshes[1].material.uniforms.u_waveIntensity.value = waveIntensity;
   }
-  if (progress != null && progress !== this.initialTextureProgress && newIndex == -1) {
-    this.mesh.material.uniforms.u_textureProgress.value = progress;
-    this.initialTextureProgress = progress;
-    didChange = true;
-  }
-
-  if (!this.loopRaf && didChange) {
+  if (!this.loopRaf) {
     this.render();
   }
 };
-GLManager.prototype.updateStickEffect = function ({ progress, direction, waveIntensity, part }) {
-  if (part === 0) {
-    this.initialMesh.material.uniforms.u_waveIntensity.value = waveIntensity;
-  }
-  else if (part === 1) {
-    this.mesh.material.uniforms.u_progress.value = progress;
-    this.mesh.material.uniforms.u_direction.value = direction;
-    this.mesh.material.uniforms.u_waveIntensity.value = waveIntensity;
-  }
-  // this.render();
-  // this.render();
-};
 
 GLManager.prototype.updateRgbEffect = function ({ position, velocity, part }) {
-  if (part === 1) {
-    this.mesh.material.uniforms.u_rgbPosition.value = new THREE.Vector2(
-      position.x,
-      position.y
-    );
-    this.mesh.material.uniforms.u_rgbVelocity.value = new THREE.Vector2(
-      velocity.x,
-      velocity.y
-    );
-  }
-  else if (part === 0) {
-    this.initialMesh.material.uniforms.u_rgbPosition.value = new THREE.Vector2(
-      position.x,
-      position.y
-    );
-    this.initialMesh.material.uniforms.u_rgbVelocity.value = new THREE.Vector2(
-      velocity.x,
-      velocity.y
-    );
-  }
+  this.meshes[this.part].material.uniforms.u_rgbPosition.value = new THREE.Vector2(position.x, position.y);
+  this.meshes[this.part].material.uniforms.u_rgbVelocity.value = new THREE.Vector2(velocity.x, velocity.y);
   if (!this.loopRaf) {
     this.render();
   }
@@ -380,23 +391,18 @@ GLManager.prototype.unmount = function () {
 };
 GLManager.prototype.onResize = function () {
   this.renderer.setSize(window.innerWidth, window.innerHeight);
-  this.mesh.material.uniforms.u_resolution.value = new THREE.Vector2(
-    window.innerWidth,
-    window.innerHeight
-  );
-  this.initialMesh.material.uniforms.u_resolution.value = new THREE.Vector2(
-    window.innerWidth,
-    window.innerHeight
-  );
+  for (let i = 0; i < this.meshes.length; i++) {
+    this.meshes[i].material.uniforms.u_resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight);
+  }
   // this.camera.aspect = window.inenrWidth / window.innerHeight;
   // this.camera.updateProjectionMatrix();
   for (var i = 0; i < this.textures.length; i++) {
-    if (this.textures[i].image) {
-      this.calculateAspectRatioFactor(i, this.textures[i]);
+    for (let j = 0; j < this.textures[j].length; j++) {
+      if (this.textures[i][j].image) {
+        this.calculateAspectRatioFactor(i, j, this.textures[i][j]);
+      }
     }
   }
-  this.calculateAspectRatioFactor(-1, this.initialTexture);
-
   this.render();
 };
 GLManager.prototype.scheduleLoop = function () {
@@ -404,11 +410,17 @@ GLManager.prototype.scheduleLoop = function () {
   this.loop();
 };
 
+GLManager.prototype.updatePart = function (part) {
+  this.part = part
+};
+
 GLManager.prototype.loop = function () {
   this.render();
   this.time += 0.1;
-  this.mesh.material.uniforms.u_time.value = this.time;
-  this.initialMesh.material.uniforms.u_time.value = this.time;
+  // this.meshes.material.uniforms.u_time.value = this.time;
+  for (let i = 0; i < this.meshes.length; i++) {
+    this.meshes[i].material.uniforms.u_time.value = this.time;
+  }
   this.loopRaf = requestAnimationFrame(this.loop);
 };
 

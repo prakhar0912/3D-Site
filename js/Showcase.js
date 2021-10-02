@@ -23,8 +23,6 @@ import gsap from "gsap";
 // onIndexChange
 function Showcase(data, options = {}) {
   this.GL = new GLManager(data);
-  this.GL.createPlane(0)
-  this.GL.createPlane(1)
 
   this.data = data;
 
@@ -35,6 +33,7 @@ function Showcase(data, options = {}) {
   this.waveIntensity = 0;
   this.inTab = false
   this.part = 0
+
 
   this.options = options;
 
@@ -65,6 +64,16 @@ function Showcase(data, options = {}) {
     onGrabEnd: this.onGrabEnd.bind(this)
   });
 }
+
+Showcase.prototype.calculateTotalEntries = function (data) {
+  let total = 0
+  for (let i = 0; i < data.length; i++) {
+    total += data[i].length
+  }
+  console.log(total)
+  return total
+}
+
 
 Showcase.prototype.mount = function (container) {
   this.GL.mount(container);
@@ -139,16 +148,17 @@ Showcase.prototype.onMouseMove = function (ev) {
 
 Showcase.prototype.onGrabMove = function (scroll) {
   if (this.part === 1) {
+    // console.log('r')
     if (this.inTab) {
       return
     }
     this.index.target = clamp(
       this.index.initial + scroll.delta / this.index.scrollSize,
-      -this.data.length + 0.51,
+      -this.data[1].length + 0.51,
       0.49
     );
 
-    const index = clamp(Math.round(-this.index.target), 0, this.data.length - 1);
+    const index = clamp(Math.round(-this.index.target), 0, this.data[1].length - 1);
 
     if (this.index.active !== index) {
       this.index.active = index;
@@ -203,7 +213,7 @@ Showcase.prototype.onGrabMove = function (scroll) {
 
 
 Showcase.prototype.titleClickStart = function () {
-  if(this.part === 1){
+  if (this.part === 1) {
     if (this.options.onZoomOutStart) {
       this.options.onClickStart({
         activeIndex: this.index.active
@@ -211,12 +221,12 @@ Showcase.prototype.titleClickStart = function () {
     }
     // this.slides.appear();
     this.index.initial = this.index.current;
-  
+
     if (this.GLStickPop) {
       this.GLStickPop.stop();
     }
     this.GL.scheduleLoop();
-  
+
     const directionSpring = spring({
       from: this.progress === 0 ? 0 : this.direction,
       to: 0,
@@ -231,7 +241,7 @@ Showcase.prototype.titleClickStart = function () {
       stiffness: 350,
       damping: 500
     });
-  
+
     const waveIntensitySpring = spring({
       from: this.waveIntensity,
       to: this.waveIntensityRange[1],
@@ -249,7 +259,7 @@ Showcase.prototype.titleClickStart = function () {
         this.progress = values[0];
         this.direction = values[1];
         this.waveIntensity = values[2];
-  
+
         this.GL.updateStickEffect({
           progress: this.progress,
           direction: this.direction,
@@ -277,14 +287,21 @@ Showcase.prototype.onGrabStart = function () {
     }
     this.GL.scheduleLoop();
 
+    this.options.startTransitionPage(0, 1)
+
     this.zoom01 = gsap.timeline()
-    this.zoom01.to(this.GL.camera.position,{
+    this.zoom01.to(this.GL.camera.position, {
       z: 15, duration: 1, ease: "power4.in",
     })
-    this.zoom01.to(this.GL.camera.position,{
-      z: 5, duration: 1.2, delay:-0.1, ease: "power4.in", onComplete: () => {
+    this.zoom01.to(this.GL.camera.position, {
+      z: 5, duration: 1.2, delay: -0.1, ease: "power4.in", onComplete: () => {
         console.log('start complete')
         this.part = 1
+        // setTimeout(() => {
+        //   this.GL.camera.position.z = 11
+        // }, 3000)
+        // this.GL.updatePart(1)
+        // this.zoom01.kill()
         if (this.GLStickPop) {
           this.GLStickPop.stop();
         }
@@ -388,12 +405,14 @@ Showcase.prototype.onGrabEnd = function () {
     if (this.zoom01) {
       console.log('stop')
       this.zoom01.kill();
+      this.options.endTransitionPage(0,1)
     }
     this.GL.scheduleLoop();
     this.zoom01 = gsap.timeline()
-    this.zoom01.to(this.GL.camera.position,{
+    this.zoom01.to(this.GL.camera.position, {
       z: 10, duration: 0.8, ease: "power2.in", onComplete: () => {
         console.log('end complete')
+        this.GL.part = 0
         this.part = 0
       }
     })
@@ -418,7 +437,7 @@ Showcase.prototype.onGrabEnd = function () {
         });
       },
     });
-    
+
   }
   else if (this.part === 1) {
     if (this.inTab) {
@@ -490,91 +509,89 @@ Showcase.prototype.onGrabEnd = function () {
 
 
 Showcase.prototype.snapCurrentToActiveIndex = function () {
-  if (this.slidesPop) {
-    this.slidesPop.stop();
-  }
-  this.slidesPop = reach({
-    from: {
-      index: this.index.current
-    },
-    to: {
-      index: Math.round(this.index.target)
-    },
-    restDelta: 0.001
-  }).start({
-    complete: () => { },
-    update: val => {
-      // this.slides.onMove(val);
-      if (this.options.onIndexChange) {
-        this.options.onIndexChange(val.index);
-      }
-      this.index.current = val.index;
+  if (this.part === 1) {
+    if (this.slidesPop) {
+      this.slidesPop.stop();
     }
-  });
+    this.slidesPop = reach({
+      from: {
+        index: this.index.current
+      },
+      to: {
+        index: Math.round(this.index.target)
+      },
+      restDelta: 0.001
+    }).start({
+      complete: () => { },
+      update: val => {
+        // this.slides.onMove(val);
+        if (this.options.onIndexChange) {
+          this.options.onIndexChange(val.index);
+        }
+        this.index.current = val.index;
+      }
+    });
+  }
 };
 
 Showcase.prototype.titleClickEnd = function () {
   // this.slides.disperse(this.index.active);
-  if(this.part === 1){
+  if (this.part === 1) {
     this.snapCurrentToActiveIndex();
 
-  if (this.GLStickPop) {
-    this.GLStickPop.stop();
-  }
-  const directionSpring = spring({
-    from: this.progress === 1 ? 1 : this.direction,
-    to: 1,
-    mass: 1,
-    stiffness: 800,
-    damping: 2000
-  });
-  const progressSpring = spring({
-    from: this.progress,
-    to: 0,
-    mass: 4,
-    stiffness: 400,
-    damping: 70,
-    restDelta: 0.0001
-  });
-  const waveIntensitySpring = spring({
-    from: this.waveIntensity,
-    to: this.waveIntensityRange[0],
-    mass: 0.1,
-    stiffness: 800,
-    damping: 50
-  });
-
-  this.GLStickPop = parallel(
-    progressSpring,
-    directionSpring,
-    waveIntensitySpring
-  ).start({
-    update: values => {
-      this.progress = values[0];
-      this.direction = values[1];
-      this.waveIntensity = values[2];
-      this.GL.updateStickEffect({
-        progress: this.progress,
-        direction: this.direction,
-        waveIntensity: this.waveIntensity,
-        part: this.part
-      });
-    },
-    complete: () => {
-      if (this.options.onClickEnd) {
-        this.options.onClickEnd({
-          activeIndex: this.index.active
-        });
-      }
-      this.GL.cancelLoop();
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
     }
-  });
+    const directionSpring = spring({
+      from: this.progress === 1 ? 1 : this.direction,
+      to: 1,
+      mass: 1,
+      stiffness: 800,
+      damping: 2000
+    });
+    const progressSpring = spring({
+      from: this.progress,
+      to: 0,
+      mass: 4,
+      stiffness: 400,
+      damping: 70,
+      restDelta: 0.0001
+    });
+    const waveIntensitySpring = spring({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[0],
+      mass: 0.1,
+      stiffness: 800,
+      damping: 50
+    });
+
+    this.GLStickPop = parallel(
+      progressSpring,
+      directionSpring,
+      waveIntensitySpring
+    ).start({
+      update: values => {
+        this.progress = values[0];
+        this.direction = values[1];
+        this.waveIntensity = values[2];
+        this.GL.updateStickEffect({
+          progress: this.progress,
+          direction: this.direction,
+          waveIntensity: this.waveIntensity,
+          part: this.part
+        });
+      },
+      complete: () => {
+        if (this.options.onClickEnd) {
+          this.options.onClickEnd({
+            activeIndex: this.index.active
+          });
+        }
+        this.GL.cancelLoop();
+      }
+    });
   }
 };
-
-
-
-
 
 Showcase.prototype.onResize = function () {
   this.GL.onResize();

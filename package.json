@@ -21,6 +21,7 @@
     "babel": "^6.23.0",
     "gsap": "^3.7.1",
     "popmotion": "^8.6.4",
+    "regenerator-runtime": "^0.13.9",
     "stats.js": "^0.17.0",
     "three": "^0.132.2"
   },
