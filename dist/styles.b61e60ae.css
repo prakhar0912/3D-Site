@@ -322,7 +322,6 @@ canvas {
   -webkit-text-stroke: 1px white;
   color: white;
   width: max-content;
-  padding: 20px auto;
   cursor: pointer;
   transition: all 0.5s ease-out;
 }
@@ -419,6 +418,35 @@ canvas {
   body {
     touch-action: none;
     /* font-size: 11px; */
+  }
+
+  .burger{
+    top: 2%;
+    right: 6%;
+    height: 35px;
+    width: 35px;
+  }
+
+  .mov > button{
+    margin: 0 5px
+  }
+
+  .mov > button > p{
+    padding: 10px 10px 6px 10px
+  }
+
+  .nav{
+    grid-template-rows: 80% 20%;
+  }
+
+  .center > img{
+    width: 50vw;
+    margin-bottom: 20px;
+  }
+
+  .text{
+    font-size: 3.8rem;
+    margin: 5px 0;
   }
 }
 
