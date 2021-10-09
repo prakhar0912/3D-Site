@@ -3,13 +3,21 @@ import {
   fragment,
   vertex
 } from "./shaders";
+import {
+  fragment1,
+  vertex1
+} from "./shaders";
+import {
+  fragment2,
+  vertex2
+} from "./shaders";
 import 'regenerator-runtime/runtime'
 
 function GLManager(data) {
   this.totalEntries = this.calculateTotalEntries(data);
   this.loadedEntries = 0;
   const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
-  camera.position.z = 10;
+  camera.position.z = 16;
   // this.mesh = null;
   // this.initialMesh = null;
   this.meshes = []
@@ -36,8 +44,10 @@ function GLManager(data) {
     this.time = 0;
     this.loopRaf = null;
     this.loop = this.loop.bind(this);
-    this.createPlane(0)
-    this.createPlane(1)
+
+    this.createPlane(0, data[0][0].position)
+    this.createPlane(1, data[1][0].position)
+    this.createPlane(2, data[2][0].position)
     this.calcAspectRatios()
     if (!this.loopRaf) {
       this.render();
@@ -111,7 +121,7 @@ GLManager.prototype.calculateTotalEntries = function (data) {
 GLManager.prototype.getViewSize = function () {
   const fovInRadians = (this.camera.fov * Math.PI) / 180;
   const viewSize = Math.abs(
-    (this.camera.position.z - 5) * Math.tan(fovInRadians / 2) * 2
+    (this.camera.position.z-10) * Math.tan(fovInRadians / 2) * 2
   );
 
   return viewSize;
@@ -167,7 +177,7 @@ GLManager.prototype.calculateAspectRatioFactor = function (index, j, texture) {
   }
 };
 // Plane Stuff
-GLManager.prototype.createPlane = function (index) {
+GLManager.prototype.createPlane = function (index, pos) {
   // Calculate bas of Isoceles triangle(camera)
   if (index === 0) {
     const viewSize = this.getViewSize();
@@ -247,7 +257,7 @@ GLManager.prototype.createPlane = function (index) {
       side: THREE.DoubleSide
     });
     const mesh2 = new THREE.Mesh(geometry, material);
-    mesh2.position.z = 5
+    mesh2.position.z = pos
     this.scene.add(mesh2);
     this.meshes.push(mesh2)
   }
@@ -324,13 +334,96 @@ GLManager.prototype.createPlane = function (index) {
           value: new THREE.Vector2(0, 0)
         }
       },
-      vertexShader: vertex,
-      fragmentShader: fragment,
+      vertexShader: vertex1,
+      fragmentShader: fragment1,
       side: THREE.DoubleSide
     });
     const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.z = pos
     this.scene.add(mesh);
     this.meshes.push(mesh);
+  }
+  else if (index === 2) {
+    const viewSize = this.getViewSize();
+    const {
+      width,
+      height
+    } = this.getPlaneSize();
+
+    const segments = 60;
+    const geometry = new THREE.PlaneBufferGeometry(
+      width,
+      height,
+      segments,
+      segments
+    );
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        u_texture: {
+          type: "t",
+          value: this.textures[2][0]
+        },
+        u_textureFactor: {
+          type: "f",
+          value: this.factors[2][0]
+        },
+        // u_texture2: {
+        //   type: "t",
+        //   value: this.textures[this.nextIndex]
+        // },
+        // u_texture2Factor: {
+        //   type: "f",
+        //   value: this.factors[this.nextIndex]
+        // },
+        // u_textureProgress: {
+        //   type: "f",
+        //   value: this.initialTextureProgress
+        // },
+        u_offset: {
+          type: "f",
+          value: 8
+        },
+        u_progress: {
+          type: "f",
+          value: 0
+        },
+        u_direction: {
+          type: "f",
+          value: 1
+        },
+        u_effect: {
+          type: "f",
+          value: 0
+        },
+        u_time: {
+          type: "f",
+          value: this.time
+        },
+        u_waveIntensity: {
+          type: "f",
+          value: 0
+        },
+        u_resolution: {
+          type: "v2",
+          value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+        },
+        u_rgbPosition: {
+          type: "v2",
+          value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
+        },
+        u_rgbVelocity: {
+          type: "v2",
+          value: new THREE.Vector2(0, 0)
+        }
+      },
+      vertexShader: vertex2,
+      fragmentShader: fragment2,
+      side: THREE.DoubleSide
+    });
+    const mesh3 = new THREE.Mesh(geometry, material);
+    mesh3.position.z = pos
+    this.scene.add(mesh3);
+    this.meshes.push(mesh3)
   }
 };
 
@@ -364,11 +457,19 @@ GLManager.prototype.updateTexture = function (newIndex, progress) {
     this.render();
   }
 };
-GLManager.prototype.updateStickEffect = function ({ progress, direction, waveIntensity, part }) {
-  if (this.part === 0) {
-    this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;
+GLManager.prototype.updateStickEffect = function ({ progress, direction, waveIntensity, part, inTransition }) {
+  // console.log(inTransition, this.part)
+  if (inTransition) {
+    // if (this.part === 0 || this.part === 2) {
+      this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;
+    // }
+    // else {
+    //   this.meshes[this.part].material.uniforms.u_progress.value = progress;
+    //   this.meshes[this.part].material.uniforms.u_direction.value = direction;
+    //   this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;
+    // }
   }
-  else if (this.part === 1) {
+  else {
     this.meshes[this.part].material.uniforms.u_progress.value = progress;
     this.meshes[this.part].material.uniforms.u_direction.value = direction;
     this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;

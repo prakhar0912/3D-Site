@@ -1,11 +1,5 @@
 class Grab {
-  constructor({
-    indexSize,
-    onIndexChange,
-    onGrabStart,
-    onGrabMove,
-    onGrabEnd
-  }) {
+  constructor({indexSize, onIndexChange, onGrabStart, onGrabMove, onGrabEnd}) {
     this.onGrabEnd = onGrabEnd;
     this.onGrabStart = onGrabStart;
     this.onGrabMove = onGrabMove;
@@ -47,10 +41,10 @@ class Grab {
     }
     if (Array.isArray(events)) {
       for (let i = 0; i < events.length; i++) {
-        window.addEventListener(events[i], listener, false);
+        document.querySelector("main").addEventListener(events[i], listener, false);
       }
     } else {
-      window.addEventListener(events, listener, false);
+      document.querySelector("main").addEventListener(events, listener, false);
     }
   }
 

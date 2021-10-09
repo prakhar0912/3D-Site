@@ -31,6 +31,7 @@ function Showcase(data, options = {}) {
   this.direction = 1;
   this.waveIntensity = 0;
   this.inTab = false
+  this.inTransition = false
   this.part = 0
 
 
@@ -53,7 +54,7 @@ function Showcase(data, options = {}) {
 
   this.slidesSpring = null;
 
-  this.waveIntensityRange = [0, 0.1]
+  this.waveIntensityRange = [0, 0.4]
 
   // this.slides = new Slides(data);
 
@@ -89,8 +90,6 @@ Showcase.prototype.onMouseMove = function (ev) {
   if (this.followerSpring) {
     this.followerSpring.stop();
     this.followerSpring = null;
-    // this.follower.vx = 0;
-    // this.follower.vy = 0;
   }
 
   this.followerSpring = reach({
@@ -144,8 +143,7 @@ Showcase.prototype.onMouseMove = function (ev) {
 
 Showcase.prototype.onGrabMove = function (scroll) {
   if (this.part === 1) {
-    // console.log('r')
-    if (this.inTab) {
+    if (this.inTab || this.inTransition) {
       return
     }
     this.index.target = clamp(
@@ -274,29 +272,94 @@ Showcase.prototype.titleClickStart = function () {
   }
 };
 
+Showcase.prototype.setStickEffect = function () {
+  this.waveIntensity = 0
+  this.progress = 0
+  this.direction = 0
+  this.GL.updateStickEffect({
+    progress: this.progress,
+    direction: this.direction,
+    waveIntensity: this.waveIntensity,
+    part: this.part,
+    inTransition: this.inTransition
+  });
+}
 
 
-Showcase.prototype.onGrabStart = function () {
-  if (this.part === 0) {
-    if (this.zoom01) {
-      this.zoom01.kill();
+
+Showcase.prototype.startMoveToSection = function (from, to) {
+  if (to < 0 || to > this.data.length - 1 || from === to) {
+    console.log(from, to)
+    return
+  }
+  if (to > from) {
+    if (this.zoom) {
+      this.zoom.kill();
+    }
+    this.setStickEffect()
+    this.GL.scheduleLoop();
+    this.options.startTransitionPage(from, to)
+    this.zoom = gsap.timeline()
+    this.zoom.to(this.GL.camera.position, {
+      z: this.GL.camera.position.z + 4, duration: 1, ease: "power4.in",
+    })
+    this.zoom.to(this.GL.camera.position, {
+      z: this.data[from][0].position - 4, duration: 1.2, ease: "power4.in", onComplete: () => {
+        console.log('start complete', from, to)
+        this.setStickEffect()
+        this.part = to
+        this.GL.part = to
+        this.options.updateNavPart(to)
+        this.inTransition = false
+      }
+    })
+
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
     }
     this.GL.scheduleLoop();
-
-    this.options.startTransitionPage(0, 1)
-
-    this.zoom01 = gsap.timeline()
-    this.zoom01.to(this.GL.camera.position, {
-      z: 15, duration: 1, ease: "power4.in",
+    const startWaveIntensitySpring = spring({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[1],
+      mass: 5,
+      stiffness: 10,
+      damping: 200
+    });
+    this.GLStickPop = parallel(
+      startWaveIntensitySpring
+    ).start({
+      update: values => {
+        this.waveIntensity = values[0];
+        if (this.inTransition)
+          this.GL.updateStickEffect({
+            waveIntensity: this.waveIntensity,
+            part: this.part,
+            inTransition: true
+          });
+      },
+    });
+  }
+  else {
+    if (this.zoom) {
+      this.zoom.kill();
+    }
+    this.setStickEffect()
+    this.GL.scheduleLoop();
+    this.options.startTransitionPage(from, to)
+    this.zoom = gsap.timeline()
+    this.zoom.to(this.GL.camera.position, {
+      z: this.GL.camera.position.z - 2, duration: 1, ease: "power4.in",
     })
-    this.zoom01.to(this.GL.camera.position, {
-      z: 5, duration: 1.2, delay: -0.1, ease: "power4.in", onComplete: () => {
-        console.log('start complete')
-        this.part = 1
-        this.GL.part = 1
-        if (this.GLStickPop) {
-          this.GLStickPop.stop();
-        }
+    this.zoom.to(this.GL.camera.position, {
+      z: this.data[to][0].position + 6, duration: 1.2, ease: "power4.in", onComplete: () => {
+        console.log('start complete', from, to)
+        this.setStickEffect()
+        this.part = to
+        this.GL.part = to
+        this.inTransition = false
+        // if (this.GLStickPop) {
+        //   this.GLStickPop.stop();
+        // }
       }
     })
 
@@ -316,16 +379,111 @@ Showcase.prototype.onGrabStart = function () {
     ).start({
       update: values => {
         this.waveIntensity = values[0];
-        this.GL.updateStickEffect({
-          waveIntensity: this.waveIntensity,
-          part: this.part
-        });
+        if (this.inTransition)
+          this.GL.updateStickEffect({
+            waveIntensity: this.waveIntensity,
+            part: this.part,
+            inTransition: this.inTransition
+          });
       },
     });
+  }
+}
 
+Showcase.prototype.endMoveToSection = function (from, to) {
+  // if(from < to){
+  if (to < 0 || to > this.data.length - 1 || from === to)  {
+    return
+  }
+  if (this.zoom) {
+    console.log('stop ', from, to)
+    this.zoom.kill();
+  }
+  this.options.endTransitionPage(from, to)
+  this.GL.scheduleLoop();
+  this.zoom = gsap.timeline()
+  this.zoom.to(this.GL.camera.position, {
+    z: this.data[from][0].position + 6, duration: 0.8, ease: "power2.in", onComplete: () => {
+      console.log('end complete')
+      this.inTransition = false
+      this.GL.part = from
+      this.part = from
+    }
+  })
+  if (this.GLStickPop) {
+    this.GLStickPop.stop();
+  }
+  const waveIntensitySpring = spring({
+    from: this.waveIntensity,
+    to: this.waveIntensityRange[0],
+    mass: 0.1,
+    stiffness: 800,
+    damping: 50
+  });
+  this.GLStickPop = parallel(
+    waveIntensitySpring
+  ).start({
+    update: values => {
+      this.waveIntensity = values[0];
+      if(this.inTransition){
+        this.GL.updateStickEffect({
+        waveIntensity: this.waveIntensity,
+        part: this.part,
+        inTransition: this.inTransition
+      });
+      }
+    },
+  });
+  // }
+  // else{
+  //   if (this.zoom) {
+  //     console.log('stop ', from, to)
+  //     this.zoom.kill();
+  //   }
+  //   this.options.endTransitionPage(from, to)
+  //   this.GL.scheduleLoop();
+  //   this.zoom = gsap.timeline()
+  //   this.zoom.to(this.GL.camera.position, {
+  //     z: this.data[from][0].position + 10, duration: 0.8, ease: "power2.in", onComplete: () => {
+  //       console.log('end complete')
+  //       this.GL.part = from
+  //       this.part = from
+  //     }
+  //   })
+  //   if (this.GLStickPop) {
+  //     this.GLStickPop.stop();
+  //   }
+  //   const waveIntensitySpring = spring({
+  //     from: this.waveIntensity,
+  //     to: this.waveIntensityRange[0],
+  //     mass: 0.1,
+  //     stiffness: 800,
+  //     damping: 50
+  //   });
+  //   this.GLStickPop = parallel(
+  //     waveIntensitySpring
+  //   ).start({
+  //     update: values => {
+  //       this.waveIntensity = values[0];
+  //       this.GL.updateStickEffect({
+  //         waveIntensity: this.waveIntensity,
+  //         part: this.part
+  //       });
+  //     },
+  //   });
+  // }
+}
+
+
+
+Showcase.prototype.onGrabStart = function () {
+  this.options.blowUp()
+  if (this.part === 0) {
+    this.inTransition = true
+    this.startMoveToSection(0, 1)
   }
   else if (this.part === 1) {
-    if (this.inTab) {
+    if (this.inTab || this.inTransition) {
       return
     }
     if (this.options.onZoomOutStart) {
@@ -393,46 +551,14 @@ Showcase.prototype.onGrabStart = function () {
 };
 
 Showcase.prototype.onGrabEnd = function () {
+  this.options.blowDown()
   if (this.part === 0) {
-    if (this.zoom01) {
-      console.log('stop')
-      this.zoom01.kill();
-    }
-    this.options.endTransitionPage(0,1)
-    this.GL.scheduleLoop();
-    this.zoom01 = gsap.timeline()
-    this.zoom01.to(this.GL.camera.position, {
-      z: 10, duration: 0.8, ease: "power2.in", onComplete: () => {
-        console.log('end complete')
-        this.GL.part = 0
-        this.part = 0
-      }
-    })
-    if (this.GLStickPop) {
-      this.GLStickPop.stop();
-    }
-    const waveIntensitySpring = spring({
-      from: this.waveIntensity,
-      to: this.waveIntensityRange[0],
-      mass: 0.1,
-      stiffness: 800,
-      damping: 50
-    });
-    this.GLStickPop = parallel(
-      waveIntensitySpring
-    ).start({
-      update: values => {
-        this.waveIntensity = values[0];
-        this.GL.updateStickEffect({
-          waveIntensity: this.waveIntensity,
-          part: this.part
-        });
-      },
-    });
-
+    this.inTransition = true
+    this.endMoveToSection(0, 1)
   }
   else if (this.part === 1) {
-    if (this.inTab) {
+    // console.log(this.inTab)
+    if (this.inTab || this.inTransition) {
       return
     }
     if (this.options.onFullscreenStart) {

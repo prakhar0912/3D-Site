@@ -1,5 +1,8 @@
+import gsap from "gsap";
+
 const lerp = (a, b, n) => (1 - n) * a + n * b;
 const body = document.body;
+
 const getMousePos = (e) => {
     let posx = 0;
     let posy = 0;
@@ -26,23 +29,51 @@ class Cursor {
         this.mousePos = {x:0, y:0};
         this.lastMousePos = {dot: {x:0, y:0}, circle: {x:0, y:0}};
         this.lastScale = 1;
-        
+        this.blowAnimation = null
         this.initEvents();
-        requestAnimationFrame(() => this.render());
+        this.render()
+        // requestAnimationFrame(() => this.render());
     }
     initEvents() {
-        window.addEventListener('mousemove', ev => this.mousePos = getMousePos(ev));
+        window.addEventListener('mousemove', ev => {
+            this.mousePos = getMousePos(ev)
+            this.render()
+        });
     }
     render() {
-        this.lastMousePos.dot.x = lerp(this.lastMousePos.dot.x, this.mousePos.x - this.bounds.dot.width/2, 1);
-        this.lastMousePos.dot.y = lerp(this.lastMousePos.dot.y, this.mousePos.y - this.bounds.dot.height/2, 1);
-        this.lastMousePos.circle.x = lerp(this.lastMousePos.circle.x, this.mousePos.x - this.bounds.circle.width/2, 0.15);
-        this.lastMousePos.circle.y = lerp(this.lastMousePos.circle.y, this.mousePos.y - this.bounds.circle.height/2, 0.15);
-        this.lastScale = lerp(this.lastScale, this.scale, 0.15);
-        this.DOM.dot.style.transform = `translateX(${(this.lastMousePos.dot.x)}px) translateY(${this.lastMousePos.dot.y}px)`;
-        this.DOM.circle.style.transform = `translateX(${(this.lastMousePos.circle.x)}px) translateY(${this.lastMousePos.circle.y}px) scale(${this.lastScale})`;
-        requestAnimationFrame(() => this.render());
+        this.lastMousePos.dot.x = this.mousePos.x - this.bounds.dot.width/2
+        this.lastMousePos.dot.y = this.mousePos.y - this.bounds.dot.height/2
+        this.lastMousePos.circle.x = this.mousePos.x - this.bounds.circle.width/2
+        this.lastMousePos.circle.y = this.mousePos.y - this.bounds.circle.height/2
+        this.lastScale = this.scale;
+
+        gsap.to(this.DOM.el, {
+            duration: 0.3,
+            x: this.lastMousePos.dot.x,
+            y: this.lastMousePos.dot.y
+        })
     }
+
+    killBlow() {
+        if(this.blowAnimation){
+            this.blowAnimation.kill()
+        }
+    }
+
+    blowUp() {
+        this.killBlow()
+        this.blowAnimation = gsap.to(this.DOM.dot, {
+            height: "50px", width: "50px", duration: 2.8
+        })
+    }
+
+    blowDown() {
+        this.killBlow()
+        this.blowAnimation = gsap.to(this.DOM.dot, {
+            height: "8px", width: "8px", duration: 1.2
+        })
+    }
+
     enter() {
         this.scale = 1.5;
         this.DOM.dot.style.display = 'none';

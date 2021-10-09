@@ -18,7 +18,6 @@ class Slides {
     console.log(this.slides)
     this.options = options
     this.tl = null;
-    this.addClickEvents()
   }
 
   createSlides() {
@@ -42,7 +41,9 @@ class Slides {
         slide.classList.add(j !== 0 && i === 1 ? "next" : "show-meta");
         meta.innerHTML = this.data[i][j].meta;
         title.innerHTML = this.data[i][j].title;
-        more.innerHTML = this.data[i][j].more;
+        if(i != 0 || j != 0){
+          more.innerHTML = this.data[i][j].more;
+        }
         desc.innerHTML = this.data[i][j].desc
         slide.appendChild(container)
         container.appendChild(header)
@@ -65,6 +66,7 @@ class Slides {
 
   mount(container) {
     container.appendChild(this.container);
+    this.addClickEvents()
   }
 
   startTransitionParts(from, to) {
@@ -188,7 +190,7 @@ class Slides {
     }
   }
   onMove(indexFloat) {
-    this.container.style.transform = `translateY(${(indexFloat * 100)}%)`;
+    this.masterSlides[this.part].style.transform = `translateY(${(indexFloat * 100) / (this.slides[this.part].length) }%)`;
   }
   appear() {
     this.container.classList.add("scrolling");

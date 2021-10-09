@@ -36540,11 +36540,19 @@ if (typeof window !== 'undefined') {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.vertex = exports.fragment = void 0;
-var fragment = "\nuniform vec2 u_resolution;\n\nuniform sampler2D u_texture;\nuniform sampler2D u_texture2;\nuniform vec2 u_textureFactor;\nuniform vec2 u_texture2Factor;\nuniform float u_textureProgress;\n\n// RGB\nuniform vec2 u_rgbPosition;\nuniform vec2 u_rgbVelocity;\n\nvarying vec2 vUv;\nvec2 centeredAspectRatio(vec2 uvs, vec2 factor){\n    return uvs * factor - factor /2. + 0.5;\n}\nvoid main(){\n    // On THREE 102 The image is has Y backwards\n    // vec2 flipedUV = vec2(vUv.x,1.-vUv.y);\n\n    vec2 normalizedRgbPos = u_rgbPosition / u_resolution;\n    normalizedRgbPos.y = 1. - normalizedRgbPos.y; \n\n    \n    vec2 vel = u_rgbVelocity;\n    float dist = distance(normalizedRgbPos + vel / u_resolution, vUv.xy);\n\n    float ratio = clamp(1.0 - dist * 5., 0., 1.);\n\n\n    vec4 tex1 = vec4(1.);\n    vec4 tex2 = vec4(1.);\n\n    vec2 uv = vUv;\n\n    uv.x -= sin(uv.y) * ratio / 100. * (vel.x + vel.y) / 7.;\n    uv.y -= sin(uv.x) * ratio / 100. * (vel.x + vel.y) / 7.;\n\n    tex1.r = texture2D(u_texture, centeredAspectRatio(uv, u_textureFactor )).r;\n    tex2.r = texture2D(u_texture2, centeredAspectRatio(uv, u_textureFactor )).r;\n\n    \n    uv.x -= sin(uv.y) * ratio / 150. * (vel.x + vel.y) / 7.;\n    uv.y -= sin(uv.x) * ratio / 150. * (vel.x + vel.y) / 7.;\n\n    tex1.g = texture2D(u_texture, centeredAspectRatio(uv, u_textureFactor )).g;\n    tex2.g = texture2D(u_texture2, centeredAspectRatio(uv, u_textureFactor )).g;\n    \n    uv.x -= sin(uv.y) * ratio / 300. * (vel.x + vel.y) / 7.;\n    uv.y -= sin(uv.x) * ratio / 300. * (vel.x + vel.y) / 7.;\n\n    tex1.b = texture2D(u_texture, centeredAspectRatio(uv, u_textureFactor )).b;\n    tex2.b = texture2D(u_texture2, centeredAspectRatio(uv, u_textureFactor )).b;\n     \n    \n\n\n    vec4 fulltex1 = texture2D(u_texture, centeredAspectRatio(vUv, u_textureFactor) );\n    vec4 fulltex2 = texture2D(u_texture2, centeredAspectRatio(vUv, u_texture2Factor));\n    \n    vec4 mixedTextures =  mix(tex1,tex2,u_textureProgress);\n\n    gl_FragColor = mixedTextures;\n}\n";
+exports.vertex2 = exports.fragment2 = exports.vertex1 = exports.fragment1 = exports.vertex = exports.fragment = void 0;
+var fragment = "\nuniform vec2 u_resolution;\n\nuniform sampler2D u_texture;\nuniform sampler2D u_texture2;\nuniform vec2 u_textureFactor;\nuniform vec2 u_texture2Factor;\nuniform float u_textureProgress;\n\n// RGB\nuniform vec2 u_rgbPosition;\nuniform vec2 u_rgbVelocity;\n\nvarying vec2 vUv;\nvec2 centeredAspectRatio(vec2 uvs, vec2 factor){\n    return uvs * factor - factor /2. + 0.5;\n}\nvoid main(){\n    // On THREE 102 The image is has Y backwards\n    // vec2 flipedUV = vec2(vUv.x,1.-vUv.y);\n\n    vec2 normalizedRgbPos = u_rgbPosition / u_resolution;\n    normalizedRgbPos.y = 1. - normalizedRgbPos.y; \n\n    \n    vec2 vel = u_rgbVelocity;\n    float dist = distance(normalizedRgbPos + vel / u_resolution, vUv.xy);\n\n    float ratio = clamp(1.0 - dist * 5., 0., 1.);\n\n\n    vec4 tex1 = vec4(1.);\n    vec4 tex2 = vec4(1.);\n\n    vec2 uv = vUv;\n\n    uv.x -= sin(uv.y) * ratio / 100. * (vel.x + vel.y) / 7.;\n    uv.y -= sin(uv.x) * ratio / 100. * (vel.x + vel.y) / 7.;\n\n    tex1.r = texture2D(u_texture, centeredAspectRatio(uv, u_textureFactor )).r;\n    tex2.r = texture2D(u_texture2, centeredAspectRatio(uv, u_textureFactor )).r;\n\n    \n    uv.x -= sin(uv.y) * ratio / 150. * (vel.x + vel.y) / 7.;\n    uv.y -= sin(uv.x) * ratio / 150. * (vel.x + vel.y) / 7.;\n\n    tex1.g = texture2D(u_texture, centeredAspectRatio(uv, u_textureFactor )).g;\n    tex2.g = texture2D(u_texture2, centeredAspectRatio(uv, u_textureFactor )).g;\n    \n    uv.x -= sin(uv.y) * ratio / 300. * (vel.x + vel.y) / 7.;\n    uv.y -= sin(uv.x) * ratio / 300. * (vel.x + vel.y) / 7.;\n\n    tex1.b = texture2D(u_texture, centeredAspectRatio(uv, u_textureFactor )).b;\n    tex2.b = texture2D(u_texture2, centeredAspectRatio(uv, u_textureFactor )).b;\n     \n    \n\n\n    vec4 fulltex1 = texture2D(u_texture, centeredAspectRatio(vUv, u_textureFactor) );\n    vec4 fulltex2 = texture2D(u_texture2, centeredAspectRatio(vUv, u_texture2Factor));\n    \n    vec4 mixedTextures =  mix(tex1,tex1,u_textureProgress);\n\n    gl_FragColor = mixedTextures;\n}\n";
 exports.fragment = fragment;
 var vertex = "\n#define PI 3.14159265359\nuniform float u_offset;\nuniform float u_progress;\nuniform float u_direction;\nuniform float u_time;\nuniform float u_waveIntensity;\nvarying vec2 vUv;\nvoid main(){\n    vec3 pos = position.xyz;\n\n    float distance = length(uv.xy - 0.5 );\n    float sizeDist = length(vec2(0.5,0.5));\n    float normalizedDistance = distance/sizeDist ;\n\n    float stickOutEffect = normalizedDistance ;\n    float stickInEffect = -normalizedDistance ;\n\n    \n    float stickEffect = mix(stickOutEffect,stickInEffect, u_direction);\n\n    // Backwards V wave.\n    float stick = 0.5;\n\n    float waveIn = u_progress*(1. / stick); \n    float waveOut =  -( u_progress - 1.) * (1./(1.-stick) );\n    waveOut = pow(smoothstep(0.,1.,waveOut),0.7);\n\n    float stickProgress = min(waveIn, waveOut);\n\n\n\n\n\n    // We can re-use stick Influcse because this oen starts at the same position\n    float offsetInProgress = clamp(waveIn,0.,1.);\n\n    // Invert stickout to get the slope moving upwards to the right\n    // and move it left by 1\n    float offsetOutProgress = clamp(1.-waveOut,0.,1.);\n\n    float offsetProgress = mix(offsetInProgress,offsetOutProgress,u_direction);\n\n\n    float stickOffset = u_offset;\n    pos.z += stickEffect * stickOffset * stickProgress  - u_offset * offsetProgress;\n\n    \n    pos.z += sin(distance * 8. - u_time * 2. )  * u_waveIntensity;\n\n    gl_Position =   \n        projectionMatrix * \n        modelViewMatrix * \n         vec4(pos, 1.0);\n\n    vUv = uv;\n}\n";
 exports.vertex = vertex;
+var fragment1 = "\nuniform vec2 u_resolution;\n\nuniform sampler2D u_texture;\nuniform sampler2D u_texture2;\nuniform vec2 u_textureFactor;\nuniform vec2 u_texture2Factor;\nuniform float u_textureProgress;\n\n// RGB\nuniform vec2 u_rgbPosition;\nuniform vec2 u_rgbVelocity;\n\nvarying vec2 vUv;\nvec2 centeredAspectRatio(vec2 uvs, vec2 factor){\n    return uvs * factor - factor /2. + 0.5;\n}\nvoid main(){\n    // On THREE 102 The image is has Y backwards\n    // vec2 flipedUV = vec2(vUv.x,1.-vUv.y);\n\n    vec2 normalizedRgbPos = u_rgbPosition / u_resolution;\n    normalizedRgbPos.y = 1. - normalizedRgbPos.y; \n\n    \n    vec2 vel = u_rgbVelocity;\n    float dist = distance(normalizedRgbPos + vel / u_resolution, vUv.xy);\n\n    float ratio = clamp(1.0 - dist * 5., 0., 1.);\n\n\n    vec4 tex1 = vec4(1.);\n    vec4 tex2 = vec4(1.);\n\n    vec2 uv = vUv;\n\n    uv.x -= sin(uv.y) * ratio / 100. * (vel.x + vel.y) / 7.;\n    uv.y -= sin(uv.x) * ratio / 100. * (vel.x + vel.y) / 7.;\n\n    tex1.r = texture2D(u_texture, centeredAspectRatio(uv, u_textureFactor )).r;\n    tex2.r = texture2D(u_texture2, centeredAspectRatio(uv, u_textureFactor )).r;\n\n    \n    uv.x -= sin(uv.y) * ratio / 150. * (vel.x + vel.y) / 7.;\n    uv.y -= sin(uv.x) * ratio / 150. * (vel.x + vel.y) / 7.;\n\n    tex1.g = texture2D(u_texture, centeredAspectRatio(uv, u_textureFactor )).g;\n    tex2.g = texture2D(u_texture2, centeredAspectRatio(uv, u_textureFactor )).g;\n    \n    uv.x -= sin(uv.y) * ratio / 300. * (vel.x + vel.y) / 7.;\n    uv.y -= sin(uv.x) * ratio / 300. * (vel.x + vel.y) / 7.;\n\n    tex1.b = texture2D(u_texture, centeredAspectRatio(uv, u_textureFactor )).b;\n    tex2.b = texture2D(u_texture2, centeredAspectRatio(uv, u_textureFactor )).b;\n     \n    \n\n\n    vec4 fulltex1 = texture2D(u_texture, centeredAspectRatio(vUv, u_textureFactor) );\n    vec4 fulltex2 = texture2D(u_texture2, centeredAspectRatio(vUv, u_texture2Factor));\n    \n    vec4 mixedTextures =  mix(tex1,tex2,u_textureProgress);\n\n    gl_FragColor = mixedTextures;\n}\n";
+exports.fragment1 = fragment1;
+var vertex1 = "\n#define PI 3.14159265359\nuniform float u_offset;\nuniform float u_progress;\nuniform float u_direction;\nuniform float u_time;\nuniform float u_waveIntensity;\nvarying vec2 vUv;\nvoid main(){\n    vec3 pos = position.xyz;\n\n    float distance = length(uv.xy - 0.5 );\n    float sizeDist = length(vec2(0.5,0.5));\n    float normalizedDistance = distance/sizeDist ;\n\n    float stickOutEffect = normalizedDistance ;\n    float stickInEffect = -normalizedDistance ;\n\n    \n    float stickEffect = mix(stickOutEffect,stickInEffect, u_direction);\n\n    // Backwards V wave.\n    float stick = 0.5;\n\n    float waveIn = u_progress*(1. / stick); \n    float waveOut =  -( u_progress - 1.) * (1./(1.-stick) );\n    waveOut = pow(smoothstep(0.,1.,waveOut),0.7);\n\n    float stickProgress = min(waveIn, waveOut);\n\n\n\n\n\n    // We can re-use stick Influcse because this oen starts at the same position\n    float offsetInProgress = clamp(waveIn,0.,1.);\n\n    // Invert stickout to get the slope moving upwards to the right\n    // and move it left by 1\n    float offsetOutProgress = clamp(1.-waveOut,0.,1.);\n\n    float offsetProgress = mix(offsetInProgress,offsetOutProgress,u_direction);\n\n\n    float stickOffset = u_offset;\n    pos.z += stickEffect * stickOffset * stickProgress  - u_offset * offsetProgress;\n\n    \n    pos.z += sin(distance * 8. - u_time * 2. )  * u_waveIntensity;\n\n    gl_Position =   \n        projectionMatrix * \n        modelViewMatrix * \n         vec4(pos, 1.0);\n\n    vUv = uv;\n}\n";
+exports.vertex1 = vertex1;
+var fragment2 = "\nuniform vec2 u_resolution;\n\nuniform sampler2D u_texture;\nuniform sampler2D u_texture2;\nuniform vec2 u_textureFactor;\nuniform vec2 u_texture2Factor;\nuniform float u_textureProgress;\n\n// RGB\nuniform vec2 u_rgbPosition;\nuniform vec2 u_rgbVelocity;\n\nvarying vec2 vUv;\nvec2 centeredAspectRatio(vec2 uvs, vec2 factor){\n    return uvs * factor - factor /2. + 0.5;\n}\nvoid main(){\n    // On THREE 102 The image is has Y backwards\n    // vec2 flipedUV = vec2(vUv.x,1.-vUv.y);\n\n    vec2 normalizedRgbPos = u_rgbPosition / u_resolution;\n    normalizedRgbPos.y = 1. - normalizedRgbPos.y; \n\n    \n    vec2 vel = u_rgbVelocity;\n    float dist = distance(normalizedRgbPos + vel / u_resolution, vUv.xy);\n\n    float ratio = clamp(1.0 - dist * 5., 0., 1.);\n\n\n    vec4 tex1 = vec4(1.);\n    vec4 tex2 = vec4(1.);\n\n    vec2 uv = vUv;\n\n    uv.x -= sin(uv.y) * ratio / 100. * (vel.x + vel.y) / 7.;\n    uv.y -= sin(uv.x) * ratio / 100. * (vel.x + vel.y) / 7.;\n\n    tex1.r = texture2D(u_texture, centeredAspectRatio(uv, u_textureFactor )).r;\n    tex2.r = texture2D(u_texture2, centeredAspectRatio(uv, u_textureFactor )).r;\n\n    \n    uv.x -= sin(uv.y) * ratio / 150. * (vel.x + vel.y) / 7.;\n    uv.y -= sin(uv.x) * ratio / 150. * (vel.x + vel.y) / 7.;\n\n    tex1.g = texture2D(u_texture, centeredAspectRatio(uv, u_textureFactor )).g;\n    tex2.g = texture2D(u_texture2, centeredAspectRatio(uv, u_textureFactor )).g;\n    \n    uv.x -= sin(uv.y) * ratio / 300. * (vel.x + vel.y) / 7.;\n    uv.y -= sin(uv.x) * ratio / 300. * (vel.x + vel.y) / 7.;\n\n    tex1.b = texture2D(u_texture, centeredAspectRatio(uv, u_textureFactor )).b;\n    tex2.b = texture2D(u_texture2, centeredAspectRatio(uv, u_textureFactor )).b;\n     \n    \n\n\n    vec4 fulltex1 = texture2D(u_texture, centeredAspectRatio(vUv, u_textureFactor));\n    vec4 fulltex2 = texture2D(u_texture2, centeredAspectRatio(vUv, u_texture2Factor));\n    \n    vec4 mixedTextures =  mix(tex1,tex1,u_textureProgress);\n\n    gl_FragColor = mixedTextures;\n}\n";
+exports.fragment2 = fragment2;
+var vertex2 = "\n#define PI 3.14159265359\nuniform float u_offset;\nuniform float u_progress;\nuniform float u_direction;\nuniform float u_time;\nuniform float u_waveIntensity;\nvarying vec2 vUv;\nvoid main(){\n    vec3 pos = position.xyz;\n\n    float distance = length(uv.xy - 0.5 );\n    float sizeDist = length(vec2(0.5,0.5));\n    float normalizedDistance = distance/sizeDist ;\n\n    float stickOutEffect = normalizedDistance ;\n    float stickInEffect = -normalizedDistance ;\n\n    \n    float stickEffect = mix(stickOutEffect,stickInEffect, u_direction);\n\n    // Backwards V wave.\n    float stick = 0.5;\n\n    float waveIn = u_progress*(1. / stick); \n    float waveOut =  -( u_progress - 1.) * (1./(1.-stick) );\n    waveOut = pow(smoothstep(0.,1.,waveOut),0.7);\n\n    float stickProgress = min(waveIn, waveOut);\n\n\n\n\n\n    // We can re-use stick Influcse because this oen starts at the same position\n    float offsetInProgress = clamp(waveIn,0.,1.);\n\n    // Invert stickout to get the slope moving upwards to the right\n    // and move it left by 1\n    float offsetOutProgress = clamp(1.-waveOut,0.,1.);\n\n    float offsetProgress = mix(offsetInProgress,offsetOutProgress,u_direction);\n\n\n    float stickOffset = u_offset;\n    pos.z += stickEffect * stickOffset * stickProgress  - u_offset * offsetProgress;\n\n    \n    pos.z += sin(distance * 8. - u_time * 2. )  * u_waveIntensity;\n\n    gl_Position =   \n        projectionMatrix * \n        modelViewMatrix * \n         vec4(pos, 1.0);\n\n    vUv = uv;\n}\n";
+exports.vertex2 = vertex2;
 },{}],"node_modules/regenerator-runtime/runtime.js":[function(require,module,exports) {
 var define;
 /**
@@ -37330,7 +37338,7 @@ function GLManager(data) {
   this.totalEntries = this.calculateTotalEntries(data);
   this.loadedEntries = 0;
   var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
-  camera.position.z = 10; // this.mesh = null;
+  camera.position.z = 16; // this.mesh = null;
   // this.initialMesh = null;
 
   this.meshes = [];
@@ -37358,9 +37366,11 @@ function GLManager(data) {
     _this.loopRaf = null;
     _this.loop = _this.loop.bind(_this);
 
-    _this.createPlane(0);
+    _this.createPlane(0, data[0][0].position);
 
-    _this.createPlane(1);
+    _this.createPlane(1, data[1][0].position);
+
+    _this.createPlane(2, data[2][0].position);
 
     _this.calcAspectRatios();
 
@@ -37515,7 +37525,7 @@ GLManager.prototype.calculateTotalEntries = function (data) {
 
 GLManager.prototype.getViewSize = function () {
   var fovInRadians = this.camera.fov * Math.PI / 180;
-  var viewSize = Math.abs((this.camera.position.z - 5) * Math.tan(fovInRadians / 2) * 2);
+  var viewSize = Math.abs((this.camera.position.z - 10) * Math.tan(fovInRadians / 2) * 2);
   return viewSize;
 };
 
@@ -37576,7 +37586,7 @@ GLManager.prototype.calculateAspectRatioFactor = function (index, j, texture) {
 }; // Plane Stuff
 
 
-GLManager.prototype.createPlane = function (index) {
+GLManager.prototype.createPlane = function (index, pos) {
   // Calculate bas of Isoceles triangle(camera)
   if (index === 0) {
     var viewSize = this.getViewSize();
@@ -37651,7 +37661,7 @@ GLManager.prototype.createPlane = function (index) {
       side: THREE.DoubleSide
     });
     var mesh2 = new THREE.Mesh(geometry, material);
-    mesh2.position.z = 5;
+    mesh2.position.z = pos;
     this.scene.add(mesh2);
     this.meshes.push(mesh2);
   } else if (index == 1) {
@@ -37724,14 +37734,94 @@ GLManager.prototype.createPlane = function (index) {
           value: new THREE.Vector2(0, 0)
         }
       },
-      vertexShader: _shaders.vertex,
-      fragmentShader: _shaders.fragment,
+      vertexShader: _shaders.vertex1,
+      fragmentShader: _shaders.fragment1,
       side: THREE.DoubleSide
     });
 
     var mesh = new THREE.Mesh(_geometry, _material);
+    mesh.position.z = pos;
     this.scene.add(mesh);
     this.meshes.push(mesh);
+  } else if (index === 2) {
+    var _viewSize2 = this.getViewSize();
+
+    var _this$getPlaneSize3 = this.getPlaneSize(),
+        _width2 = _this$getPlaneSize3.width,
+        _height2 = _this$getPlaneSize3.height;
+
+    var _segments2 = 60;
+
+    var _geometry2 = new THREE.PlaneBufferGeometry(_width2, _height2, _segments2, _segments2);
+
+    var _material2 = new THREE.ShaderMaterial({
+      uniforms: {
+        u_texture: {
+          type: "t",
+          value: this.textures[2][0]
+        },
+        u_textureFactor: {
+          type: "f",
+          value: this.factors[2][0]
+        },
+        // u_texture2: {
+        //   type: "t",
+        //   value: this.textures[this.nextIndex]
+        // },
+        // u_texture2Factor: {
+        //   type: "f",
+        //   value: this.factors[this.nextIndex]
+        // },
+        // u_textureProgress: {
+        //   type: "f",
+        //   value: this.initialTextureProgress
+        // },
+        u_offset: {
+          type: "f",
+          value: 8
+        },
+        u_progress: {
+          type: "f",
+          value: 0
+        },
+        u_direction: {
+          type: "f",
+          value: 1
+        },
+        u_effect: {
+          type: "f",
+          value: 0
+        },
+        u_time: {
+          type: "f",
+          value: this.time
+        },
+        u_waveIntensity: {
+          type: "f",
+          value: 0
+        },
+        u_resolution: {
+          type: "v2",
+          value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+        },
+        u_rgbPosition: {
+          type: "v2",
+          value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2)
+        },
+        u_rgbVelocity: {
+          type: "v2",
+          value: new THREE.Vector2(0, 0)
+        }
+      },
+      vertexShader: _shaders.vertex2,
+      fragmentShader: _shaders.fragment2,
+      side: THREE.DoubleSide
+    });
+
+    var mesh3 = new THREE.Mesh(_geometry2, _material2);
+    mesh3.position.z = pos;
+    this.scene.add(mesh3);
+    this.meshes.push(mesh3);
   }
 };
 
@@ -37771,11 +37861,19 @@ GLManager.prototype.updateStickEffect = function (_ref3) {
   var progress = _ref3.progress,
       direction = _ref3.direction,
       waveIntensity = _ref3.waveIntensity,
-      part = _ref3.part;
+      part = _ref3.part,
+      inTransition = _ref3.inTransition;
 
-  if (this.part === 0) {
-    this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;
-  } else if (this.part === 1) {
+  // console.log(inTransition, this.part)
+  if (inTransition) {
+    // if (this.part === 0 || this.part === 2) {
+    this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity; // }
+    // else {
+    //   this.meshes[this.part].material.uniforms.u_progress.value = progress;
+    //   this.meshes[this.part].material.uniforms.u_direction.value = direction;
+    //   this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;
+    // }
+  } else {
     this.meshes[this.part].material.uniforms.u_progress.value = progress;
     this.meshes[this.part].material.uniforms.u_direction.value = direction;
     this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;
@@ -42425,10 +42523,10 @@ var Grab = /*#__PURE__*/function () {
 
       if (Array.isArray(events)) {
         for (var i = 0; i < events.length; i++) {
-          window.addEventListener(events[i], listener, false);
+          document.querySelector("main").addEventListener(events[i], listener, false);
         }
       } else {
-        window.addEventListener(events, listener, false);
+        document.querySelector("main").addEventListener(events, listener, false);
       }
     }
   }, {
@@ -48146,6 +48244,7 @@ function Showcase(data) {
   this.direction = 1;
   this.waveIntensity = 0;
   this.inTab = false;
+  this.inTransition = false;
   this.part = 0;
   this.options = options;
   this.index = {
@@ -48161,7 +48260,7 @@ function Showcase(data) {
   };
   this.followerSpring = null;
   this.slidesSpring = null;
-  this.waveIntensityRange = [0, 0.1]; // this.slides = new Slides(data);
+  this.waveIntensityRange = [0, 0.4]; // this.slides = new Slides(data);
 
   this.grab = new _Grab.Grab({
     onGrabStart: this.onGrabStart.bind(this),
@@ -48198,8 +48297,7 @@ Showcase.prototype.onMouseMove = function (ev) {
 
   if (this.followerSpring) {
     this.followerSpring.stop();
-    this.followerSpring = null; // this.follower.vx = 0;
-    // this.follower.vy = 0;
+    this.followerSpring = null;
   }
 
   this.followerSpring = (0, _reach.reach)({
@@ -48258,8 +48356,7 @@ Showcase.prototype.onGrabMove = function (scroll) {
   var _this2 = this;
 
   if (this.part === 1) {
-    // console.log('r')
-    if (this.inTab) {
+    if (this.inTab || this.inTransition) {
       return;
     }
 
@@ -48388,35 +48485,109 @@ Showcase.prototype.titleClickStart = function () {
   }
 };
 
-Showcase.prototype.onGrabStart = function () {
+Showcase.prototype.setStickEffect = function () {
+  this.waveIntensity = 0;
+  this.progress = 0;
+  this.direction = 0;
+  this.GL.updateStickEffect({
+    progress: this.progress,
+    direction: this.direction,
+    waveIntensity: this.waveIntensity,
+    part: this.part,
+    inTransition: this.inTransition
+  });
+};
+
+Showcase.prototype.startMoveToSection = function (from, to) {
   var _this4 = this;
 
-  if (this.part === 0) {
-    if (this.zoom01) {
-      this.zoom01.kill();
+  if (to < 0 || to > this.data.length - 1 || from === to) {
+    console.log(from, to);
+    return;
+  }
+
+  if (to > from) {
+    if (this.zoom) {
+      this.zoom.kill();
     }
 
+    this.setStickEffect();
     this.GL.scheduleLoop();
-    this.options.startTransitionPage(0, 1);
-    this.zoom01 = _gsap.default.timeline();
-    this.zoom01.to(this.GL.camera.position, {
-      z: 15,
+    this.options.startTransitionPage(from, to);
+    this.zoom = _gsap.default.timeline();
+    this.zoom.to(this.GL.camera.position, {
+      z: this.GL.camera.position.z + 4,
       duration: 1,
       ease: "power4.in"
     });
-    this.zoom01.to(this.GL.camera.position, {
-      z: 5,
+    this.zoom.to(this.GL.camera.position, {
+      z: this.data[from][0].position - 4,
       duration: 1.2,
-      delay: -0.1,
       ease: "power4.in",
       onComplete: function onComplete() {
-        console.log('start complete');
-        _this4.part = 1;
-        _this4.GL.part = 1;
+        console.log('start complete', from, to);
 
-        if (_this4.GLStickPop) {
-          _this4.GLStickPop.stop();
-        }
+        _this4.setStickEffect();
+
+        _this4.part = to;
+        _this4.GL.part = to;
+
+        _this4.options.updateNavPart(to);
+
+        _this4.inTransition = false;
+      }
+    });
+
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
+    }
+
+    this.GL.scheduleLoop();
+    var startWaveIntensitySpring = (0, _popmotion.spring)({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[1],
+      mass: 5,
+      stiffness: 10,
+      damping: 200
+    });
+    this.GLStickPop = (0, _popmotion.parallel)(startWaveIntensitySpring).start({
+      update: function update(values) {
+        _this4.waveIntensity = values[0];
+        if (_this4.inTransition) _this4.GL.updateStickEffect({
+          waveIntensity: _this4.waveIntensity,
+          part: _this4.part,
+          inTransition: true
+        });
+      }
+    });
+  } else {
+    if (this.zoom) {
+      this.zoom.kill();
+    }
+
+    this.setStickEffect();
+    this.GL.scheduleLoop();
+    this.options.startTransitionPage(from, to);
+    this.zoom = _gsap.default.timeline();
+    this.zoom.to(this.GL.camera.position, {
+      z: this.GL.camera.position.z - 2,
+      duration: 1,
+      ease: "power4.in"
+    });
+    this.zoom.to(this.GL.camera.position, {
+      z: this.data[to][0].position + 6,
+      duration: 1.2,
+      ease: "power4.in",
+      onComplete: function onComplete() {
+        console.log('start complete', from, to);
+
+        _this4.setStickEffect();
+
+        _this4.part = to;
+        _this4.GL.part = to;
+        _this4.inTransition = false; // if (this.GLStickPop) {
+        //   this.GLStickPop.stop();
+        // }
       }
     });
 
@@ -48435,15 +48606,117 @@ Showcase.prototype.onGrabStart = function () {
     this.GLStickPop = (0, _popmotion.parallel)(waveIntensitySpring).start({
       update: function update(values) {
         _this4.waveIntensity = values[0];
-
-        _this4.GL.updateStickEffect({
+        if (_this4.inTransition) _this4.GL.updateStickEffect({
           waveIntensity: _this4.waveIntensity,
-          part: _this4.part
+          part: _this4.part,
+          inTransition: _this4.inTransition
         });
       }
     });
+  }
+};
+
+Showcase.prototype.endMoveToSection = function (from, to) {
+  var _this5 = this;
+
+  // if(from < to){
+  if (to < 0 || to > this.data.length - 1 || from === to) {
+    return;
+  }
+
+  if (this.zoom) {
+    console.log('stop ', from, to);
+    this.zoom.kill();
+  }
+
+  this.options.endTransitionPage(from, to);
+  this.GL.scheduleLoop();
+  this.zoom = _gsap.default.timeline();
+  this.zoom.to(this.GL.camera.position, {
+    z: this.data[from][0].position + 6,
+    duration: 0.8,
+    ease: "power2.in",
+    onComplete: function onComplete() {
+      console.log('end complete');
+      _this5.inTransition = false;
+      _this5.GL.part = from;
+      _this5.part = from;
+    }
+  });
+
+  if (this.GLStickPop) {
+    this.GLStickPop.stop();
+  }
+
+  var waveIntensitySpring = (0, _popmotion.spring)({
+    from: this.waveIntensity,
+    to: this.waveIntensityRange[0],
+    mass: 0.1,
+    stiffness: 800,
+    damping: 50
+  });
+  this.GLStickPop = (0, _popmotion.parallel)(waveIntensitySpring).start({
+    update: function update(values) {
+      _this5.waveIntensity = values[0];
+
+      if (_this5.inTransition) {
+        _this5.GL.updateStickEffect({
+          waveIntensity: _this5.waveIntensity,
+          part: _this5.part,
+          inTransition: _this5.inTransition
+        });
+      }
+    }
+  }); // }
+  // else{
+  //   if (this.zoom) {
+  //     console.log('stop ', from, to)
+  //     this.zoom.kill();
+  //   }
+  //   this.options.endTransitionPage(from, to)
+  //   this.GL.scheduleLoop();
+  //   this.zoom = gsap.timeline()
+  //   this.zoom.to(this.GL.camera.position, {
+  //     z: this.data[from][0].position + 10, duration: 0.8, ease: "power2.in", onComplete: () => {
+  //       console.log('end complete')
+  //       this.GL.part = from
+  //       this.part = from
+  //     }
+  //   })
+  //   if (this.GLStickPop) {
+  //     this.GLStickPop.stop();
+  //   }
+  //   const waveIntensitySpring = spring({
+  //     from: this.waveIntensity,
+  //     to: this.waveIntensityRange[0],
+  //     mass: 0.1,
+  //     stiffness: 800,
+  //     damping: 50
+  //   });
+  //   this.GLStickPop = parallel(
+  //     waveIntensitySpring
+  //   ).start({
+  //     update: values => {
+  //       this.waveIntensity = values[0];
+  //       this.GL.updateStickEffect({
+  //         waveIntensity: this.waveIntensity,
+  //         part: this.part
+  //       });
+  //     },
+  //   });
+  // }
+};
+
+Showcase.prototype.onGrabStart = function () {
+  var _this6 = this;
+
+  this.options.blowUp();
+
+  if (this.part === 0) {
+    this.inTransition = true;
+    this.startMoveToSection(0, 1);
   } else if (this.part === 1) {
-    if (this.inTab) {
+    if (this.inTab || this.inTransition) {
       return;
     }
 
@@ -48475,34 +48748,32 @@ Showcase.prototype.onGrabStart = function () {
       stiffness: 350,
       damping: 500
     });
-
-    var _waveIntensitySpring = (0, _popmotion.spring)({
+    var waveIntensitySpring = (0, _popmotion.spring)({
       from: this.waveIntensity,
       to: this.waveIntensityRange[1],
       mass: 5,
       stiffness: 10,
       damping: 200
     });
-
-    this.GLStickPop = (0, _popmotion.parallel)(progressSpring, directionSpring, _waveIntensitySpring).start({
+    this.GLStickPop = (0, _popmotion.parallel)(progressSpring, directionSpring, waveIntensitySpring).start({
       update: function update(values) {
-        if (_this4.progress !== values[0]) {}
+        if (_this6.progress !== values[0]) {}
 
-        _this4.progress = values[0];
-        _this4.direction = values[1];
-        _this4.waveIntensity = values[2];
+        _this6.progress = values[0];
+        _this6.direction = values[1];
+        _this6.waveIntensity = values[2];
 
-        _this4.GL.updateStickEffect({
-          progress: _this4.progress,
-          direction: _this4.direction,
-          waveIntensity: _this4.waveIntensity,
-          part: _this4.part
+        _this6.GL.updateStickEffect({
+          progress: _this6.progress,
+          direction: _this6.direction,
+          waveIntensity: _this6.waveIntensity,
+          part: _this6.part
         });
       },
       complete: function complete() {
-        if (_this4.options.onZoomOutFinish) {
-          _this4.options.onZoomOutFinish({
-            activeIndex: _this4.index.active
+        if (_this6.options.onZoomOutFinish) {
+          _this6.options.onZoomOutFinish({
+            activeIndex: _this6.index.active
           });
         }
       }
@@ -48511,51 +48782,16 @@ Showcase.prototype.onGrabStart = function () {
 };
 
 Showcase.prototype.onGrabEnd = function () {
-  var _this5 = this;
+  var _this7 = this;
+
+  this.options.blowDown();
 
   if (this.part === 0) {
-    if (this.zoom01) {
-      console.log('stop');
-      this.zoom01.kill();
-    }
-
-    this.options.endTransitionPage(0, 1);
-    this.GL.scheduleLoop();
-    this.zoom01 = _gsap.default.timeline();
-    this.zoom01.to(this.GL.camera.position, {
-      z: 10,
-      duration: 0.8,
-      ease: "power2.in",
-      onComplete: function onComplete() {
-        console.log('end complete');
-        _this5.GL.part = 0;
-        _this5.part = 0;
-      }
-    });
-
-    if (this.GLStickPop) {
-      this.GLStickPop.stop();
-    }
-
-    var waveIntensitySpring = (0, _popmotion.spring)({
-      from: this.waveIntensity,
-      to: this.waveIntensityRange[0],
-      mass: 0.1,
-      stiffness: 800,
-      damping: 50
-    });
-    this.GLStickPop = (0, _popmotion.parallel)(waveIntensitySpring).start({
-      update: function update(values) {
-        _this5.waveIntensity = values[0];
-
-        _this5.GL.updateStickEffect({
-          waveIntensity: _this5.waveIntensity,
-          part: _this5.part
-        });
-      }
-    });
+    this.inTransition = true;
+    this.endMoveToSection(0, 1);
   } else if (this.part === 1) {
-    if (this.inTab) {
+    // console.log(this.inTab)
+    if (this.inTab || this.inTransition) {
       return;
     }
 
@@ -48566,97 +48802,6 @@ Showcase.prototype.onGrabEnd = function () {
     } // this.slides.disperse(this.index.active);
 
 
-    this.snapCurrentToActiveIndex();
-
-    if (this.GLStickPop) {
-      this.GLStickPop.stop();
-    }
-
-    var directionSpring = (0, _popmotion.spring)({
-      from: this.progress === 1 ? 1 : this.direction,
-      to: 1,
-      mass: 1,
-      stiffness: 800,
-      damping: 2000
-    });
-    var progressSpring = (0, _popmotion.spring)({
-      from: this.progress,
-      to: 0,
-      mass: 4,
-      stiffness: 400,
-      damping: 70,
-      restDelta: 0.0001
-    });
-
-    var _waveIntensitySpring2 = (0, _popmotion.spring)({
-      from: this.waveIntensity,
-      to: this.waveIntensityRange[0],
-      mass: 0.1,
-      stiffness: 800,
-      damping: 50
-    });
-
-    this.GLStickPop = (0, _popmotion.parallel)(progressSpring, directionSpring, _waveIntensitySpring2).start({
-      update: function update(values) {
-        _this5.progress = values[0];
-        _this5.direction = values[1];
-        _this5.waveIntensity = values[2];
-
-        _this5.GL.updateStickEffect({
-          progress: _this5.progress,
-          direction: _this5.direction,
-          waveIntensity: _this5.waveIntensity,
-          part: _this5.part
-        });
-      },
-      complete: function complete() {
-        if (_this5.options.onFullscreenFinish) {
-          _this5.options.onFullscreenFinish({
-            activeIndex: _this5.index.active
-          });
-        }
-
-        _this5.GL.cancelLoop();
-      }
-    });
-  }
-};
-
-Showcase.prototype.snapCurrentToActiveIndex = function () {
-  var _this6 = this;
-
-  if (this.part === 1) {
-    if (this.slidesPop) {
-      this.slidesPop.stop();
-    }
-
-    this.slidesPop = (0, _reach.reach)({
-      from: {
-        index: this.index.current
-      },
-      to: {
-        index: Math.round(this.index.target)
-      },
-      restDelta: 0.001
-    }).start({
-      complete: function complete() {},
-      update: function update(val) {
-        // this.slides.onMove(val);
-        if (_this6.options.onIndexChange) {
-          _this6.options.onIndexChange(val.index);
-        }
-
-        _this6.index.current = val.index;
-      }
-    });
-  }
-};
-
-Showcase.prototype.titleClickEnd = function () {
-  var _this7 = this;
-
-  // this.slides.disperse(this.index.active);
-  if (this.part === 1) {
     this.snapCurrentToActiveIndex();
 
     if (this.GLStickPop) {
@@ -48699,13 +48844,102 @@ Showcase.prototype.titleClickEnd = function () {
         });
       },
       complete: function complete() {
-        if (_this7.options.onClickEnd) {
-          _this7.options.onClickEnd({
+        if (_this7.options.onFullscreenFinish) {
+          _this7.options.onFullscreenFinish({
             activeIndex: _this7.index.active
           });
         }
 
         _this7.GL.cancelLoop();
+      }
+    });
+  }
+};
+
+Showcase.prototype.snapCurrentToActiveIndex = function () {
+  var _this8 = this;
+
+  if (this.part === 1) {
+    if (this.slidesPop) {
+      this.slidesPop.stop();
+    }
+
+    this.slidesPop = (0, _reach.reach)({
+      from: {
+        index: this.index.current
+      },
+      to: {
+        index: Math.round(this.index.target)
+      },
+      restDelta: 0.001
+    }).start({
+      complete: function complete() {},
+      update: function update(val) {
+        // this.slides.onMove(val);
+        if (_this8.options.onIndexChange) {
+          _this8.options.onIndexChange(val.index);
+        }
+
+        _this8.index.current = val.index;
+      }
+    });
+  }
+};
+
+Showcase.prototype.titleClickEnd = function () {
+  var _this9 = this;
+
+  // this.slides.disperse(this.index.active);
+  if (this.part === 1) {
+    this.snapCurrentToActiveIndex();
+
+    if (this.GLStickPop) {
+      this.GLStickPop.stop();
+    }
+
+    var directionSpring = (0, _popmotion.spring)({
+      from: this.progress === 1 ? 1 : this.direction,
+      to: 1,
+      mass: 1,
+      stiffness: 800,
+      damping: 2000
+    });
+    var progressSpring = (0, _popmotion.spring)({
+      from: this.progress,
+      to: 0,
+      mass: 4,
+      stiffness: 400,
+      damping: 70,
+      restDelta: 0.0001
+    });
+    var waveIntensitySpring = (0, _popmotion.spring)({
+      from: this.waveIntensity,
+      to: this.waveIntensityRange[0],
+      mass: 0.1,
+      stiffness: 800,
+      damping: 50
+    });
+    this.GLStickPop = (0, _popmotion.parallel)(progressSpring, directionSpring, waveIntensitySpring).start({
+      update: function update(values) {
+        _this9.progress = values[0];
+        _this9.direction = values[1];
+        _this9.waveIntensity = values[2];
+
+        _this9.GL.updateStickEffect({
+          progress: _this9.progress,
+          direction: _this9.direction,
+          waveIntensity: _this9.waveIntensity,
+          part: _this9.part
+        });
+      },
+      complete: function complete() {
+        if (_this9.options.onClickEnd) {
+          _this9.options.onClickEnd({
+            activeIndex: _this9.index.active
+          });
+        }
+
+        _this9.GL.cancelLoop();
       }
     });
   }
@@ -48753,7 +48987,6 @@ var Slides = /*#__PURE__*/function () {
     console.log(this.slides);
     this.options = options;
     this.tl = null;
-    this.addClickEvents();
   }
 
   _createClass(Slides, [{
@@ -48783,7 +49016,11 @@ var Slides = /*#__PURE__*/function () {
           slide.classList.add(j !== 0 && i === 1 ? "next" : "show-meta");
           meta.innerHTML = this.data[i][j].meta;
           title.innerHTML = this.data[i][j].title;
-          more.innerHTML = this.data[i][j].more;
+
+          if (i != 0 || j != 0) {
+            more.innerHTML = this.data[i][j].more;
+          }
+
           desc.innerHTML = this.data[i][j].desc;
           slide.appendChild(container);
           container.appendChild(header);
@@ -48810,6 +49047,7 @@ var Slides = /*#__PURE__*/function () {
     key: "mount",
     value: function mount(container) {
       container.appendChild(this.container);
+      this.addClickEvents();
     }
   }, {
     key: "startTransitionParts",
@@ -48992,7 +49230,7 @@ var Slides = /*#__PURE__*/function () {
   }, {
     key: "onMove",
     value: function onMove(indexFloat) {
-      this.container.style.transform = "translateY(".concat(indexFloat * 100, "%)");
+      this.masterSlides[this.part].style.transform = "translateY(".concat(indexFloat * 100 / this.slides[this.part].length, "%)");
     }
   }, {
     key: "appear",
@@ -49036,6 +49274,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Cursor = void 0;
 
+var _gsap = _interopRequireDefault(require("gsap"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -49069,8 +49311,6 @@ var getMousePos = function getMousePos(e) {
 
 var Cursor = /*#__PURE__*/function () {
   function Cursor(el) {
-    var _this = this;
-
     _classCallCheck(this, Cursor);
 
     this.DOM = {
@@ -49099,35 +49339,62 @@ var Cursor = /*#__PURE__*/function () {
       }
     };
     this.lastScale = 1;
+    this.blowAnimation = null;
     this.initEvents();
-    requestAnimationFrame(function () {
-      return _this.render();
-    });
+    this.render(); // requestAnimationFrame(() => this.render());
   }
 
   _createClass(Cursor, [{
     key: "initEvents",
     value: function initEvents() {
-      var _this2 = this;
+      var _this = this;
 
       window.addEventListener('mousemove', function (ev) {
-        return _this2.mousePos = getMousePos(ev);
+        _this.mousePos = getMousePos(ev);
+
+        _this.render();
       });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      this.lastMousePos.dot.x = this.mousePos.x - this.bounds.dot.width / 2;
+      this.lastMousePos.dot.y = this.mousePos.y - this.bounds.dot.height / 2;
+      this.lastMousePos.circle.x = this.mousePos.x - this.bounds.circle.width / 2;
+      this.lastMousePos.circle.y = this.mousePos.y - this.bounds.circle.height / 2;
+      this.lastScale = this.scale;
 
-      this.lastMousePos.dot.x = lerp(this.lastMousePos.dot.x, this.mousePos.x - this.bounds.dot.width / 2, 1);
-      this.lastMousePos.dot.y = lerp(this.lastMousePos.dot.y, this.mousePos.y - this.bounds.dot.height / 2, 1);
-      this.lastMousePos.circle.x = lerp(this.lastMousePos.circle.x, this.mousePos.x - this.bounds.circle.width / 2, 0.15);
-      this.lastMousePos.circle.y = lerp(this.lastMousePos.circle.y, this.mousePos.y - this.bounds.circle.height / 2, 0.15);
-      this.lastScale = lerp(this.lastScale, this.scale, 0.15);
-      this.DOM.dot.style.transform = "translateX(".concat(this.lastMousePos.dot.x, "px) translateY(").concat(this.lastMousePos.dot.y, "px)");
-      this.DOM.circle.style.transform = "translateX(".concat(this.lastMousePos.circle.x, "px) translateY(").concat(this.lastMousePos.circle.y, "px) scale(").concat(this.lastScale, ")");
-      requestAnimationFrame(function () {
-        return _this3.render();
+      _gsap.default.to(this.DOM.el, {
+        duration: 0.3,
+        x: this.lastMousePos.dot.x,
+        y: this.lastMousePos.dot.y
+      });
+    }
+  }, {
+    key: "killBlow",
+    value: function killBlow() {
+      if (this.blowAnimation) {
+        this.blowAnimation.kill();
+      }
+    }
+  }, {
+    key: "blowUp",
+    value: function blowUp() {
+      this.killBlow();
+      this.blowAnimation = _gsap.default.to(this.DOM.dot, {
+        height: "50px",
+        width: "50px",
+        duration: 2.8
+      });
+    }
+  }, {
+    key: "blowDown",
+    value: function blowDown() {
+      this.killBlow();
+      this.blowAnimation = _gsap.default.to(this.DOM.dot, {
+        height: "8px",
+        width: "8px",
+        duration: 1.2
       });
     }
   }, {
@@ -49148,7 +49415,173 @@ var Cursor = /*#__PURE__*/function () {
 }();
 
 exports.Cursor = Cursor;
-},{}],"images/1.jpg":[function(require,module,exports) {
+},{"gsap":"node_modules/gsap/index.js"}],"js/Nav.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Nav = void 0;
+
+var _gsap = _interopRequireDefault(require("gsap"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Nav = /*#__PURE__*/function () {
+  function Nav(options) {
+    _classCallCheck(this, Nav);
+
+    this.navEle = document.querySelector(".nav");
+    this.navContainer = this.navEle.parentElement;
+    this.navDisplayed = false;
+    this.navAnimation = null;
+    this.lettersAnimations = [];
+    this.inTransition = false;
+    this.textWrappers = document.querySelectorAll('.text');
+    this.options = options;
+    this.part = 0;
+    this.addListeners();
+    this.setLetters();
+  }
+
+  _createClass(Nav, [{
+    key: "killAnimation",
+    value: function killAnimation() {
+      if (this.navAnimation) {
+        this.navAnimation.kill();
+      }
+    }
+  }, {
+    key: "updatePart",
+    value: function updatePart(index) {
+      var _this = this;
+
+      this.part = index;
+      this.textWrappers.forEach(function (ele, i) {
+        if (i === _this.part) {
+          ele.classList.add("active");
+        } else {
+          ele.classList.remove("active");
+        }
+      });
+    }
+  }, {
+    key: "showNav",
+    value: function showNav() {
+      var _this2 = this;
+
+      this.killAnimation();
+      this.navAnimation = _gsap.default.timeline();
+      this.navAnimation.to(this.navEle, {
+        clipPath: "ellipse(200% 110% at 50% 0%)",
+        duration: 0.6,
+        onComplete: function onComplete() {
+          _this2.navDisplayed = true;
+          _this2.navContainer.style.pointerEvents = "all";
+        }
+      });
+    }
+  }, {
+    key: "hideNav",
+    value: function hideNav() {
+      var _this3 = this;
+
+      this.killAnimation();
+      this.navAnimation = _gsap.default.timeline();
+      this.navAnimation.to(this.navEle, {
+        clipPath: "ellipse(0% 0% at 50% 0%)",
+        duration: 0.6,
+        onComplete: function onComplete() {
+          _this3.navDisplayed = false;
+          _this3.navContainer.style.pointerEvents = "none";
+        }
+      });
+    }
+  }, {
+    key: "addListeners",
+    value: function addListeners() {
+      var _this4 = this;
+
+      document.querySelector(".burger").addEventListener("click", function () {
+        if (_this4.navDisplayed === false) {
+          _this4.navDisplayed = true;
+
+          _this4.showNav();
+        } else {
+          _this4.navDisplayed = false;
+
+          _this4.hideNav();
+        }
+      });
+      this.textWrappers.forEach(function (textWrapper, i) {
+        textWrapper.addEventListener('mouseenter', function () {
+          _this4.lettersAnimation(textWrapper);
+        });
+        textWrapper.addEventListener('click', function () {
+          _this4.moveToSection(i);
+        });
+        textWrapper.addEventListener('touchend', function () {
+          _this4.moveToSection(i);
+        });
+      });
+    }
+  }, {
+    key: "moveToSection",
+    value: function moveToSection(index) {
+      this.textWrappers.forEach(function (ele, i) {
+        if (i === index) {
+          ele.classList.add("active");
+        } else {
+          ele.classList.remove("active");
+        }
+      });
+      this.hideNav();
+
+      if (index === 3) {
+        index = 2;
+      }
+
+      this.part = index;
+      this.options.onSectionSelected(index);
+    }
+  }, {
+    key: "setLetters",
+    value: function setLetters() {
+      this.textWrappers.forEach(function (textWrapper) {
+        textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+      });
+    }
+  }, {
+    key: "lettersAnimation",
+    value: function lettersAnimation(ele) {
+      var letters = ele.querySelectorAll(".letter");
+      letters.forEach(function (el, i) {
+        _gsap.default.fromTo(el, {
+          scale: 2,
+          opacity: 0
+        }, {
+          scale: 1,
+          opacity: 1,
+          translateZ: 0,
+          duration: 0.3,
+          delay: i * 0.05,
+          ease: "power4.in"
+        });
+      });
+    }
+  }]);
+
+  return Nav;
+}();
+
+exports.Nav = Nav;
+},{"gsap":"node_modules/gsap/index.js"}],"images/1.jpg":[function(require,module,exports) {
 module.exports = "/1.106c6bd6.jpg";
 },{}],"images/2.jpg":[function(require,module,exports) {
 module.exports = "/2.adddeb7c.jpg";
@@ -49172,6 +49605,8 @@ var _Showcase = require("./Showcase");
 var _Slides = require("./Slides");
 
 var _Cursor = require("./Cursor");
+
+var _Nav = require("./Nav");
 
 var _ = _interopRequireDefault(require("../images/1.jpg"));
 
@@ -49198,7 +49633,7 @@ var slidesData = [[{
   title: "<img src='".concat(_landingLogo.default, "'><img src='").concat(_studio.default, "'>"),
   desc: "\n      <div class=\"desc-container\">\n      <h3>Description</h3>\n      <img src=\"".concat(_.default, "\" alt=\"\" class=\"desc-img\">\n      <div class=\"desc-content\">\n        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n        Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n        Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n      </div>\n      <p class='close'>Close</p>\n    </div>\n      "),
   more: 'Click and Hold!',
-  position: 5
+  position: 10
 }], [{
   image: _.default,
   title: "<p>ADSnURL</p><p>App Design</p>",
@@ -49225,6 +49660,12 @@ var slidesData = [[{
   title: "<p class='long'>THE corporate shirt</p><p class='ye'>Packaging</p>",
   desc: "\n      <div class=\"desc-container\">\n      <h3>Description</h3>\n      <img src=\"".concat(_5.default, "\" alt=\"\" class=\"desc-img\">\n      <div class=\"desc-content\">\n        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n        Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n        Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n      </div>\n      <p class='close'>Close</p>\n    </div>\n      "),
   more: 'Click and Hold!'
+}], [{
+  image: _3.default,
+  title: "<img src='".concat(_landingLogo.default, "'><img src='").concat(_studio.default, "'> ar"),
+  desc: "\n      <div class=\"desc-container\">\n      <h3>Description</h3>\n      <img src=\"".concat(_.default, "\" alt=\"\" class=\"desc-img\">\n      <div class=\"desc-content\">\n        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n        Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n        Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n      </div>\n      <p class='close'>Close</p>\n    </div>\n      "),
+  more: 'Click and Hold!',
+  position: -10
 }]];
 var slides = new _Slides.Slides(slidesData, {
   onTitleClickStart: function onTitleClickStart() {
@@ -49275,6 +49716,20 @@ var showcase = new _Showcase.Showcase(slidesData, {
   },
   endTransitionPage: function endTransitionPage(from, to) {
     slides.endTransitionParts(from, to);
+  },
+  updateNavPart: function updateNavPart(index) {
+    nav.updatePart(index);
+  },
+  blowUp: function blowUp() {
+    cursor.blowUp();
+  },
+  blowDown: function blowDown() {
+    cursor.blowDown();
+  }
+});
+var nav = new _Nav.Nav({
+  onSectionSelected: function onSectionSelected(index) {
+    showcase.startMoveToSection(showcase.part, index);
   }
 });
 showcase.mount(container);
@@ -49286,7 +49741,39 @@ window.addEventListener("resize", function () {
 window.addEventListener("mousemove", function (ev) {
   showcase.onMouseMove(ev);
 });
-},{"./Showcase":"js/Showcase.js","./Slides":"js/Slides.js","./Cursor":"js/Cursor.js","../images/1.jpg":"images/1.jpg","../images/2.jpg":"images/2.jpg","../images/3.jpg":"images/3.jpg","../images/4.jpg":"images/4.jpg","../images/5.jpg":"images/5.jpg","../images/landing.jpg":"images/landing.jpg","../images/landingLogo.svg":"images/landingLogo.svg","../images/studio.svg":"images/studio.svg"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+document.querySelector("button.nextbtn").addEventListener("mousedown", function () {
+  showcase.inTransition = true;
+  showcase.startMoveToSection(showcase.part, showcase.part + 1);
+  cursor.blowUp();
+});
+document.querySelector("button.nextbtn").addEventListener("touchstart", function () {
+  showcase.inTransition = true;
+  showcase.startMoveToSection(showcase.part, showcase.part + 1);
+});
+document.querySelector("button.nextbtn").addEventListener("mouseup", function () {
+  showcase.endMoveToSection(showcase.part, showcase.part + 1);
+  cursor.blowDown();
+});
+document.querySelector("button.nextbtn").addEventListener("touchend", function () {
+  showcase.endMoveToSection(showcase.part, showcase.part + 1);
+});
+document.querySelector("button.prevbtn").addEventListener("mousedown", function () {
+  showcase.inTransition = true;
+  showcase.startMoveToSection(showcase.part, showcase.part - 1);
+  cursor.blowUp();
+});
+document.querySelector("button.prevbtn").addEventListener("touchstart", function () {
+  showcase.inTransition = true;
+  showcase.startMoveToSection(showcase.part, showcase.part - 1);
+});
+document.querySelector("button.prevbtn").addEventListener("mouseup", function () {
+  showcase.endMoveToSection(showcase.part, showcase.part - 1);
+  cursor.blowDown();
+});
+document.querySelector("button.prevbtn").addEventListener("touchend", function () {
+  showcase.endMoveToSection(showcase.part, showcase.part - 1);
+});
+},{"./Showcase":"js/Showcase.js","./Slides":"js/Slides.js","./Cursor":"js/Cursor.js","./Nav":"js/Nav.js","../images/1.jpg":"images/1.jpg","../images/2.jpg":"images/2.jpg","../images/3.jpg":"images/3.jpg","../images/4.jpg":"images/4.jpg","../images/5.jpg":"images/5.jpg","../images/landing.jpg":"images/landing.jpg","../images/landingLogo.svg":"images/landingLogo.svg","../images/studio.svg":"images/studio.svg"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -49314,7 +49801,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41681" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33155" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

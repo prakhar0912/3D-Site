@@ -234,28 +234,31 @@ body {
 
 .cursor {
   display: none;
-}
-
-.cursor__inner {
+  mix-blend-mode: difference;
+  position: absolute;
+  width: 50px;
+  height: 50px;
   z-index: 9999;
   pointer-events: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  mix-blend-mode: difference;
-  border-radius: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .cursor__inner--dot {
   width: 8px;
   height: 8px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   background: #fff;
+  transform: translate(-50%, -50%);
+  border-radius: 100%;
 }
 
 .cursor__inner--circle {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border: 1px solid #fff;
+  border-radius: 100%;
 }
 
 /* Page Loader */
@@ -306,12 +309,43 @@ a:focus {
 }
 
 .frame {
+  position: absolute;
   height: 100vh;
   width: 100vw;
-  padding: 3rem 5vw;
   text-align: center;
-  position: relative;
-  z-index: 1000;
+  z-index: 11;
+  pointer-events: none;
+}
+
+.mov{
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  pointer-events: all;
+  transform: translateX(-50%);
+}
+
+.mov > button{
+  background: transparent;
+  border: solid 1px white;
+  border-radius: 10px;
+  padding: 0;
+  margin: 0 10px;
+}
+
+.mov > button > p{
+  font-size: 1rem;
+  padding: 10px 20px 6px 20px;
+  margin: 0;
+  color: white;
+  font-family: mortendBold;
+}
+
+.frame__tip{
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .frame__title {
@@ -359,24 +393,6 @@ a:focus {
 
 @media screen and (min-width: 53em) {
   .frame {
-    position: fixed;
-    text-align: left;
-    z-index: 10000;
-    top: 0;
-    left: 0;
-    display: grid;
-    align-content: space-between;
-    width: 100%;
-    max-width: none;
-    height: 100vh;
-    padding: 2rem;
-    pointer-events: none;
-    grid-template-columns: 75% 25%;
-    grid-template-rows: auto auto auto;
-    grid-template-areas:
-      "title links"
-      "... ..."
-      "tip ...";
   }
 
   .frame__title-wrap {
@@ -398,11 +414,6 @@ a:focus {
     content: '-------------';
     letter-spacing: -0.15rem;
     margin: 0 1rem 0 0;
-  }
-
-  .frame__tip {
-    grid-area: tip;
-    margin: 0;
   }
 
   .frame__demos {
