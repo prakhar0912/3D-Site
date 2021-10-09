@@ -48521,11 +48521,12 @@ Showcase.prototype.startMoveToSection = function (from, to) {
       ease: "power4.in"
     });
     this.zoom.to(this.GL.camera.position, {
-      z: this.data[from][0].position - 4,
+      z: this.data[to][0].position + 4,
       duration: 1.2,
       ease: "power4.in",
       onComplete: function onComplete() {
         console.log('start complete', from, to);
+        console.log(_this4.GL.camera.position.z);
 
         _this4.setStickEffect();
 
@@ -48582,6 +48583,8 @@ Showcase.prototype.startMoveToSection = function (from, to) {
         console.log('start complete', from, to);
 
         _this4.setStickEffect();
+
+        _this4.options.updateNavPart(to);
 
         _this4.part = to;
         _this4.GL.part = to;
