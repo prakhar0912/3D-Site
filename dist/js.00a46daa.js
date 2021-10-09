@@ -49427,6 +49427,18 @@ var _gsap = _interopRequireDefault(require("gsap"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -49440,24 +49452,64 @@ var Nav = /*#__PURE__*/function () {
     this.navEle = document.querySelector(".nav");
     this.navContainer = this.navEle.parentElement;
     this.navDisplayed = false;
-    this.navAnimation = null;
+    this.startNavAnimation = _gsap.default.timeline();
+    this.startBurgerAnimation = _gsap.default.timeline();
+    this.startOpacityAnimation = _gsap.default.timeline();
+    this.endNavAnimation = _gsap.default.timeline();
+    this.endBurgerAnimation = _gsap.default.timeline();
+    this.endOpacityAnimation = _gsap.default.timeline();
+    this.centerEle = document.querySelector(".center");
+    this.socialsEle = document.querySelector(".socials");
     this.lettersAnimations = [];
     this.inTransition = false;
     this.textWrappers = document.querySelectorAll('.text');
+    this.lines = document.querySelectorAll('.line');
     this.options = options;
     this.part = 0;
+    this.letters = [];
+
+    _gsap.default.set(this.centerEle, {
+      yPercent: -20,
+      opacity: 0
+    });
+
+    _gsap.default.set(this.socialsEle, {
+      xPercent: -20,
+      opacity: 0
+    });
+
     this.addListeners();
     this.setLetters();
-  }
+    this.direction = 0; // this.delay = 1
+  } // killAnimation(dir) {
+  //     if (dir) {
+  //         if (this.startNavAnimation.isActive()) {
+  //             this.startNavAnimation.kill()
+  //         }
+  //         if (this.startBurgerAnimation.isActive()) {
+  //             this.startBurgerAnimation.kill()
+  //         }
+  //         if (this.startOpacityAnimation.isActive()) {
+  //             this.startOpacityAnimation.kill()
+  //         }
+  //     }
+  //     else {
+  //         if (this.endNavAnimation.isActive()) {
+  //             this.delay = 0
+  //             console.log('here')
+  //             this.endNavAnimation.kill()
+  //         }
+  //         if (this.endBurgerAnimation.isActive()) {
+  //             this.endBurgerAnimation.kill()
+  //         }
+  //         if (this.endOpacityAnimation.isActive()) {
+  //             this.endOpacityAnimation.kill()
+  //         }
+  //     }
+  // }
+
 
   _createClass(Nav, [{
-    key: "killAnimation",
-    value: function killAnimation() {
-      if (this.navAnimation) {
-        this.navAnimation.kill();
-      }
-    }
-  }, {
     key: "updatePart",
     value: function updatePart(index) {
       var _this = this;
@@ -49476,9 +49528,31 @@ var Nav = /*#__PURE__*/function () {
     value: function showNav() {
       var _this2 = this;
 
-      this.killAnimation();
-      this.navAnimation = _gsap.default.timeline();
-      this.navAnimation.to(this.navEle, {
+      // this.killAnimation(false)
+      this.startBurgerAnimation.to(this.lines[0], {
+        rotate: "43deg",
+        duration: 0.1
+      });
+      this.startBurgerAnimation.to(this.lines[1], {
+        opacity: "0",
+        duration: 0.1,
+        delay: -0.1
+      });
+      this.startBurgerAnimation.to(this.lines[2], {
+        rotate: "-45deg",
+        duration: 0.1,
+        delay: -0.1
+      });
+      this.startOpacityAnimation.to(this.centerEle, {
+        yPercent: 0,
+        opacity: 1,
+        delay: 0.6
+      });
+      this.startOpacityAnimation.to(this.socialsEle, {
+        xPercent: 0,
+        opacity: 1
+      });
+      this.startNavAnimation.to(this.navEle, {
         clipPath: "ellipse(200% 110% at 50% 0%)",
         duration: 0.6,
         onComplete: function onComplete() {
@@ -49492,10 +49566,32 @@ var Nav = /*#__PURE__*/function () {
     value: function hideNav() {
       var _this3 = this;
 
-      this.killAnimation();
-      this.navAnimation = _gsap.default.timeline();
-      this.navAnimation.to(this.navEle, {
+      // this.killAnimation(true)
+      this.endBurgerAnimation.to(this.lines[0], {
+        rotation: 0,
+        duration: 0.1
+      });
+      this.endBurgerAnimation.to(this.lines[1], {
+        opacity: "1",
+        duration: 0.1,
+        delay: -0.1
+      });
+      this.endBurgerAnimation.to(this.lines[2], {
+        rotation: 0,
+        duration: 0.1,
+        delay: -0.1
+      });
+      this.endOpacityAnimation.to(this.socialsEle, {
+        xPercent: -20,
+        opacity: 0
+      });
+      this.endOpacityAnimation.to(this.centerEle, {
+        yPercent: -20,
+        opacity: 0
+      });
+      this.endNavAnimation.to(this.navEle, {
         clipPath: "ellipse(0% 0% at 50% 0%)",
+        delay: this.delay,
         duration: 0.6,
         onComplete: function onComplete() {
           _this3.navDisplayed = false;
@@ -49521,7 +49617,7 @@ var Nav = /*#__PURE__*/function () {
       });
       this.textWrappers.forEach(function (textWrapper, i) {
         textWrapper.addEventListener('mouseenter', function () {
-          _this4.lettersAnimation(textWrapper);
+          _this4.lettersAnimation(i);
         });
         textWrapper.addEventListener('click', function () {
           _this4.moveToSection(i);
@@ -49553,27 +49649,48 @@ var Nav = /*#__PURE__*/function () {
   }, {
     key: "setLetters",
     value: function setLetters() {
+      var _this5 = this;
+
       this.textWrappers.forEach(function (textWrapper) {
         textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+
+        _this5.letters.push(_toConsumableArray(textWrapper.querySelectorAll(".letter")));
       });
     }
   }, {
     key: "lettersAnimation",
-    value: function lettersAnimation(ele) {
-      var letters = ele.querySelectorAll(".letter");
-      letters.forEach(function (el, i) {
-        _gsap.default.fromTo(el, {
-          scale: 2,
-          opacity: 0
-        }, {
-          scale: 1,
-          opacity: 1,
-          translateZ: 0,
-          duration: 0.3,
-          delay: i * 0.05,
-          ease: "power4.in"
+    value: function lettersAnimation(i) {
+      if (this.direction % 2 === 0) {
+        this.letters[i].forEach(function (el, i) {
+          _gsap.default.fromTo(el, {
+            scale: 2,
+            opacity: 0
+          }, {
+            scale: 1,
+            opacity: 1,
+            translateZ: 0,
+            duration: 0.3,
+            delay: i * 0.05,
+            ease: "power4.in"
+          });
         });
-      });
+        this.direction = 1;
+      } else {
+        this.letters[i].reverse().forEach(function (el, i) {
+          _gsap.default.fromTo(el, {
+            scale: 2,
+            opacity: 0
+          }, {
+            scale: 1,
+            opacity: 1,
+            translateZ: 0,
+            duration: 0.3,
+            delay: i * 0.05,
+            ease: "power4.in"
+          });
+        });
+        this.direction = 0;
+      }
     }
   }]);
 
