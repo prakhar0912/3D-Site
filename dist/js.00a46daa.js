@@ -37338,9 +37338,7 @@ function GLManager(data) {
   this.totalEntries = this.calculateTotalEntries(data);
   this.loadedEntries = 0;
   var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
-  camera.position.z = 16; // this.mesh = null;
-  // this.initialMesh = null;
-
+  camera.position.z = 16;
   this.meshes = [];
   var scene = new THREE.Scene();
   camera.lookAt = scene.position;
@@ -37393,7 +37391,6 @@ GLManager.prototype.loadFactors = function (data) {
     factorsMaster.push(factors);
   }
 
-  console.log(factorsMaster);
   return factorsMaster;
 };
 
@@ -37567,9 +37564,10 @@ GLManager.prototype.calculateAspectRatioFactor = function (index, j, texture) {
       this.meshes[1].material.uniforms.u_texture2Factor.needsUpdate = true;
     }
   } else {
-    if (this.meshes[0]) {
-      this.meshes[0].material.uniforms.u_textureFactor.value = this.factors[0][0];
-      this.meshes[0].material.uniforms.u_textureFactor.needsUpdate = true;
+    if (this.meshes[index]) {
+      console.log('here');
+      this.meshes[index].material.uniforms.u_textureFactor.value = this.factors[index][j];
+      this.meshes[index].material.uniforms.u_textureFactor.needsUpdate = true;
     }
   }
 
