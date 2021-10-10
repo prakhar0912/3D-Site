@@ -29,31 +29,14 @@ class Slides {
       }
       let innerSlides = []
       for (let j = 0; j < this.data[i].length; j++) {
+
         const slide = createEleWithClass("div", "slide");
-        const container = createEleWithClass("div", "slide-container")
-        const header = createEleWithClass("div", "slide-header")
-        const title = createEleWithClass("div", "slide-title");
-        const meta = createEleWithClass("p", "slide-meta");
-        const more = createEleWithClass("a", "slide-more");
-        const desc = createEleWithClass("div", "slide-desc")
-        const img = createEleWithClass("img", "desc-img")
-        img.src = this.data[i][j].image
         slide.classList.add(j !== 0 && i === 1 ? "next" : "show-meta");
-        meta.innerHTML = this.data[i][j].meta;
-        title.innerHTML = this.data[i][j].title;
-        if(i != 0 || j != 0){
-          more.innerHTML = this.data[i][j].more;
-        }
-        desc.innerHTML = this.data[i][j].desc
-        slide.appendChild(container)
-        container.appendChild(header)
-        header.appendChild(title);
-        header.appendChild(more);
-        container.appendChild(desc)
+        slide.innerHTML = this.data[i][j].content
         Mastercontainer.appendChild(slide);
-        this.masterSlides.push(Mastercontainer)
         innerSlides.push(slide)
       }
+      this.masterSlides.push(Mastercontainer)
       slides.push(innerSlides)
       this.container.appendChild(Mastercontainer)
     }
@@ -70,6 +53,7 @@ class Slides {
   }
 
   startTransitionParts(from, to) {
+    console.log("here", from, to)
     if (this.tl) {
       this.tl.kill()
     }
@@ -82,6 +66,7 @@ class Slides {
     this.tl.to(this.masterSlides[to], {
       opacity: 1, duration: 0.7, delay: -0.1, onComplete: () => {
         this.masterSlides[to].classList.add('current')
+        // console.log(to)
         this.part = to
       }
     })
@@ -190,7 +175,7 @@ class Slides {
     }
   }
   onMove(indexFloat) {
-    this.masterSlides[this.part].style.transform = `translateY(${(indexFloat * 100) / (this.slides[this.part].length) }%)`;
+    this.masterSlides[this.part].style.transform = `translateY(${(indexFloat * 100) / (this.slides[this.part].length)}%)`;
   }
   appear() {
     this.container.classList.add("scrolling");
