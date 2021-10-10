@@ -182,7 +182,7 @@ const slidesData = [
   ],
   [
     {
-      image: landingImage,
+      image: image3,
       content: `
       <div class="slide-container">
         <div class="slide-header">

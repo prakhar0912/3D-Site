@@ -304,7 +304,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
       z: this.GL.camera.position.z + 4, duration: 1, ease: "power4.in",
     })
     this.zoom.to(this.GL.camera.position, {
-      z: this.data[to][0].position + 4, duration: 1.2, ease: "power4.in", onComplete: () => {
+      z: this.data[to][0].position + 6, duration: 1.2, ease: "power4.in", onComplete: () => {
         console.log('start complete', from, to)
         console.log(this.GL.camera.position.z)
         this.setStickEffect()

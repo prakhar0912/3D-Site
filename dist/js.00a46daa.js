@@ -37516,7 +37516,6 @@ GLManager.prototype.calculateTotalEntries = function (data) {
     total += data[i].length;
   }
 
-  console.log(total);
   return total;
 };
 
@@ -37565,7 +37564,6 @@ GLManager.prototype.calculateAspectRatioFactor = function (index, j, texture) {
     }
   } else {
     if (this.meshes[index]) {
-      console.log('here');
       this.meshes[index].material.uniforms.u_textureFactor.value = this.factors[index][j];
       this.meshes[index].material.uniforms.u_textureFactor.needsUpdate = true;
     }
@@ -37587,8 +37585,6 @@ GLManager.prototype.calculateAspectRatioFactor = function (index, j, texture) {
 GLManager.prototype.createPlane = function (index, pos) {
   // Calculate bas of Isoceles triangle(camera)
   if (index === 0) {
-    var viewSize = this.getViewSize();
-
     var _this$getPlaneSize = this.getPlaneSize(),
         width = _this$getPlaneSize.width,
         height = _this$getPlaneSize.height;
@@ -37663,8 +37659,6 @@ GLManager.prototype.createPlane = function (index, pos) {
     this.scene.add(mesh2);
     this.meshes.push(mesh2);
   } else if (index == 1) {
-    var _viewSize = this.getViewSize();
-
     var _this$getPlaneSize2 = this.getPlaneSize(),
         _width = _this$getPlaneSize2.width,
         _height = _this$getPlaneSize2.height;
@@ -37742,8 +37736,6 @@ GLManager.prototype.createPlane = function (index, pos) {
     this.scene.add(mesh);
     this.meshes.push(mesh);
   } else if (index === 2) {
-    var _viewSize2 = this.getViewSize();
-
     var _this$getPlaneSize3 = this.getPlaneSize(),
         _width2 = _this$getPlaneSize3.width,
         _height2 = _this$getPlaneSize3.height;
@@ -48519,7 +48511,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
       ease: "power4.in"
     });
     this.zoom.to(this.GL.camera.position, {
-      z: this.data[to][0].position + 4,
+      z: this.data[to][0].position + 6,
       duration: 1.2,
       ease: "power4.in",
       onComplete: function onComplete() {
@@ -49750,7 +49742,7 @@ var slidesData = [[{
   image: _5.default,
   content: "\n      <div class=\"slide-container\">\n        <div class=\"slide-header\">\n          <div class=\"slide-title\">\n            <p>THE corporate shirt</p>\n            <p>Packaging</p>\n          </div>\n          <a class=\"slide-more\">Click and Hold!</a>\n        </div>\n        <div class=\"slide-desc\">\n          <div class=\"desc-container\">\n            <h3>Description</h3>\n            <img src=\"".concat(_5.default, "\" alt=\"\" class=\"desc-img\">\n            <div class=\"desc-content\">\n              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n            </div>\n            <p class=\"close\">Close</p>\n          </div>\n        </div>\n      </div>  \n      ")
 }], [{
-  image: _landing.default,
+  image: _3.default,
   content: "\n      <div class=\"slide-container\">\n        <div class=\"slide-header\">\n          <div class=\"slide-title\">\n            <img src=\"".concat(_landingLogo.default, "\">\n            <img src=\"").concat(_studio.default, "\">\n          </div>\n        </div>\n      </div>\n      "),
   position: -10
 }]];

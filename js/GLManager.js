@@ -110,7 +110,6 @@ GLManager.prototype.calculateTotalEntries = function (data) {
   for (let i = 0; i < data.length; i++) {
     total += data[i].length
   }
-  console.log(total)
   return total
 }
 
@@ -161,7 +160,6 @@ GLManager.prototype.calculateAspectRatioFactor = function (index, j, texture) {
   }
   else {
     if (this.meshes[index]) {
-      console.log('here')
       this.meshes[index].material.uniforms.u_textureFactor.value = this.factors[index][j];
       this.meshes[index].material.uniforms.u_textureFactor.needsUpdate = true;
     }
@@ -179,7 +177,6 @@ GLManager.prototype.calculateAspectRatioFactor = function (index, j, texture) {
 GLManager.prototype.createPlane = function (index, pos) {
   // Calculate bas of Isoceles triangle(camera)
   if (index === 0) {
-    const viewSize = this.getViewSize();
     const {
       width,
       height
@@ -261,7 +258,6 @@ GLManager.prototype.createPlane = function (index, pos) {
     this.meshes.push(mesh2)
   }
   else if (index == 1) {
-    const viewSize = this.getViewSize();
     const {
       width,
       height
@@ -343,7 +339,6 @@ GLManager.prototype.createPlane = function (index, pos) {
     this.meshes.push(mesh);
   }
   else if (index === 2) {
-    const viewSize = this.getViewSize();
     const {
       width,
       height
