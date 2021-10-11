@@ -12,6 +12,8 @@ import {
   vertex2
 } from "./shaders";
 import 'regenerator-runtime/runtime'
+// import { GUI } from 'three/examples/jsm/libs/dat.gui.module'
+import Stats from "stats.js";
 
 function GLManager(data) {
   this.totalEntries = this.calculateTotalEntries(data);
@@ -47,11 +49,24 @@ function GLManager(data) {
     this.createPlane(1, data[1][0].position)
     this.createPlane(2, data[2][0].position)
     this.calcAspectRatios()
+    this.setUpGui()
     if (!this.loopRaf) {
       this.render();
     }
   })
 }
+
+GLManager.prototype.setUpGui = function () {
+
+  this.stats = Stats()
+  this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+  document.body.appendChild(this.stats.dom);
+  // const gui = new GUI()
+  // const cameraFolder = gui.addFolder('Camera')
+  // cameraFolder.add(this.camera.position, 'z', -16, -10)
+  // cameraFolder.open()
+}
+
 
 GLManager.prototype.loadFactors = function (data) {
   let factorsMaster = []
@@ -117,7 +132,7 @@ GLManager.prototype.calculateTotalEntries = function (data) {
 GLManager.prototype.getViewSize = function () {
   const fovInRadians = (this.camera.fov * Math.PI) / 180;
   const viewSize = Math.abs(
-    (this.camera.position.z-10) * Math.tan(fovInRadians / 2) * 2
+    (this.camera.position.z - 10) * Math.tan(fovInRadians / 2) * 2
   );
 
   return viewSize;
@@ -455,7 +470,7 @@ GLManager.prototype.updateStickEffect = function ({ progress, direction, waveInt
   // console.log(inTransition, this.part)
   if (inTransition) {
     // if (this.part === 0 || this.part === 2) {
-      this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;
+    this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;
     // }
     // else {
     //   this.meshes[this.part].material.uniforms.u_progress.value = progress;
@@ -521,11 +536,13 @@ GLManager.prototype.scheduleLoop = function () {
 };
 
 GLManager.prototype.loop = function () {
+  this.stats.begin()
   this.render();
   this.time += 0.1;
   for (let i = 0; i < this.meshes.length; i++) {
     this.meshes[i].material.uniforms.u_time.value = this.time;
   }
+  this.stats.end()
   this.loopRaf = requestAnimationFrame(this.loop);
 };
 

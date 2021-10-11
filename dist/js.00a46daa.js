@@ -37310,6 +37310,14 @@ try {
   }
 }
 
+},{}],"node_modules/stats.js/build/stats.min.js":[function(require,module,exports) {
+var define;
+// stats.js - http://github.com/mrdoob/stats.js
+(function(f,e){"object"===typeof exports&&"undefined"!==typeof module?module.exports=e():"function"===typeof define&&define.amd?define(e):f.Stats=e()})(this,function(){var f=function(){function e(a){c.appendChild(a.dom);return a}function u(a){for(var d=0;d<c.children.length;d++)c.children[d].style.display=d===a?"block":"none";l=a}var l=0,c=document.createElement("div");c.style.cssText="position:fixed;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000";c.addEventListener("click",function(a){a.preventDefault();
+u(++l%c.children.length)},!1);var k=(performance||Date).now(),g=k,a=0,r=e(new f.Panel("FPS","#0ff","#002")),h=e(new f.Panel("MS","#0f0","#020"));if(self.performance&&self.performance.memory)var t=e(new f.Panel("MB","#f08","#201"));u(0);return{REVISION:16,dom:c,addPanel:e,showPanel:u,begin:function(){k=(performance||Date).now()},end:function(){a++;var c=(performance||Date).now();h.update(c-k,200);if(c>g+1E3&&(r.update(1E3*a/(c-g),100),g=c,a=0,t)){var d=performance.memory;t.update(d.usedJSHeapSize/
+1048576,d.jsHeapSizeLimit/1048576)}return c},update:function(){k=this.end()},domElement:c,setMode:u}};f.Panel=function(e,f,l){var c=Infinity,k=0,g=Math.round,a=g(window.devicePixelRatio||1),r=80*a,h=48*a,t=3*a,v=2*a,d=3*a,m=15*a,n=74*a,p=30*a,q=document.createElement("canvas");q.width=r;q.height=h;q.style.cssText="width:80px;height:48px";var b=q.getContext("2d");b.font="bold "+9*a+"px Helvetica,Arial,sans-serif";b.textBaseline="top";b.fillStyle=l;b.fillRect(0,0,r,h);b.fillStyle=f;b.fillText(e,t,v);
+b.fillRect(d,m,n,p);b.fillStyle=l;b.globalAlpha=.9;b.fillRect(d,m,n,p);return{dom:q,update:function(h,w){c=Math.min(c,h);k=Math.max(k,h);b.fillStyle=l;b.globalAlpha=1;b.fillRect(0,0,r,m);b.fillStyle=f;b.fillText(g(h)+" "+e+" ("+g(c)+"-"+g(k)+")",t,v);b.drawImage(q,d+a,m,n-a,p,d,m,n-a,p);b.fillRect(d+n-a,m,a,p);b.fillStyle=l;b.globalAlpha=.9;b.fillRect(d+n-a,m,a,g((1-h/w)*p))}}};return f});
+
 },{}],"js/GLManager.js":[function(require,module,exports) {
 "use strict";
 
@@ -37323,6 +37331,10 @@ var THREE = _interopRequireWildcard(require("three"));
 var _shaders = require("./shaders");
 
 require("regenerator-runtime/runtime");
+
+var _stats = _interopRequireDefault(require("stats.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -37372,11 +37384,23 @@ function GLManager(data) {
 
     _this.calcAspectRatios();
 
+    _this.setUpGui();
+
     if (!_this.loopRaf) {
       _this.render();
     }
   });
 }
+
+GLManager.prototype.setUpGui = function () {
+  this.stats = (0, _stats.default)();
+  this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+
+  document.body.appendChild(this.stats.dom); // const gui = new GUI()
+  // const cameraFolder = gui.addFolder('Camera')
+  // cameraFolder.add(this.camera.position, 'z', -16, -10)
+  // cameraFolder.open()
+};
 
 GLManager.prototype.loadFactors = function (data) {
   var factorsMaster = [];
@@ -37935,6 +37959,7 @@ GLManager.prototype.scheduleLoop = function () {
 };
 
 GLManager.prototype.loop = function () {
+  this.stats.begin();
   this.render();
   this.time += 0.1;
 
@@ -37942,6 +37967,7 @@ GLManager.prototype.loop = function () {
     this.meshes[i].material.uniforms.u_time.value = this.time;
   }
 
+  this.stats.end();
   this.loopRaf = requestAnimationFrame(this.loop);
 };
 
@@ -37949,7 +37975,7 @@ GLManager.prototype.cancelLoop = function () {
   cancelAnimationFrame(this.loopRaf);
   this.loopRaf = null;
 };
-},{"three":"node_modules/three/build/three.module.js","./shaders":"js/shaders.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js"}],"node_modules/tslib/tslib.es6.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","./shaders":"js/shaders.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js","stats.js":"node_modules/stats.js/build/stats.min.js"}],"node_modules/tslib/tslib.es6.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49690,16 +49716,13 @@ module.exports = "/landing.10726b6b.jpg";
 module.exports = "/landingLogo.9fdc7c6d.svg";
 },{}],"images/studio.svg":[function(require,module,exports) {
 module.exports = "/studio.db870bdb.svg";
-},{}],"js/index.js":[function(require,module,exports) {
+},{}],"js/slidesData.js":[function(require,module,exports) {
 "use strict";
 
-var _Showcase = require("./Showcase");
-
-var _Slides = require("./Slides");
-
-var _Cursor = require("./Cursor");
-
-var _Nav = require("./Nav");
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.slidesData = void 0;
 
 var _ = _interopRequireDefault(require("../images/1.jpg"));
 
@@ -49719,34 +49742,48 @@ var _studio = _interopRequireDefault(require("../images/studio.svg"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var container = document.getElementById("app");
-var cursor = new _Cursor.Cursor(document.querySelector(".cursor"));
 var slidesData = [[{
   image: _landing.default,
-  content: "\n      <div class=\"slide-container\">\n        <div class=\"slide-header\">\n          <div class=\"slide-title\">\n            <img src=\"".concat(_landingLogo.default, "\">\n            <img src=\"").concat(_studio.default, "\">\n          </div>\n          <p style=\"text-align: center;\">Click and Hold to Progress!</p>\n        </div>\n      </div>\n      "),
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n            <p style=\"text-align: center;\">Click and Hold to Progress!</p>\n          </div>\n        </div>\n        "),
   position: 10
 }], [{
   image: _.default,
-  content: "\n      <div class=\"slide-container\">\n        <div class=\"slide-header\">\n          <div class=\"slide-title\">\n            <p>ADSnURL</p>\n            <p>App Design</p>\n          </div>\n          <a class=\"slide-more\">Click and Hold!</a>\n        </div>\n        <div class=\"slide-desc\">\n          <div class=\"desc-container\">\n            <h3>Description</h3>\n            <img src=\"".concat(_.default, "\" alt=\"\" class=\"desc-img\">\n            <div class=\"desc-content\">\n              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n            </div>\n            <p class=\"close\">Close</p>\n          </div>\n        </div>\n      </div>      \n      "),
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>ADSnURL</p>\n              <p>App Design</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>      \n        "),
   position: 0
 }, {
   image: _2.default,
-  content: "\n      <div class=\"slide-container\">\n        <div class=\"slide-header\">\n          <div class=\"slide-title\">\n            <p>vegaan</p>\n            <p>Branding</p>\n          </div>\n          <a class=\"slide-more\">Click and Hold!</a>\n        </div>\n        <div class=\"slide-desc\">\n          <div class=\"desc-container\">\n            <h3>Description</h3>\n            <img src=\"".concat(_2.default, "\" alt=\"\" class=\"desc-img\">\n            <div class=\"desc-content\">\n              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n            </div>\n            <p class=\"close\">Close</p>\n          </div>\n        </div>\n      </div>   \n      ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>vegaan</p>\n              <p>Branding</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_2.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>   \n        ")
 }, {
   image: _3.default,
-  content: "\n      <div class=\"slide-container\">\n        <div class=\"slide-header\">\n          <div class=\"slide-title\">\n            <p>KathKIN</p>\n            <p>Branding</p>\n          </div>\n          <a class=\"slide-more\">Click and Hold!</a>\n        </div>\n        <div class=\"slide-desc\">\n          <div class=\"desc-container\">\n            <h3>Description</h3>\n            <img src=\"".concat(_3.default, "\" alt=\"\" class=\"desc-img\">\n            <div class=\"desc-content\">\n              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n            </div>\n            <p class=\"close\">Close</p>\n          </div>\n        </div>\n      </div>  \n      ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>KathKIN</p>\n              <p>Branding</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_3.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>  \n        ")
 }, {
   image: _4.default,
-  content: "\n      <div class=\"slide-container\">\n        <div class=\"slide-header\">\n          <div class=\"slide-title\">\n            <p>PINK LEAF</p>\n            <p>Packaging</p>\n          </div>\n          <a class=\"slide-more\">Click and Hold!</a>\n        </div>\n        <div class=\"slide-desc\">\n          <div class=\"desc-container\">\n            <h3>Description</h3>\n            <img src=\"".concat(_4.default, "\" alt=\"\" class=\"desc-img\">\n            <div class=\"desc-content\">\n              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n            </div>\n            <p class=\"close\">Close</p>\n          </div>\n        </div>\n      </div>  \n      ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>PINK LEAF</p>\n              <p>Packaging</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_4.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>  \n        ")
 }, {
   image: _5.default,
-  content: "\n      <div class=\"slide-container\">\n        <div class=\"slide-header\">\n          <div class=\"slide-title\">\n            <p>THE corporate shirt</p>\n            <p>Packaging</p>\n          </div>\n          <a class=\"slide-more\">Click and Hold!</a>\n        </div>\n        <div class=\"slide-desc\">\n          <div class=\"desc-container\">\n            <h3>Description</h3>\n            <img src=\"".concat(_5.default, "\" alt=\"\" class=\"desc-img\">\n            <div class=\"desc-content\">\n              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n              Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n            </div>\n            <p class=\"close\">Close</p>\n          </div>\n        </div>\n      </div>  \n      ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>THE corporate shirt</p>\n              <p>Packaging</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_5.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>  \n        ")
 }], [{
   image: _3.default,
-  content: "\n      <div class=\"slide-container\">\n        <div class=\"slide-header\">\n          <div class=\"slide-title\">\n            <img src=\"".concat(_landingLogo.default, "\">\n            <img src=\"").concat(_studio.default, "\">\n          </div>\n        </div>\n      </div>\n      "),
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n          </div>\n        </div>\n        "),
   position: -10
 }]];
-var slides = new _Slides.Slides(slidesData, {
+exports.slidesData = slidesData;
+},{"../images/1.jpg":"images/1.jpg","../images/2.jpg":"images/2.jpg","../images/3.jpg":"images/3.jpg","../images/4.jpg":"images/4.jpg","../images/5.jpg":"images/5.jpg","../images/landing.jpg":"images/landing.jpg","../images/landingLogo.svg":"images/landingLogo.svg","../images/studio.svg":"images/studio.svg"}],"js/index.js":[function(require,module,exports) {
+"use strict";
+
+var _Showcase = require("./Showcase");
+
+var _Slides = require("./Slides");
+
+var _Cursor = require("./Cursor");
+
+var _Nav = require("./Nav");
+
+var _slidesData = require("./slidesData");
+
+var container = document.getElementById("app");
+var cursor = new _Cursor.Cursor(document.querySelector(".cursor"));
+var slides = new _Slides.Slides(_slidesData.slidesData, {
   onTitleClickStart: function onTitleClickStart() {
     showcase.titleClickStart();
     showcase.inTab = true;
@@ -49755,7 +49792,7 @@ var slides = new _Slides.Slides(slidesData, {
     showcase.titleClickEnd();
   }
 });
-var showcase = new _Showcase.Showcase(slidesData, {
+var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
   onActiveIndexChange: function onActiveIndexChange(activeIndex) {
     slides.onActiveIndexChange(activeIndex);
   },
@@ -49852,7 +49889,7 @@ document.querySelector("button.prevbtn").addEventListener("mouseup", function ()
 document.querySelector("button.prevbtn").addEventListener("touchend", function () {
   showcase.endMoveToSection(showcase.part, showcase.part - 1);
 });
-},{"./Showcase":"js/Showcase.js","./Slides":"js/Slides.js","./Cursor":"js/Cursor.js","./Nav":"js/Nav.js","../images/1.jpg":"images/1.jpg","../images/2.jpg":"images/2.jpg","../images/3.jpg":"images/3.jpg","../images/4.jpg":"images/4.jpg","../images/5.jpg":"images/5.jpg","../images/landing.jpg":"images/landing.jpg","../images/landingLogo.svg":"images/landingLogo.svg","../images/studio.svg":"images/studio.svg"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./Showcase":"js/Showcase.js","./Slides":"js/Slides.js","./Cursor":"js/Cursor.js","./Nav":"js/Nav.js","./slidesData":"js/slidesData.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
