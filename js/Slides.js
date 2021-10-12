@@ -192,7 +192,7 @@ class Slides {
     }
   }
   onMove(indexFloat) {
-    this.masterSlides[this.part].style.transform = `translateY(${(indexFloat * 100)}%)`;
+    this.masterSlides[this.part].style.transform = `translateY(${(indexFloat * 100)}vh)`;
   }
   appear() {
     this.container.classList.add("scrolling");

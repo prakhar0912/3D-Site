@@ -49278,7 +49278,7 @@ var Slides = /*#__PURE__*/function () {
   }, {
     key: "onMove",
     value: function onMove(indexFloat) {
-      this.masterSlides[this.part].style.transform = "translateY(".concat(indexFloat * 100, "%)");
+      this.masterSlides[this.part].style.transform = "translateY(".concat(indexFloat * 100, "vh)");
     }
   }, {
     key: "appear",
