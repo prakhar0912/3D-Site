@@ -189,7 +189,7 @@ const slidesData = [
               <img src="${landingStudio}">
             </div>
           </div>
-          <div class="slide-desc">
+          <div class="slide-desc slide-desc-last">
             <div class="contact-container">
                 <section>
                     <div class="cTitle cOne">

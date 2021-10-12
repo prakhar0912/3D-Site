@@ -38,7 +38,7 @@ const showcase = new Showcase(slidesData, {
   onClickStart: ({ activeIndex }) => {
     cursor.enter();
     slides.disperse(activeIndex)
-    document.querySelector('.content').style.overflowY = 'auto'
+    // document.querySelector('#app').style.overflow = 'auto'
   },
   onClickEnd: ({ activeIndex }) => {
     cursor.leave();
@@ -78,7 +78,7 @@ const nav = new Nav({
 })
 
 showcase.mount(container);
-slides.mount(container);
+slides.mount(document.body);
 showcase.render();
 
 window.addEventListener("resize", function () {

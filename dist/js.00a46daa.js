@@ -42536,10 +42536,10 @@ var Grab = /*#__PURE__*/function () {
 
       if (Array.isArray(events)) {
         for (var i = 0; i < events.length; i++) {
-          document.querySelector("main").addEventListener(events[i], listener, false);
+          document.querySelector("main").addEventListener(events[i], listener, true);
         }
       } else {
-        document.querySelector("main").addEventListener(events, listener, false);
+        document.querySelector("main").addEventListener(events, listener, true);
       }
     }
   }, {
@@ -49016,7 +49016,6 @@ var Slides = /*#__PURE__*/function () {
     this.part = 0;
     this.masterSlides = [];
     this.slides = this.createSlides();
-    console.log(this.slides);
     this.options = options;
     this.tl = null;
   }
@@ -49164,27 +49163,20 @@ var Slides = /*#__PURE__*/function () {
 
       var tl = _gsap.default.timeline();
 
-      tl.fromTo(header, {
-        yPercent: 0,
-        opacity: 1
-      }, {
-        yPercent: -20,
+      tl.to(header, {
         height: 0,
         duration: 0.5,
         opacity: 0,
         onComplete: function onComplete() {
           desc.style.height = 'auto';
-          _this4.slides[2][0].style.top = 0;
-          _this4.slides[2][0].style.left = 0;
-          _this4.slides[2][0].style.display = 'block';
+          _this4.slides[2][0].style.overflow = 'auto';
+          _this4.slides[2][0].style.pointerEvents = 'all';
         }
       });
       tl.to(desc, {
         opacity: 1,
         duration: 0.1,
-        onComplete: function onComplete() {
-          document.querySelector('.content').style.overflowY = 'auto';
-        }
+        height: 'auto'
       });
     }
   }, {
@@ -49194,25 +49186,22 @@ var Slides = /*#__PURE__*/function () {
 
       var desc = this.slides[2][0].querySelector('.slide-desc');
       var header = this.slides[2][0].querySelectorAll('.slide-header');
-      document.querySelector('.content').style.overflowY = 'hidden';
-      this.slides[2][0].style.display = 'grid';
 
       var tl = _gsap.default.timeline();
 
       tl.to(desc, {
         opacity: 0,
+        duration: 0.3,
         height: 0,
-        duration: 0.5,
         onComplete: function onComplete() {
-          _this5.slides[2][0].style.top = 'auto';
-          _this5.slides[2][0].style.left = 'auto';
+          _this5.slides[2][0].style.pointerEvents = 'none';
+          _this5.slides[2][0].style.overflow = 'hidden';
         }
       });
       tl.to(header, {
         opacity: 1,
         height: "auto",
-        yPercent: 0,
-        duration: 0.3
+        duration: 1
       });
     }
   }, {
@@ -49226,26 +49215,19 @@ var Slides = /*#__PURE__*/function () {
       var tl = _gsap.default.timeline();
 
       tl.to(header, {
-        height: "0",
+        height: 0,
         duration: 0.5,
         opacity: 0,
         onComplete: function onComplete() {
-          _this6.slides[_this6.part].forEach(function (slide, i) {
-            if (i != _this6.currentIdx) {
-              slide.style.display = 'none';
-            }
-          });
-
           desc.style.height = 'auto';
-          _this6.slides[_this6.part][_this6.currentIdx].style.top = 0;
-          _this6.slides[_this6.part][_this6.currentIdx].style.left = 0;
-          _this6.slides[_this6.part][_this6.currentIdx].style.position = 'absolute';
-          _this6.slides[_this6.part][_this6.currentIdx].style.display = 'block';
+          _this6.slides[_this6.part][_this6.currentIdx].style.overflow = 'auto';
+          _this6.slides[_this6.part][_this6.currentIdx].style.pointerEvents = 'all';
         }
       });
       tl.to(desc, {
         opacity: 1,
-        duration: 0.1
+        duration: 0.1,
+        height: 'auto'
       });
     }
   }, {
@@ -49263,22 +49245,8 @@ var Slides = /*#__PURE__*/function () {
         duration: 0.3,
         height: 0,
         onComplete: function onComplete() {
-          _this7.slides[_this7.part].forEach(function (slide, i) {
-            if (i != _this7.currentIdx) {
-              slide.style.display = 'grid';
-            }
-          });
-
-          _this7.slides[_this7.part][_this7.currentIdx].style.top = 'auto';
-          _this7.slides[_this7.part][_this7.currentIdx].style.left = 'auto';
-          _this7.slides[_this7.part][_this7.currentIdx].style.position = 'relative';
-          _this7.slides[_this7.part][_this7.currentIdx].style.display = 'grid';
-
-          if (document.querySelector('.content').scrollTop > 0) {
-            document.querySelector('.content').scrollTop = 0;
-          }
-
-          document.querySelector('.content').style.overflow = 'hidden';
+          _this7.slides[_this7.part][_this7.currentIdx].style.pointerEvents = 'none';
+          _this7.slides[_this7.part][_this7.currentIdx].style.overflow = 'hidden';
         }
       });
       tl.to(header, {
@@ -49310,7 +49278,7 @@ var Slides = /*#__PURE__*/function () {
   }, {
     key: "onMove",
     value: function onMove(indexFloat) {
-      this.masterSlides[this.part].style.transform = "translateY(".concat(indexFloat * 100 / this.slides[this.part].length, "%)");
+      this.masterSlides[this.part].style.transform = "translateY(".concat(indexFloat * 100, "%)");
     }
   }, {
     key: "appear",
@@ -49836,7 +49804,7 @@ var slidesData = [[{
   content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title long\">\n              <p class=\"long\">THE corporate shirt</p>\n              <p class=\"long\">Packaging</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_5.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
 }], [{
   image: _contactBack.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"contact-container\">\n                <section>\n                    <div class=\"cTitle cOne\">\n                        <div>\n                            <p>1</p>\n                        </div>\n                        <p>OUR SERVICES</p>\n                        <h1>HOW WE</h1>\n                        <h1>MAY HELP YOU</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <p>\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cTwo\">\n                        <div>\n                            <p>2</p>\n                        </div>\n                        <p>OUR TEAM</p>\n                        <h1>YOU WILL BE</h1>\n                        <h1>IN SAFE HANDS</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <p>\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cThree\">\n                        <div>\n                            <p>3</p>\n                        </div>\n                        <p>OUR CLIENTS</p>\n                        <h1>PEOPLE WHO</h1>\n                        <h1>TRUST US</h1>\n                    </div>\n                    <div>\n                        <img src=\"").concat(_clients.default, "\" alt=\"\">\n                    </div>\n                </section>\n                <section class=\"contacts\">\n                  <div class=\"contacts-cont\">\n                    <h2>Contact</h2>\n                    <div>\n                        <p>514 656-0976</p>\n                        <p>info@whitepencil.com</p>\n                    </div>\n                    <h2>Address</h2>\n                    <div>\n                      <p>4030, rue Saint-Ambroise, suite 105</p>\n                      <p>Montr\xE9al (Qu\xE9bec) H4C 2C7</p>\n                      <p>Canada</p>\n                    </div>\n                    <div class=\"email\">\n                        <h2>Write to us</h2>\n                        <p>Email</p>\n                    </div>\n                  </div>\n                </section>\n            </div>\n          </div>\n        </div>\n      "),
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n          </div>\n          <div class=\"slide-desc slide-desc-last\">\n            <div class=\"contact-container\">\n                <section>\n                    <div class=\"cTitle cOne\">\n                        <div>\n                            <p>1</p>\n                        </div>\n                        <p>OUR SERVICES</p>\n                        <h1>HOW WE</h1>\n                        <h1>MAY HELP YOU</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <p>\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cTwo\">\n                        <div>\n                            <p>2</p>\n                        </div>\n                        <p>OUR TEAM</p>\n                        <h1>YOU WILL BE</h1>\n                        <h1>IN SAFE HANDS</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <p>\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cThree\">\n                        <div>\n                            <p>3</p>\n                        </div>\n                        <p>OUR CLIENTS</p>\n                        <h1>PEOPLE WHO</h1>\n                        <h1>TRUST US</h1>\n                    </div>\n                    <div>\n                        <img src=\"").concat(_clients.default, "\" alt=\"\">\n                    </div>\n                </section>\n                <section class=\"contacts\">\n                  <div class=\"contacts-cont\">\n                    <h2>Contact</h2>\n                    <div>\n                        <p>514 656-0976</p>\n                        <p>info@whitepencil.com</p>\n                    </div>\n                    <h2>Address</h2>\n                    <div>\n                      <p>4030, rue Saint-Ambroise, suite 105</p>\n                      <p>Montr\xE9al (Qu\xE9bec) H4C 2C7</p>\n                      <p>Canada</p>\n                    </div>\n                    <div class=\"email\">\n                        <h2>Write to us</h2>\n                        <p>Email</p>\n                    </div>\n                  </div>\n                </section>\n            </div>\n          </div>\n        </div>\n      "),
   position: -10
 }]];
 exports.slidesData = slidesData;
@@ -49886,8 +49854,7 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
   onClickStart: function onClickStart(_ref2) {
     var activeIndex = _ref2.activeIndex;
     cursor.enter();
-    slides.disperse(activeIndex);
-    document.querySelector('.content').style.overflowY = 'auto';
+    slides.disperse(activeIndex); // document.querySelector('#app').style.overflow = 'auto'
   },
   onClickEnd: function onClickEnd(_ref3) {
     var activeIndex = _ref3.activeIndex;
@@ -49931,7 +49898,7 @@ var nav = new _Nav.Nav({
   }
 });
 showcase.mount(container);
-slides.mount(container);
+slides.mount(document.body);
 showcase.render();
 window.addEventListener("resize", function () {
   showcase.onResize();

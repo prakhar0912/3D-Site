@@ -15,7 +15,6 @@ class Slides {
     this.part = 0
     this.masterSlides = []
     this.slides = this.createSlides()
-    console.log(this.slides)
     this.options = options
     this.tl = null;
   }
@@ -122,36 +121,29 @@ class Slides {
     let header = this.slides[2][0].querySelector('.slide-header')
     let desc = this.slides[2][0].querySelector('.slide-desc')
     let tl = gsap.timeline()
-    tl.fromTo(header, {
-      yPercent: 0, opacity: 1
-    },{
-      yPercent: -20, height: 0, duration: 0.5, opacity: 0, onComplete: () => {
+    tl.to(header, {
+      height: 0, duration: 0.5, opacity: 0, onComplete: () => {
         desc.style.height = 'auto'
-        this.slides[2][0].style.top = 0;
-        this.slides[2][0].style.left = 0;
-        this.slides[2][0].style.display = 'block'
+        this.slides[2][0].style.overflow = 'auto'
+        this.slides[2][0].style.pointerEvents = 'all'
       }
     })
     tl.to(desc, {
-      opacity: 1, duration: 0.1, onComplete: () => {
-        document.querySelector('.content').style.overflowY = 'auto'
-      }
+      opacity: 1, duration: 0.1, height: 'auto'
     })
   }
 
   hidePart3() {
     let desc = this.slides[2][0].querySelector('.slide-desc')
     let header = this.slides[2][0].querySelectorAll('.slide-header')
-    document.querySelector('.content').style.overflowY = 'hidden'
-    this.slides[2][0].style.display = 'grid'
     let tl = gsap.timeline()
     tl.to(desc, {
-      opacity: 0, height: 0, duration: 0.5, onComplete: () => {
-        this.slides[2][0].style.top = 'auto';
-        this.slides[2][0].style.left = 'auto';
+      opacity: 0, duration: 0.3, height: 0, onComplete: () => {
+        this.slides[2][0].style.pointerEvents = 'none'
+        this.slides[2][0].style.overflow = 'hidden'
       }
     })
-    tl.to(header, { opacity: 1, height: "auto", yPercent: 0, duration: 0.3,})
+    tl.to(header, { opacity: 1, height: "auto", duration: 1, })
   }
 
 
@@ -160,21 +152,14 @@ class Slides {
     let desc = this.slides[this.part][this.currentIdx].querySelector('.slide-desc')
     let tl = gsap.timeline()
     tl.to(header, {
-      height: "0", duration: 0.5, opacity: 0, onComplete: () => {
-        this.slides[this.part].forEach((slide, i) => {
-          if (i != this.currentIdx) {
-            slide.style.display = 'none'
-          }
-        })
+      height: 0, duration: 0.5, opacity: 0, onComplete: () => {
         desc.style.height = 'auto'
-        this.slides[this.part][this.currentIdx].style.top = 0;
-        this.slides[this.part][this.currentIdx].style.left = 0;
-        this.slides[this.part][this.currentIdx].style.position = 'absolute'
-        this.slides[this.part][this.currentIdx].style.display = 'block'
+        this.slides[this.part][this.currentIdx].style.overflow = 'auto'
+        this.slides[this.part][this.currentIdx].style.pointerEvents = 'all'
       }
     })
     tl.to(desc, {
-      opacity: 1, duration: 0.1,
+      opacity: 1, duration: 0.1, height: 'auto'
     })
   }
   hideDesc(activeIndex) {
@@ -183,19 +168,8 @@ class Slides {
     let tl = gsap.timeline()
     tl.to(desc, {
       opacity: 0, duration: 0.3, height: 0, onComplete: () => {
-        this.slides[this.part].forEach((slide, i) => {
-          if (i != this.currentIdx) {
-            slide.style.display = 'grid'
-          }
-        })
-        this.slides[this.part][this.currentIdx].style.top = 'auto';
-        this.slides[this.part][this.currentIdx].style.left = 'auto';
-        this.slides[this.part][this.currentIdx].style.position = 'relative'
-        this.slides[this.part][this.currentIdx].style.display = 'grid'
-        if (document.querySelector('.content').scrollTop > 0) {
-          document.querySelector('.content').scrollTop = 0
-        }
-        document.querySelector('.content').style.overflow = 'hidden'
+        this.slides[this.part][this.currentIdx].style.pointerEvents = 'none'
+        this.slides[this.part][this.currentIdx].style.overflow = 'hidden'
       }
     })
     tl.to(header, { opacity: 1, height: "auto", duration: 1, })
@@ -218,7 +192,7 @@ class Slides {
     }
   }
   onMove(indexFloat) {
-    this.masterSlides[this.part].style.transform = `translateY(${(indexFloat * 100) / (this.slides[this.part].length)}%)`;
+    this.masterSlides[this.part].style.transform = `translateY(${(indexFloat * 100)}%)`;
   }
   appear() {
     this.container.classList.add("scrolling");

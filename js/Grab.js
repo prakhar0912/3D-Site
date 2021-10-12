@@ -41,10 +41,10 @@ class Grab {
     }
     if (Array.isArray(events)) {
       for (let i = 0; i < events.length; i++) {
-        document.querySelector("main").addEventListener(events[i], listener, false);
+        document.querySelector("main").addEventListener(events[i], listener, true);
       }
     } else {
-      document.querySelector("main").addEventListener(events, listener, false);
+      document.querySelector("main").addEventListener(events, listener, true);
     }
   }
 
