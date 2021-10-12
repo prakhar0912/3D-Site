@@ -6,12 +6,17 @@ import image5 from "../images/5.jpg";
 import landingImage from "../images/landing.jpg"
 import landingLogo from "../images/landingLogo.svg"
 import landingStudio from "../images/studio.svg"
+import contactImage1 from "../images/contact1.jpg"
+import contactImage2 from "../images/contact2.jpg"
+import contactBack from "../images/contactBack.jpg"
+import clients from "../images/clients.jpg"
+
 
 const slidesData = [
-    [
-        {
-            image: landingImage,
-            content: `
+  [
+    {
+      image: landingImage,
+      content: `
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
@@ -21,14 +26,14 @@ const slidesData = [
             <p style="text-align: center;">Click and Hold to Progress!</p>
           </div>
         </div>
-        `,
-            position: 10
-        },
-    ],
-    [
-        {
-            image: image1,
-            content: `
+      `,
+      position: 10
+    },
+  ],
+  [
+    {
+      image: image1,
+      content: `
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
@@ -52,13 +57,13 @@ const slidesData = [
               <p class="close">Close</p>
             </div>
           </div>
-        </div>      
-        `,
-            position: 0
-        },
-        {
-            image: image2,
-            content: `
+        </div>
+      `,
+      position: 0
+    },
+    {
+      image: image2,
+      content: `
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
@@ -82,12 +87,12 @@ const slidesData = [
               <p class="close">Close</p>
             </div>
           </div>
-        </div>   
-        `
-        },
-        {
-            image: image3,
-            content: `
+        </div>
+      `
+    },
+    {
+      image: image3,
+      content: `
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
@@ -111,12 +116,12 @@ const slidesData = [
               <p class="close">Close</p>
             </div>
           </div>
-        </div>  
-        `
-        },
-        {
-            image: image4,
-            content: `
+        </div>
+      `
+    },
+    {
+      image: image4,
+      content: `
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
@@ -140,17 +145,17 @@ const slidesData = [
               <p class="close">Close</p>
             </div>
           </div>
-        </div>  
-        `
-        },
-        {
-            image: image5,
-            content: `
+        </div>
+      `
+    },
+    {
+      image: image5,
+      content: `
         <div class="slide-container">
           <div class="slide-header">
-            <div class="slide-title">
-              <p>THE corporate shirt</p>
-              <p>Packaging</p>
+            <div class="slide-title long">
+              <p class="long">THE corporate shirt</p>
+              <p class="long">Packaging</p>
             </div>
             <a class="slide-more">Click and Hold!</a>
           </div>
@@ -169,14 +174,14 @@ const slidesData = [
               <p class="close">Close</p>
             </div>
           </div>
-        </div>  
-        `
-        }
-    ],
-    [
-        {
-            image: image3,
-            content: `
+        </div>
+      `
+    }
+  ],
+  [
+    {
+      image: contactBack,
+      content: `
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
@@ -184,10 +189,102 @@ const slidesData = [
               <img src="${landingStudio}">
             </div>
           </div>
+          <div class="slide-desc">
+            <div class="contact-container">
+                <section>
+                    <div class="cTitle cOne">
+                        <div>
+                            <p>1</p>
+                        </div>
+                        <p>OUR SERVICES</p>
+                        <h1>HOW WE</h1>
+                        <h1>MAY HELP YOU</h1>
+                    </div>
+                    <div class="cContent">
+                        <div class="cLeft">
+                            <p>
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.
+                            </p>
+                            <div class="img-container">
+                                <img src="${contactImage2}" alt="">
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="img-container">
+                                <img src="${contactImage1}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <div class="cTitle cTwo">
+                        <div>
+                            <p>2</p>
+                        </div>
+                        <p>OUR TEAM</p>
+                        <h1>YOU WILL BE</h1>
+                        <h1>IN SAFE HANDS</h1>
+                    </div>
+                    <div class="cContent">
+                        <div class="cLeft">
+                            <p>
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.
+                            </p>
+                            <div class="img-container">
+                                <img src="${contactImage2}" alt="">
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="img-container">
+                                <img src="${contactImage1}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <div class="cTitle cThree">
+                        <div>
+                            <p>3</p>
+                        </div>
+                        <p>OUR CLIENTS</p>
+                        <h1>PEOPLE WHO</h1>
+                        <h1>TRUST US</h1>
+                    </div>
+                    <div>
+                        <img src="${clients}" alt="">
+                    </div>
+                </section>
+                <section class="contacts">
+                  <div class="contacts-cont">
+                    <h2>Contact</h2>
+                    <div>
+                        <p>514 656-0976</p>
+                        <p>info@whitepencil.com</p>
+                    </div>
+                    <h2>Address</h2>
+                    <div>
+                      <p>4030, rue Saint-Ambroise, suite 105</p>
+                      <p>Montréal (Québec) H4C 2C7</p>
+                      <p>Canada</p>
+                    </div>
+                    <div class="email">
+                        <h2>Write to us</h2>
+                        <p>Email</p>
+                    </div>
+                  </div>
+                </section>
+            </div>
+          </div>
         </div>
-        `,
-            position: -10
-        },
-    ],
+      `,
+      position: -10
+    }
+  ]
 ];
 export {slidesData}

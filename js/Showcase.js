@@ -311,6 +311,11 @@ Showcase.prototype.startMoveToSection = function (from, to) {
         this.part = to
         this.GL.part = to
         this.options.updateNavPart(to)
+        if(to === 2){
+          setTimeout(() => {
+            this.options.onPart3()
+          }, 500)
+        }
         this.inTransition = false
       }
     })
@@ -348,6 +353,9 @@ Showcase.prototype.startMoveToSection = function (from, to) {
     this.GL.scheduleLoop();
     this.options.startTransitionPage(from, to)
     this.zoom = gsap.timeline()
+    if(from === 2){
+      this.options.onHidePart3()
+    }
     this.zoom.to(this.GL.camera.position, {
       z: this.GL.camera.position.z - 2, duration: 1, ease: "power4.in",
     })
@@ -403,6 +411,9 @@ Showcase.prototype.endMoveToSection = function (from, to) {
   }
   this.options.endTransitionPage(from, to)
   this.GL.scheduleLoop();
+  if(from === 2){
+    this.options.onPart3()
+  }
   this.zoom = gsap.timeline()
   this.zoom.to(this.GL.camera.position, {
     z: this.data[from][0].position + 6, duration: 0.8, ease: "power2.in", onComplete: () => {

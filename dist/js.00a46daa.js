@@ -37396,10 +37396,7 @@ GLManager.prototype.setUpGui = function () {
   this.stats = (0, _stats.default)();
   this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
 
-  document.body.appendChild(this.stats.dom); // const gui = new GUI()
-  // const cameraFolder = gui.addFolder('Camera')
-  // cameraFolder.add(this.camera.position, 'z', -16, -10)
-  // cameraFolder.open()
+  document.body.appendChild(this.stats.dom);
 };
 
 GLManager.prototype.loadFactors = function (data) {
@@ -48551,6 +48548,12 @@ Showcase.prototype.startMoveToSection = function (from, to) {
 
         _this4.options.updateNavPart(to);
 
+        if (to === 2) {
+          setTimeout(function () {
+            _this4.options.onPart3();
+          }, 500);
+        }
+
         _this4.inTransition = false;
       }
     });
@@ -48586,6 +48589,11 @@ Showcase.prototype.startMoveToSection = function (from, to) {
     this.GL.scheduleLoop();
     this.options.startTransitionPage(from, to);
     this.zoom = _gsap.default.timeline();
+
+    if (from === 2) {
+      this.options.onHidePart3();
+    }
+
     this.zoom.to(this.GL.camera.position, {
       z: this.GL.camera.position.z - 2,
       duration: 1,
@@ -48650,6 +48658,11 @@ Showcase.prototype.endMoveToSection = function (from, to) {
 
   this.options.endTransitionPage(from, to);
   this.GL.scheduleLoop();
+
+  if (from === 2) {
+    this.options.onPart3();
+  }
+
   this.zoom = _gsap.default.timeline();
   this.zoom.to(this.GL.camera.position, {
     z: this.data[from][0].position + 6,
@@ -49014,7 +49027,7 @@ var Slides = /*#__PURE__*/function () {
       var slides = [];
 
       for (var i = 0; i < this.data.length; i++) {
-        var Mastercontainer = createEleWithClass("div", "master-slide-container");
+        var Mastercontainer = createEleWithClass("div", "master-slide-container hide");
 
         if (i == 0) {
           Mastercontainer = createEleWithClass("div", "master-slide-container current");
@@ -49053,18 +49066,19 @@ var Slides = /*#__PURE__*/function () {
     value: function startTransitionParts(from, to) {
       var _this = this;
 
-      console.log("here", from, to);
-
       if (this.tl) {
         this.tl.kill();
       }
 
+      this.masterSlides[to].classList.remove('hide');
       this.tl = _gsap.default.timeline();
       this.tl.to(this.masterSlides[from], {
         opacity: 0,
         duration: 2.3,
         onComplete: function onComplete() {
           _this.masterSlides[from].classList.remove('current');
+
+          _this.masterSlides[from].classList.add('hide');
         }
       });
       this.tl.to(this.masterSlides[to], {
@@ -49072,8 +49086,9 @@ var Slides = /*#__PURE__*/function () {
         duration: 0.7,
         delay: -0.1,
         onComplete: function onComplete() {
-          _this.masterSlides[to].classList.add('current'); // console.log(to)
+          console.log('here');
 
+          _this.masterSlides[to].classList.add('current');
 
           _this.part = to;
         }
@@ -49085,9 +49100,11 @@ var Slides = /*#__PURE__*/function () {
       var _this2 = this;
 
       if (this.tl) {
+        console.log('kill');
         this.tl.kill();
       }
 
+      this.masterSlides[to].classList.add('hide');
       this.tl = _gsap.default.timeline();
       this.tl.to(this.masterSlides[to], {
         opacity: 0,
@@ -49138,9 +49155,70 @@ var Slides = /*#__PURE__*/function () {
       });
     }
   }, {
+    key: "showPart3",
+    value: function showPart3() {
+      var _this4 = this;
+
+      var header = this.slides[2][0].querySelector('.slide-header');
+      var desc = this.slides[2][0].querySelector('.slide-desc');
+
+      var tl = _gsap.default.timeline();
+
+      tl.fromTo(header, {
+        yPercent: 0,
+        opacity: 1
+      }, {
+        yPercent: -20,
+        height: 0,
+        duration: 0.5,
+        opacity: 0,
+        onComplete: function onComplete() {
+          desc.style.height = 'auto';
+          _this4.slides[2][0].style.top = 0;
+          _this4.slides[2][0].style.left = 0;
+          _this4.slides[2][0].style.display = 'block';
+        }
+      });
+      tl.to(desc, {
+        opacity: 1,
+        duration: 0.1,
+        onComplete: function onComplete() {
+          document.querySelector('.content').style.overflowY = 'auto';
+        }
+      });
+    }
+  }, {
+    key: "hidePart3",
+    value: function hidePart3() {
+      var _this5 = this;
+
+      var desc = this.slides[2][0].querySelector('.slide-desc');
+      var header = this.slides[2][0].querySelectorAll('.slide-header');
+      document.querySelector('.content').style.overflowY = 'hidden';
+      this.slides[2][0].style.display = 'grid';
+
+      var tl = _gsap.default.timeline();
+
+      tl.to(desc, {
+        opacity: 0,
+        height: 0,
+        duration: 0.5,
+        onComplete: function onComplete() {
+          _this5.slides[2][0].style.top = 'auto';
+          _this5.slides[2][0].style.left = 'auto';
+        }
+      });
+      tl.to(header, {
+        opacity: 1,
+        height: "auto",
+        yPercent: 0,
+        duration: 0.3
+      });
+    }
+  }, {
     key: "showDesc",
     value: function showDesc(activeIndex) {
-      var _this4 = this;
+      var _this6 = this;
 
       var header = this.slides[this.part][this.currentIdx].querySelector('.slide-header');
       var desc = this.slides[this.part][this.currentIdx].querySelector('.slide-desc');
@@ -49152,17 +49230,17 @@ var Slides = /*#__PURE__*/function () {
         duration: 0.5,
         opacity: 0,
         onComplete: function onComplete() {
-          _this4.slides[_this4.part].forEach(function (slide, i) {
-            if (i != _this4.currentIdx) {
+          _this6.slides[_this6.part].forEach(function (slide, i) {
+            if (i != _this6.currentIdx) {
               slide.style.display = 'none';
             }
           });
 
           desc.style.height = 'auto';
-          _this4.slides[_this4.part][_this4.currentIdx].style.top = 0;
-          _this4.slides[_this4.part][_this4.currentIdx].style.left = 0;
-          _this4.slides[_this4.part][_this4.currentIdx].style.position = 'absolute';
-          _this4.slides[_this4.part][_this4.currentIdx].style.display = 'block';
+          _this6.slides[_this6.part][_this6.currentIdx].style.top = 0;
+          _this6.slides[_this6.part][_this6.currentIdx].style.left = 0;
+          _this6.slides[_this6.part][_this6.currentIdx].style.position = 'absolute';
+          _this6.slides[_this6.part][_this6.currentIdx].style.display = 'block';
         }
       });
       tl.to(desc, {
@@ -49173,7 +49251,7 @@ var Slides = /*#__PURE__*/function () {
   }, {
     key: "hideDesc",
     value: function hideDesc(activeIndex) {
-      var _this5 = this;
+      var _this7 = this;
 
       var desc = this.slides[this.part][this.currentIdx].querySelector('.slide-desc');
       var header = this.slides[this.part][this.currentIdx].querySelectorAll('.slide-header');
@@ -49185,16 +49263,16 @@ var Slides = /*#__PURE__*/function () {
         duration: 0.3,
         height: 0,
         onComplete: function onComplete() {
-          _this5.slides[_this5.part].forEach(function (slide, i) {
-            if (i != _this5.currentIdx) {
+          _this7.slides[_this7.part].forEach(function (slide, i) {
+            if (i != _this7.currentIdx) {
               slide.style.display = 'grid';
             }
           });
 
-          _this5.slides[_this5.part][_this5.currentIdx].style.top = 'auto';
-          _this5.slides[_this5.part][_this5.currentIdx].style.left = 'auto';
-          _this5.slides[_this5.part][_this5.currentIdx].style.position = 'relative';
-          _this5.slides[_this5.part][_this5.currentIdx].style.display = 'grid';
+          _this7.slides[_this7.part][_this7.currentIdx].style.top = 'auto';
+          _this7.slides[_this7.part][_this7.currentIdx].style.left = 'auto';
+          _this7.slides[_this7.part][_this7.currentIdx].style.position = 'relative';
+          _this7.slides[_this7.part][_this7.currentIdx].style.display = 'grid';
 
           if (document.querySelector('.content').scrollTop > 0) {
             document.querySelector('.content').scrollTop = 0;
@@ -49483,33 +49561,7 @@ var Nav = /*#__PURE__*/function () {
     this.addListeners();
     this.setLetters();
     this.direction = 0; // this.delay = 1
-  } // killAnimation(dir) {
-  //     if (dir) {
-  //         if (this.startNavAnimation.isActive()) {
-  //             this.startNavAnimation.kill()
-  //         }
-  //         if (this.startBurgerAnimation.isActive()) {
-  //             this.startBurgerAnimation.kill()
-  //         }
-  //         if (this.startOpacityAnimation.isActive()) {
-  //             this.startOpacityAnimation.kill()
-  //         }
-  //     }
-  //     else {
-  //         if (this.endNavAnimation.isActive()) {
-  //             this.delay = 0
-  //             console.log('here')
-  //             this.endNavAnimation.kill()
-  //         }
-  //         if (this.endBurgerAnimation.isActive()) {
-  //             this.endBurgerAnimation.kill()
-  //         }
-  //         if (this.endOpacityAnimation.isActive()) {
-  //             this.endOpacityAnimation.kill()
-  //         }
-  //     }
-  // }
-
+  }
 
   _createClass(Nav, [{
     key: "updatePart",
@@ -49641,6 +49693,10 @@ var Nav = /*#__PURE__*/function () {
       });
       this.hideNav();
 
+      if (this.part === 2) {
+        this.options.onHidePart3();
+      }
+
       if (index === 3) {
         index = 2;
       }
@@ -49716,6 +49772,14 @@ module.exports = "/landing.10726b6b.jpg";
 module.exports = "/landingLogo.9fdc7c6d.svg";
 },{}],"images/studio.svg":[function(require,module,exports) {
 module.exports = "/studio.db870bdb.svg";
+},{}],"images/contact1.jpg":[function(require,module,exports) {
+module.exports = "/contact1.ab26e644.jpg";
+},{}],"images/contact2.jpg":[function(require,module,exports) {
+module.exports = "/contact2.9872ccad.jpg";
+},{}],"images/contactBack.jpg":[function(require,module,exports) {
+module.exports = "/contactBack.1e01978f.jpg";
+},{}],"images/clients.jpg":[function(require,module,exports) {
+module.exports = "/clients.89e11f67.jpg";
 },{}],"js/slidesData.js":[function(require,module,exports) {
 "use strict";
 
@@ -49740,35 +49804,43 @@ var _landingLogo = _interopRequireDefault(require("../images/landingLogo.svg"));
 
 var _studio = _interopRequireDefault(require("../images/studio.svg"));
 
+var _contact = _interopRequireDefault(require("../images/contact1.jpg"));
+
+var _contact2 = _interopRequireDefault(require("../images/contact2.jpg"));
+
+var _contactBack = _interopRequireDefault(require("../images/contactBack.jpg"));
+
+var _clients = _interopRequireDefault(require("../images/clients.jpg"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var slidesData = [[{
   image: _landing.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n            <p style=\"text-align: center;\">Click and Hold to Progress!</p>\n          </div>\n        </div>\n        "),
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n            <p style=\"text-align: center;\">Click and Hold to Progress!</p>\n          </div>\n        </div>\n      "),
   position: 10
 }], [{
   image: _.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>ADSnURL</p>\n              <p>App Design</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>      \n        "),
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>ADSnURL</p>\n              <p>App Design</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      "),
   position: 0
 }, {
   image: _2.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>vegaan</p>\n              <p>Branding</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_2.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>   \n        ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>vegaan</p>\n              <p>Branding</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_2.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
 }, {
   image: _3.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>KathKIN</p>\n              <p>Branding</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_3.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>  \n        ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>KathKIN</p>\n              <p>Branding</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_3.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
 }, {
   image: _4.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>PINK LEAF</p>\n              <p>Packaging</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_4.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>  \n        ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>PINK LEAF</p>\n              <p>Packaging</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_4.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
 }, {
   image: _5.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>THE corporate shirt</p>\n              <p>Packaging</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_5.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>  \n        ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title long\">\n              <p class=\"long\">THE corporate shirt</p>\n              <p class=\"long\">Packaging</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_5.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
 }], [{
-  image: _3.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n          </div>\n        </div>\n        "),
+  image: _contactBack.default,
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"contact-container\">\n                <section>\n                    <div class=\"cTitle cOne\">\n                        <div>\n                            <p>1</p>\n                        </div>\n                        <p>OUR SERVICES</p>\n                        <h1>HOW WE</h1>\n                        <h1>MAY HELP YOU</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <p>\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cTwo\">\n                        <div>\n                            <p>2</p>\n                        </div>\n                        <p>OUR TEAM</p>\n                        <h1>YOU WILL BE</h1>\n                        <h1>IN SAFE HANDS</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <p>\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo beatae quis, ratione recusandae qui placeat, quibusdam doloribus doloremque sunt et expedita rerum repellat. Fugit, cupiditate. Corporis praesentium consectetur voluptatum maiores.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cThree\">\n                        <div>\n                            <p>3</p>\n                        </div>\n                        <p>OUR CLIENTS</p>\n                        <h1>PEOPLE WHO</h1>\n                        <h1>TRUST US</h1>\n                    </div>\n                    <div>\n                        <img src=\"").concat(_clients.default, "\" alt=\"\">\n                    </div>\n                </section>\n                <section class=\"contacts\">\n                  <div class=\"contacts-cont\">\n                    <h2>Contact</h2>\n                    <div>\n                        <p>514 656-0976</p>\n                        <p>info@whitepencil.com</p>\n                    </div>\n                    <h2>Address</h2>\n                    <div>\n                      <p>4030, rue Saint-Ambroise, suite 105</p>\n                      <p>Montr\xE9al (Qu\xE9bec) H4C 2C7</p>\n                      <p>Canada</p>\n                    </div>\n                    <div class=\"email\">\n                        <h2>Write to us</h2>\n                        <p>Email</p>\n                    </div>\n                  </div>\n                </section>\n            </div>\n          </div>\n        </div>\n      "),
   position: -10
 }]];
 exports.slidesData = slidesData;
-},{"../images/1.jpg":"images/1.jpg","../images/2.jpg":"images/2.jpg","../images/3.jpg":"images/3.jpg","../images/4.jpg":"images/4.jpg","../images/5.jpg":"images/5.jpg","../images/landing.jpg":"images/landing.jpg","../images/landingLogo.svg":"images/landingLogo.svg","../images/studio.svg":"images/studio.svg"}],"js/index.js":[function(require,module,exports) {
+},{"../images/1.jpg":"images/1.jpg","../images/2.jpg":"images/2.jpg","../images/3.jpg":"images/3.jpg","../images/4.jpg":"images/4.jpg","../images/5.jpg":"images/5.jpg","../images/landing.jpg":"images/landing.jpg","../images/landingLogo.svg":"images/landingLogo.svg","../images/studio.svg":"images/studio.svg","../images/contact1.jpg":"images/contact1.jpg","../images/contact2.jpg":"images/contact2.jpg","../images/contactBack.jpg":"images/contactBack.jpg","../images/clients.jpg":"images/clients.jpg"}],"js/index.js":[function(require,module,exports) {
 "use strict";
 
 var _Showcase = require("./Showcase");
@@ -49781,6 +49853,7 @@ var _Nav = require("./Nav");
 
 var _slidesData = require("./slidesData");
 
+// import Contact from "./Contact";
 var container = document.getElementById("app");
 var cursor = new _Cursor.Cursor(document.querySelector(".cursor"));
 var slides = new _Slides.Slides(_slidesData.slidesData, {
@@ -49793,6 +49866,12 @@ var slides = new _Slides.Slides(_slidesData.slidesData, {
   }
 });
 var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
+  onPart3: function onPart3() {
+    slides.showPart3();
+  },
+  onHidePart3: function onHidePart3() {
+    slides.hidePart3();
+  },
   onActiveIndexChange: function onActiveIndexChange(activeIndex) {
     slides.onActiveIndexChange(activeIndex);
   },
@@ -49846,6 +49925,9 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
 var nav = new _Nav.Nav({
   onSectionSelected: function onSectionSelected(index) {
     showcase.startMoveToSection(showcase.part, index);
+  },
+  onHidePart3: function onHidePart3() {
+    slides.hidePart3();
   }
 });
 showcase.mount(container);
@@ -49917,7 +49999,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33155" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45763" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

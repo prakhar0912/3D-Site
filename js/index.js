@@ -3,6 +3,7 @@ import { Slides } from "./Slides";
 import { Cursor } from "./Cursor";
 import { Nav } from "./Nav";
 import { slidesData } from "./slidesData";
+// import Contact from "./Contact";
 
 
 const container = document.getElementById("app");
@@ -18,6 +19,12 @@ const slides = new Slides(slidesData, {
   },
 });
 const showcase = new Showcase(slidesData, {
+  onPart3: () => {
+    slides.showPart3()
+  },
+  onHidePart3: () => {
+    slides.hidePart3()
+  },
   onActiveIndexChange: activeIndex => {
     slides.onActiveIndexChange(activeIndex);
   },
@@ -64,6 +71,9 @@ const showcase = new Showcase(slidesData, {
 const nav = new Nav({
   onSectionSelected: (index) => {
     showcase.startMoveToSection(showcase.part, index)
+  },
+  onHidePart3: () => {
+    slides.hidePart3()
   }
 })
 
@@ -119,4 +129,3 @@ document.querySelector("button.prevbtn").addEventListener("mouseup", () => {
 document.querySelector("button.prevbtn").addEventListener("touchend", () => {
   showcase.endMoveToSection(showcase.part, showcase.part - 1)
 })
-

@@ -23,7 +23,7 @@ class Slides {
   createSlides() {
     let slides = []
     for (let i = 0; i < this.data.length; i++) {
-      let Mastercontainer = createEleWithClass("div", "master-slide-container")
+      let Mastercontainer = createEleWithClass("div", "master-slide-container hide")
       if (i == 0) {
         Mastercontainer = createEleWithClass("div", "master-slide-container current")
       }
@@ -53,20 +53,21 @@ class Slides {
   }
 
   startTransitionParts(from, to) {
-    console.log("here", from, to)
     if (this.tl) {
       this.tl.kill()
     }
+    this.masterSlides[to].classList.remove('hide')
     this.tl = gsap.timeline()
     this.tl.to(this.masterSlides[from], {
       opacity: 0, duration: 2.3, onComplete: () => {
         this.masterSlides[from].classList.remove('current')
+        this.masterSlides[from].classList.add('hide')
       }
     })
     this.tl.to(this.masterSlides[to], {
       opacity: 1, duration: 0.7, delay: -0.1, onComplete: () => {
+        console.log('here')
         this.masterSlides[to].classList.add('current')
-        // console.log(to)
         this.part = to
       }
     })
@@ -74,8 +75,10 @@ class Slides {
 
   endTransitionParts(from, to) {
     if (this.tl) {
+      console.log('kill')
       this.tl.kill()
     }
+    this.masterSlides[to].classList.add('hide')
     this.tl = gsap.timeline()
     this.tl.to(this.masterSlides[to], {
       opacity: 0, duration: 0.7, onComplete: () => {
@@ -114,6 +117,44 @@ class Slides {
       })
     })
   }
+
+  showPart3() {
+    let header = this.slides[2][0].querySelector('.slide-header')
+    let desc = this.slides[2][0].querySelector('.slide-desc')
+    let tl = gsap.timeline()
+    tl.fromTo(header, {
+      yPercent: 0, opacity: 1
+    },{
+      yPercent: -20, height: 0, duration: 0.5, opacity: 0, onComplete: () => {
+        desc.style.height = 'auto'
+        this.slides[2][0].style.top = 0;
+        this.slides[2][0].style.left = 0;
+        this.slides[2][0].style.display = 'block'
+      }
+    })
+    tl.to(desc, {
+      opacity: 1, duration: 0.1, onComplete: () => {
+        document.querySelector('.content').style.overflowY = 'auto'
+      }
+    })
+  }
+
+  hidePart3() {
+    let desc = this.slides[2][0].querySelector('.slide-desc')
+    let header = this.slides[2][0].querySelectorAll('.slide-header')
+    document.querySelector('.content').style.overflowY = 'hidden'
+    this.slides[2][0].style.display = 'grid'
+    let tl = gsap.timeline()
+    tl.to(desc, {
+      opacity: 0, height: 0, duration: 0.5, onComplete: () => {
+        this.slides[2][0].style.top = 'auto';
+        this.slides[2][0].style.left = 'auto';
+      }
+    })
+    tl.to(header, { opacity: 1, height: "auto", yPercent: 0, duration: 0.3,})
+  }
+
+
   showDesc(activeIndex) {
     let header = this.slides[this.part][this.currentIdx].querySelector('.slide-header')
     let desc = this.slides[this.part][this.currentIdx].querySelector('.slide-desc')
@@ -132,7 +173,9 @@ class Slides {
         this.slides[this.part][this.currentIdx].style.display = 'block'
       }
     })
-    tl.to(desc, { opacity: 1, duration: 0.1 })
+    tl.to(desc, {
+      opacity: 1, duration: 0.1,
+    })
   }
   hideDesc(activeIndex) {
     let desc = this.slides[this.part][this.currentIdx].querySelector('.slide-desc')

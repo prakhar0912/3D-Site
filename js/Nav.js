@@ -37,33 +37,6 @@ class Nav {
         // this.delay = 1
     }
 
-    // killAnimation(dir) {
-    //     if (dir) {
-    //         if (this.startNavAnimation.isActive()) {
-    //             this.startNavAnimation.kill()
-    //         }
-    //         if (this.startBurgerAnimation.isActive()) {
-    //             this.startBurgerAnimation.kill()
-    //         }
-    //         if (this.startOpacityAnimation.isActive()) {
-    //             this.startOpacityAnimation.kill()
-    //         }
-    //     }
-    //     else {
-    //         if (this.endNavAnimation.isActive()) {
-    //             this.delay = 0
-    //             console.log('here')
-    //             this.endNavAnimation.kill()
-    //         }
-    //         if (this.endBurgerAnimation.isActive()) {
-    //             this.endBurgerAnimation.kill()
-    //         }
-    //         if (this.endOpacityAnimation.isActive()) {
-    //             this.endOpacityAnimation.kill()
-    //         }
-    //     }
-    // }
-
     updatePart(index) {
         this.part = index
         this.textWrappers.forEach((ele, i) => {
@@ -185,6 +158,9 @@ class Nav {
             }
         })
         this.hideNav()
+        if(this.part === 2){
+            this.options.onHidePart3()
+        }
         if (index === 3) {
             index = 2
         }

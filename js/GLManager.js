@@ -12,7 +12,6 @@ import {
   vertex2
 } from "./shaders";
 import 'regenerator-runtime/runtime'
-// import { GUI } from 'three/examples/jsm/libs/dat.gui.module'
 import Stats from "stats.js";
 
 function GLManager(data) {
@@ -57,14 +56,9 @@ function GLManager(data) {
 }
 
 GLManager.prototype.setUpGui = function () {
-
   this.stats = Stats()
   this.stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
   document.body.appendChild(this.stats.dom);
-  // const gui = new GUI()
-  // const cameraFolder = gui.addFolder('Camera')
-  // cameraFolder.add(this.camera.position, 'z', -16, -10)
-  // cameraFolder.open()
 }
 
 
