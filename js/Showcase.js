@@ -319,6 +319,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
           this.applyEvents()
         }
         if (from === 1) {
+          console.log('okayy')
           this.removeEvents()
         }
         this.setStickEffect()
@@ -380,6 +381,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
           this.applyEvents()
         }
         if (from === 1) {
+          console.log('okayy')
           this.removeEvents()
         }
         this.setStickEffect()

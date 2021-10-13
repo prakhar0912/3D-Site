@@ -1,5 +1,5 @@
 class Grab {
-  constructor({indexSize, onIndexChange, onGrabStart, onGrabMove, onGrabEnd}) {
+  constructor({ indexSize, onIndexChange, onGrabStart, onGrabMove, onGrabEnd }) {
     this.onGrabEnd = onGrabEnd;
     this.onGrabStart = onGrabStart;
     this.onGrabMove = onGrabMove;
@@ -17,9 +17,11 @@ class Grab {
 
   }
 
-  addListeners(){
-    this.listen("mousemove", this.onMouseMove.bind(this));
-    this.listen("touchmove", this.onMouseMove.bind(this), true);
+  addListeners() {
+    this.mouseHandler = this.mouseMovePre.bind(this)
+    this.touchHandler = this.touchMovePre.bind(this)
+    document.querySelector("main").addEventListener("mousemove", this.mouseHandler, false);
+    document.querySelector("main").addEventListener("touchmove", this.touchHandler, false);
   }
 
   listen(events, grabListener, isTouch) {
@@ -31,30 +33,42 @@ class Grab {
     };
 
     let touchListener = function (ev) {
-      // if (ev.type === "touchend") {
-      //   throw new Error(ev.targetTouches);
-      // }
       ev.preventDefault();
       grabListener({
         y: ev.targetTouches[0] ? ev.targetTouches[0].clientY : null
       });
     };
+
     let listener = mouseListener;
     if (isTouch) {
       listener = touchListener;
     }
     if (Array.isArray(events)) {
       for (let i = 0; i < events.length; i++) {
-        document.querySelector("main").addEventListener(events[i], listener, true);
+        document.querySelector("main").addEventListener(events[i], listener, false);
       }
     } else {
-      document.querySelector("main").addEventListener(events, listener, true);
+      document.querySelector("main").addEventListener(events, listener, false);
     }
   }
 
+  mouseMovePre(ev) {
+    if (ev.type === "mouseout" && ev.relatedTarget != null) return;
+    this.onMouseMove({
+      y: ev.clientY
+    });
+  }
+
+  touchMovePre(ev) {
+    ev.preventDefault();
+    this.onMouseMove({
+      y: ev.targetTouches[0] ? ev.targetTouches[0].clientY : null
+    });
+  }
+
   removeListeners() {
-    this.remove("mousemove", this.onMouseMove.bind(this));
-    this.remove("touchmove", this.onMouseMove.bind(this), true);
+    document.querySelector("main").removeEventListener("mousemove", this.mouseHandler, false);
+    document.querySelector("main").removeEventListener("touchmove", this.touchHandler, false);
   }
 
   remove(events, grabListener, isTouch) {
@@ -71,16 +85,17 @@ class Grab {
         y: ev.targetTouches[0] ? ev.targetTouches[0].clientY : null
       });
     };
+
     let listener = mouseListener;
     if (isTouch) {
       listener = touchListener;
     }
     if (Array.isArray(events)) {
       for (let i = 0; i < events.length; i++) {
-        document.querySelector("main").removeEventListener(events[i], listener, true);
+        document.querySelector("main").removeEventListener(events[i], listener, false);
       }
     } else {
-      document.querySelector("main").removeEventListener(events, listener, true);
+      document.querySelector("main").removeEventListener(events, listener, false);
     }
   }
 

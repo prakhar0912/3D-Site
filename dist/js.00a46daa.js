@@ -42502,8 +42502,10 @@ var Grab = /*#__PURE__*/function () {
   _createClass(Grab, [{
     key: "addListeners",
     value: function addListeners() {
-      this.listen("mousemove", this.onMouseMove.bind(this));
-      this.listen("touchmove", this.onMouseMove.bind(this), true);
+      this.mouseHandler = this.mouseMovePre.bind(this);
+      this.touchHandler = this.touchMovePre.bind(this);
+      document.querySelector("main").addEventListener("mousemove", this.mouseHandler, false);
+      document.querySelector("main").addEventListener("touchmove", this.touchHandler, false);
     }
   }, {
     key: "listen",
@@ -42516,9 +42518,6 @@ var Grab = /*#__PURE__*/function () {
       };
 
       var touchListener = function touchListener(ev) {
-        // if (ev.type === "touchend") {
-        //   throw new Error(ev.targetTouches);
-        // }
         ev.preventDefault();
         grabListener({
           y: ev.targetTouches[0] ? ev.targetTouches[0].clientY : null
@@ -42533,17 +42532,33 @@ var Grab = /*#__PURE__*/function () {
 
       if (Array.isArray(events)) {
         for (var i = 0; i < events.length; i++) {
-          document.querySelector("main").addEventListener(events[i], listener, true);
+          document.querySelector("main").addEventListener(events[i], listener, false);
         }
       } else {
-        document.querySelector("main").addEventListener(events, listener, true);
+        document.querySelector("main").addEventListener(events, listener, false);
       }
+    }
+  }, {
+    key: "mouseMovePre",
+    value: function mouseMovePre(ev) {
+      if (ev.type === "mouseout" && ev.relatedTarget != null) return;
+      this.onMouseMove({
+        y: ev.clientY
+      });
+    }
+  }, {
+    key: "touchMovePre",
+    value: function touchMovePre(ev) {
+      ev.preventDefault();
+      this.onMouseMove({
+        y: ev.targetTouches[0] ? ev.targetTouches[0].clientY : null
+      });
     }
   }, {
     key: "removeListeners",
     value: function removeListeners() {
-      this.remove("mousemove", this.onMouseMove.bind(this));
-      this.remove("touchmove", this.onMouseMove.bind(this), true);
+      document.querySelector("main").removeEventListener("mousemove", this.mouseHandler, false);
+      document.querySelector("main").removeEventListener("touchmove", this.touchHandler, false);
     }
   }, {
     key: "remove",
@@ -42570,10 +42585,10 @@ var Grab = /*#__PURE__*/function () {
 
       if (Array.isArray(events)) {
         for (var i = 0; i < events.length; i++) {
-          document.querySelector("main").removeEventListener(events[i], listener, true);
+          document.querySelector("main").removeEventListener(events[i], listener, false);
         }
       } else {
-        document.querySelector("main").removeEventListener(events, listener, true);
+        document.querySelector("main").removeEventListener(events, listener, false);
       }
     }
   }, {
@@ -48587,6 +48602,8 @@ Showcase.prototype.startMoveToSection = function (from, to) {
         }
 
         if (from === 1) {
+          console.log('okayy');
+
           _this4.removeEvents();
         }
 
@@ -48660,6 +48677,8 @@ Showcase.prototype.startMoveToSection = function (from, to) {
         }
 
         if (from === 1) {
+          console.log('okayy');
+
           _this4.removeEvents();
         }
 
@@ -49140,8 +49159,6 @@ var Slides = /*#__PURE__*/function () {
         duration: 0.7,
         delay: -0.1,
         onComplete: function onComplete() {
-          console.log('here');
-
           _this.masterSlides[to].classList.add('current');
 
           _this.part = to;

@@ -65,7 +65,6 @@ class Slides {
     })
     this.tl.to(this.masterSlides[to], {
       opacity: 1, duration: 0.7, delay: -0.1, onComplete: () => {
-        console.log('here')
         this.masterSlides[to].classList.add('current')
         this.part = to
       }
