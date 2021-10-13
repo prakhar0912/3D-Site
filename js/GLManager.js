@@ -461,16 +461,8 @@ GLManager.prototype.updateTexture = function (newIndex, progress) {
   }
 };
 GLManager.prototype.updateStickEffect = function ({ progress, direction, waveIntensity, part, inTransition }) {
-  // console.log(inTransition, this.part)
   if (inTransition) {
-    // if (this.part === 0 || this.part === 2) {
     this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;
-    // }
-    // else {
-    //   this.meshes[this.part].material.uniforms.u_progress.value = progress;
-    //   this.meshes[this.part].material.uniforms.u_direction.value = direction;
-    //   this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;
-    // }
   }
   else {
     this.meshes[this.part].material.uniforms.u_progress.value = progress;

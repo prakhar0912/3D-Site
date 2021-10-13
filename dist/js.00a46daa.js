@@ -37875,15 +37875,8 @@ GLManager.prototype.updateStickEffect = function (_ref3) {
       part = _ref3.part,
       inTransition = _ref3.inTransition;
 
-  // console.log(inTransition, this.part)
   if (inTransition) {
-    // if (this.part === 0 || this.part === 2) {
-    this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity; // }
-    // else {
-    //   this.meshes[this.part].material.uniforms.u_progress.value = progress;
-    //   this.meshes[this.part].material.uniforms.u_direction.value = direction;
-    //   this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;
-    // }
+    this.meshes[this.part].material.uniforms.u_waveIntensity.value = waveIntensity;
   } else {
     this.meshes[this.part].material.uniforms.u_progress.value = progress;
     this.meshes[this.part].material.uniforms.u_direction.value = direction;
@@ -49359,6 +49352,8 @@ var getMousePos = function getMousePos(e) {
 
 var Cursor = /*#__PURE__*/function () {
   function Cursor(el) {
+    var _this = this;
+
     _classCallCheck(this, Cursor);
 
     this.DOM = {
@@ -49389,33 +49384,38 @@ var Cursor = /*#__PURE__*/function () {
     this.lastScale = 1;
     this.blowAnimation = null;
     this.initEvents();
-    this.render(); // requestAnimationFrame(() => this.render());
+    requestAnimationFrame(function () {
+      return _this.render();
+    });
   }
 
   _createClass(Cursor, [{
     key: "initEvents",
     value: function initEvents() {
-      var _this = this;
+      var _this2 = this;
 
       window.addEventListener('mousemove', function (ev) {
-        _this.mousePos = getMousePos(ev);
-
-        _this.render();
+        _this2.mousePos = getMousePos(ev); // this.render()
       });
     }
   }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       this.lastMousePos.dot.x = this.mousePos.x - this.bounds.dot.width / 2;
       this.lastMousePos.dot.y = this.mousePos.y - this.bounds.dot.height / 2;
       this.lastMousePos.circle.x = this.mousePos.x - this.bounds.circle.width / 2;
       this.lastMousePos.circle.y = this.mousePos.y - this.bounds.circle.height / 2;
-      this.lastScale = this.scale;
+      this.lastScale = this.scale; // gsap.set()
 
-      _gsap.default.to(this.DOM.el, {
-        duration: 0.3,
+      _gsap.default.set(this.DOM.el, {
         x: this.lastMousePos.dot.x,
         y: this.lastMousePos.dot.y
+      });
+
+      requestAnimationFrame(function () {
+        return _this3.render();
       });
     }
   }, {

@@ -8,6 +8,10 @@
   src: url(/CelinePeachScript.f40286b3.ttf);
 }
 
+body{
+  cursor: none;
+}
+
 #app {
   position: relative;
   height: 100%;
@@ -254,10 +258,9 @@ canvas {
   opacity: 1;
   /* pointer-events: all; */
   visibility: visible;
-
 }
 
-.current > .slide > .slide-container > .slide-header > .slide-title > .slide-more {
+.current>.slide>.slide-container>.slide-header>.slide-title>.slide-more {
   pointer-events: all;
   visibility: visible;
 }
@@ -607,42 +610,42 @@ section {
     font-size: 3.8rem;
     margin: 5px 0;
   }
-  .contact-container{
+  .contact-container {
     width: 95%;
     margin-top: 200px;
   }
-  .contact-container > section{
+  .contact-container>section {
     max-width: 100%;
     margin: 170px auto;
   }
-  .cTitle{
+  .cTitle {
     margin: 20px auto;
   }
-  .cTitle > div{
+  .cTitle>div {
     height: 20vw;
     width: 20vw;
     transform: translate(0, -120%)
   }
-  .cTitle > div > p{
+  .cTitle>div>p {
     margin: 0;
     height: 3.4rem;
   }
-  .cContent{
+  .cContent {
     grid-template-columns: none;
     grid-template-rows: auto auto;
     justify-items: center;
   }
-  .cContent>.cLeft>p{
+  .cContent>.cLeft>p {
     margin: 20px auto;
   }
-  .img-container{
+  .img-container {
     width: 100%;
   }
-  .img-container > img{
+  .img-container>img {
     display: block;
     margin: 0 auto;
   }
-  .cLeft{
+  .cLeft {
     /* width: max-content; */
     margin: 0 auto;
     margin-bottom: 20px;
@@ -650,17 +653,54 @@ section {
   .cTwo>p:nth-of-type(1), .cTwo>h1:nth-of-type(1) {
     margin-left: 10%;
   }
-  section:nth-of-type(3) > div > img{
+  section:nth-of-type(3)>div>img {
     width: 100%;
     margin: auto;
   }
-  .right{
+  .right {
     display: none;
   }
-  .contacts-cont{
+  .contacts-cont {
     width: 90%;
     justify-items: left;
     margin: 200px auto;
+  }
+}
+
+@media (max-height: 850px) {
+  .slide-title>img:nth-of-type(1) {
+    width: 45vw;
+  }
+  .slide-title>img:nth-of-type(2) {
+    width: 20vw;
+  }
+  .slide-title>p:nth-of-type(1) {
+    font-size: 6rem;
+  }
+  .slide-title>p:nth-of-type(2) {
+    font-size: 6rem;
+  }
+  .long {
+    font-size: 4rem!important;
+    max-width: 80vw;
+  }
+  .contact-container {
+    width: 90%;
+  }
+  .contact-container>section {
+    max-width: 80%;
+  }
+  .cTwo>p:nth-of-type(1), .cTwo>h1:nth-of-type(1) {
+    margin-left: 20%;
+  }
+  .nav{
+    grid-template-rows: 85% 15%;
+  }
+  .center > img{
+    width: 20vw;
+  }
+  .text{
+    font-size: 4rem;
   }
 }
 

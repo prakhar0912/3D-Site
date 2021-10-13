@@ -31,13 +31,12 @@ class Cursor {
         this.lastScale = 1;
         this.blowAnimation = null
         this.initEvents();
-        this.render()
-        // requestAnimationFrame(() => this.render());
+        requestAnimationFrame(() => this.render());
     }
     initEvents() {
         window.addEventListener('mousemove', ev => {
             this.mousePos = getMousePos(ev)
-            this.render()
+            // this.render()
         });
     }
     render() {
@@ -47,11 +46,12 @@ class Cursor {
         this.lastMousePos.circle.y = this.mousePos.y - this.bounds.circle.height/2
         this.lastScale = this.scale;
 
-        gsap.to(this.DOM.el, {
-            duration: 0.3,
+        // gsap.set()
+        gsap.set(this.DOM.el, {
             x: this.lastMousePos.dot.x,
             y: this.lastMousePos.dot.y
         })
+        requestAnimationFrame(() => this.render())
     }
 
     killBlow() {
