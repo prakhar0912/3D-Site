@@ -57,13 +57,22 @@ function Showcase(data, options = {}) {
   this.waveIntensityRange = [0, 0.4]
 
   // this.slides = new Slides(data);
-
   this.grab = new Grab({
     onGrabStart: this.onGrabStart.bind(this),
     onGrabMove: this.onGrabMove.bind(this),
     onGrabEnd: this.onGrabEnd.bind(this)
   });
+
 }
+
+Showcase.prototype.applyEvents = function () {
+  this.grab.addListeners()
+}
+
+Showcase.prototype.removeEvents = function () {
+  this.grab.removeListeners()
+}
+
 
 Showcase.prototype.calculateTotalEntries = function (data) {
   let total = 0
@@ -306,12 +315,17 @@ Showcase.prototype.startMoveToSection = function (from, to) {
     this.zoom.to(this.GL.camera.position, {
       z: this.data[to][0].position + 6, duration: 1.2, ease: "power4.in", onComplete: () => {
         console.log('start complete', from, to)
-        console.log(this.GL.camera.position.z)
+        if (to === 1) {
+          this.applyEvents()
+        }
+        if (from === 1) {
+          this.removeEvents()
+        }
         this.setStickEffect()
         this.part = to
         this.GL.part = to
         this.options.updateNavPart(to)
-        if(to === 2){
+        if (to === 2) {
           setTimeout(() => {
             this.options.onPart3()
           }, 500)
@@ -353,7 +367,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
     this.GL.scheduleLoop();
     this.options.startTransitionPage(from, to)
     this.zoom = gsap.timeline()
-    if(from === 2){
+    if (from === 2) {
       this.options.onHidePart3()
     }
     this.zoom.to(this.GL.camera.position, {
@@ -362,14 +376,17 @@ Showcase.prototype.startMoveToSection = function (from, to) {
     this.zoom.to(this.GL.camera.position, {
       z: this.data[to][0].position + 6, duration: 1.2, ease: "power4.in", onComplete: () => {
         console.log('start complete', from, to)
+        if (to === 1) {
+          this.applyEvents()
+        }
+        if (from === 1) {
+          this.removeEvents()
+        }
         this.setStickEffect()
         this.options.updateNavPart(to)
         this.part = to
         this.GL.part = to
         this.inTransition = false
-        // if (this.GLStickPop) {
-        //   this.GLStickPop.stop();
-        // }
       }
     })
 
@@ -402,7 +419,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
 
 Showcase.prototype.endMoveToSection = function (from, to) {
   // if(from < to){
-  if (to < 0 || to > this.data.length - 1 || from === to)  {
+  if (to < 0 || to > this.data.length - 1 || from === to) {
     return
   }
   if (this.zoom) {
@@ -411,7 +428,7 @@ Showcase.prototype.endMoveToSection = function (from, to) {
   }
   this.options.endTransitionPage(from, to)
   this.GL.scheduleLoop();
-  if(from === 2){
+  if (from === 2) {
     this.options.onPart3()
   }
   this.zoom = gsap.timeline()
@@ -438,12 +455,12 @@ Showcase.prototype.endMoveToSection = function (from, to) {
   ).start({
     update: values => {
       this.waveIntensity = values[0];
-      if(this.inTransition){
+      if (this.inTransition) {
         this.GL.updateStickEffect({
-        waveIntensity: this.waveIntensity,
-        part: this.part,
-        inTransition: this.inTransition
-      });
+          waveIntensity: this.waveIntensity,
+          part: this.part,
+          inTransition: this.inTransition
+        });
       }
     },
   });

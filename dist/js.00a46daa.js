@@ -42494,14 +42494,18 @@ var Grab = /*#__PURE__*/function () {
       initial: 0
     };
     this.listen("mousedown", this.onMouseDown.bind(this));
-    this.listen("mousemove", this.onMouseMove.bind(this));
     this.listen("mouseup", this.onMouseUp.bind(this));
     this.listen("touchstart", this.onMouseDown.bind(this), true);
-    this.listen("touchmove", this.onMouseMove.bind(this), true);
     this.listen(["touchend", "touchcancel"], this.onMouseUp.bind(this), true);
   }
 
   _createClass(Grab, [{
+    key: "addListeners",
+    value: function addListeners() {
+      this.listen("mousemove", this.onMouseMove.bind(this));
+      this.listen("touchmove", this.onMouseMove.bind(this), true);
+    }
+  }, {
     key: "listen",
     value: function listen(events, grabListener, isTouch) {
       var mouseListener = function mouseListener(ev) {
@@ -42533,6 +42537,43 @@ var Grab = /*#__PURE__*/function () {
         }
       } else {
         document.querySelector("main").addEventListener(events, listener, true);
+      }
+    }
+  }, {
+    key: "removeListeners",
+    value: function removeListeners() {
+      this.remove("mousemove", this.onMouseMove.bind(this));
+      this.remove("touchmove", this.onMouseMove.bind(this), true);
+    }
+  }, {
+    key: "remove",
+    value: function remove(events, grabListener, isTouch) {
+      var mouseListener = function mouseListener(ev) {
+        if (ev.type === "mouseout" && ev.relatedTarget != null) return;
+        grabListener({
+          y: ev.clientY
+        });
+      };
+
+      var touchListener = function touchListener(ev) {
+        ev.preventDefault();
+        grabListener({
+          y: ev.targetTouches[0] ? ev.targetTouches[0].clientY : null
+        });
+      };
+
+      var listener = mouseListener;
+
+      if (isTouch) {
+        listener = touchListener;
+      }
+
+      if (Array.isArray(events)) {
+        for (var i = 0; i < events.length; i++) {
+          document.querySelector("main").removeEventListener(events[i], listener, true);
+        }
+      } else {
+        document.querySelector("main").removeEventListener(events, listener, true);
       }
     }
   }, {
@@ -48275,6 +48316,14 @@ function Showcase(data) {
   });
 }
 
+Showcase.prototype.applyEvents = function () {
+  this.grab.addListeners();
+};
+
+Showcase.prototype.removeEvents = function () {
+  this.grab.removeListeners();
+};
+
 Showcase.prototype.calculateTotalEntries = function (data) {
   var total = 0;
 
@@ -48532,7 +48581,14 @@ Showcase.prototype.startMoveToSection = function (from, to) {
       ease: "power4.in",
       onComplete: function onComplete() {
         console.log('start complete', from, to);
-        console.log(_this4.GL.camera.position.z);
+
+        if (to === 1) {
+          _this4.applyEvents();
+        }
+
+        if (from === 1) {
+          _this4.removeEvents();
+        }
 
         _this4.setStickEffect();
 
@@ -48599,15 +48655,21 @@ Showcase.prototype.startMoveToSection = function (from, to) {
       onComplete: function onComplete() {
         console.log('start complete', from, to);
 
+        if (to === 1) {
+          _this4.applyEvents();
+        }
+
+        if (from === 1) {
+          _this4.removeEvents();
+        }
+
         _this4.setStickEffect();
 
         _this4.options.updateNavPart(to);
 
         _this4.part = to;
         _this4.GL.part = to;
-        _this4.inTransition = false; // if (this.GLStickPop) {
-        //   this.GLStickPop.stop();
-        // }
+        _this4.inTransition = false;
       }
     });
 

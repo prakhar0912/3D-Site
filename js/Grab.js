@@ -9,15 +9,19 @@ class Grab {
       current: 0,
       initial: 0
     };
-
     this.listen("mousedown", this.onMouseDown.bind(this));
-    this.listen("mousemove", this.onMouseMove.bind(this));
     this.listen("mouseup", this.onMouseUp.bind(this));
 
     this.listen("touchstart", this.onMouseDown.bind(this), true);
-    this.listen("touchmove", this.onMouseMove.bind(this), true);
     this.listen(["touchend", "touchcancel"], this.onMouseUp.bind(this), true);
+
   }
+
+  addListeners(){
+    this.listen("mousemove", this.onMouseMove.bind(this));
+    this.listen("touchmove", this.onMouseMove.bind(this), true);
+  }
+
   listen(events, grabListener, isTouch) {
     let mouseListener = function (ev) {
       if (ev.type === "mouseout" && ev.relatedTarget != null) return;
@@ -47,6 +51,40 @@ class Grab {
       document.querySelector("main").addEventListener(events, listener, true);
     }
   }
+
+  removeListeners() {
+    this.remove("mousemove", this.onMouseMove.bind(this));
+    this.remove("touchmove", this.onMouseMove.bind(this), true);
+  }
+
+  remove(events, grabListener, isTouch) {
+    let mouseListener = function (ev) {
+      if (ev.type === "mouseout" && ev.relatedTarget != null) return;
+      grabListener({
+        y: ev.clientY
+      });
+    };
+
+    let touchListener = function (ev) {
+      ev.preventDefault();
+      grabListener({
+        y: ev.targetTouches[0] ? ev.targetTouches[0].clientY : null
+      });
+    };
+    let listener = mouseListener;
+    if (isTouch) {
+      listener = touchListener;
+    }
+    if (Array.isArray(events)) {
+      for (let i = 0; i < events.length; i++) {
+        document.querySelector("main").removeEventListener(events[i], listener, true);
+      }
+    } else {
+      document.querySelector("main").removeEventListener(events, listener, true);
+    }
+  }
+
+
 
   onMouseDown(position) {
     this.scroll.inital = this.scroll.current;
