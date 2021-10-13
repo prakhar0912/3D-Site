@@ -531,8 +531,30 @@ section {
   grid-area: e;
 }
 
+section:nth-of-type(3)>div>img {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: auto;
+}
+
 .hide {
   display: none;
+}
+
+
+@media (max-width: 1250px){
+  .img-container > img{
+    display: block;
+    width: 80%;
+    margin: auto;
+  }
+  .cContent{
+    align-items: center;
+  }
+  .right{
+    justify-self: right;
+  }
 }
 
 @media (max-width: 800px) {
@@ -652,10 +674,6 @@ section {
   }
   .cTwo>p:nth-of-type(1), .cTwo>h1:nth-of-type(1) {
     margin-left: 10%;
-  }
-  section:nth-of-type(3)>div>img {
-    width: 100%;
-    margin: auto;
   }
   .right {
     display: none;
