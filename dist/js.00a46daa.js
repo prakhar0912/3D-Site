@@ -49242,7 +49242,7 @@ var Slides = /*#__PURE__*/function () {
         onComplete: function onComplete() {
           desc.style.height = 'auto';
           _this4.slides[2][0].style.overflow = 'auto';
-          _this4.slides[2][0].style.pointerEvents = 'all';
+          _this4.slides[2][0].style.pointerEvents = 'all'; // this.slides[2][0].classList.add('show-desc')
         }
       });
       tl.to(desc, {
@@ -49267,7 +49267,7 @@ var Slides = /*#__PURE__*/function () {
         height: 0,
         onComplete: function onComplete() {
           _this5.slides[2][0].style.pointerEvents = 'none';
-          _this5.slides[2][0].style.overflow = 'hidden';
+          _this5.slides[2][0].style.overflow = 'hidden'; // this.slides[2][0].classList.remove('show-desc')
         }
       });
       tl.to(header, {
@@ -49287,11 +49287,15 @@ var Slides = /*#__PURE__*/function () {
       var tl = _gsap.default.timeline();
 
       tl.to(header, {
-        height: 0,
         duration: 0.5,
         opacity: 0,
+        y: -100,
         onComplete: function onComplete() {
           desc.style.height = 'auto';
+          header.style.height = '0';
+
+          _this6.slides[_this6.part][_this6.currentIdx].classList.add('show-desc');
+
           _this6.slides[_this6.part][_this6.currentIdx].style.overflow = 'auto';
           _this6.slides[_this6.part][_this6.currentIdx].style.pointerEvents = 'all';
         }
@@ -49309,6 +49313,7 @@ var Slides = /*#__PURE__*/function () {
 
       var desc = this.slides[this.part][this.currentIdx].querySelector('.slide-desc');
       var header = this.slides[this.part][this.currentIdx].querySelectorAll('.slide-header');
+      this.slides[this.part][this.currentIdx].classList.remove('show-desc');
 
       var tl = _gsap.default.timeline();
 
@@ -49324,6 +49329,7 @@ var Slides = /*#__PURE__*/function () {
       tl.to(header, {
         opacity: 1,
         height: "auto",
+        y: 0,
         duration: 1
       });
     }
@@ -49350,12 +49356,14 @@ var Slides = /*#__PURE__*/function () {
   }, {
     key: "onMove",
     value: function onMove(indexFloat) {
-      this.masterSlides[this.part].style.transform = "translateY(".concat(indexFloat * 100, "vh)");
+      if (this.part === 1) {
+        this.masterSlides[this.part].style.transform = "translateY(".concat(indexFloat * 50, "vh)");
+      }
     }
   }, {
     key: "appear",
     value: function appear() {
-      this.container.classList.add("scrolling");
+      this.masterSlides[1].classList.add("scrolling");
       this.slides[this.part][this.currentIdx].classList.remove("show-meta");
     }
   }, {
@@ -49364,7 +49372,7 @@ var Slides = /*#__PURE__*/function () {
       //this.currentIdx = activeIndex;
       if (this.part === 1) {
         this.slides[1][this.currentIdx].classList.add("show-meta");
-        this.container.classList.remove("scrolling");
+        this.masterSlides[1].classList.remove("scrolling");
 
         for (var index = 0; index < this.data[1].length; index++) {
           if (index > activeIndex) {
@@ -50045,7 +50053,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45763" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35299" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -155,6 +155,7 @@ Showcase.prototype.onGrabMove = function (scroll) {
     if (this.inTab || this.inTransition) {
       return
     }
+    
     this.index.target = clamp(
       this.index.initial + scroll.delta / this.index.scrollSize,
       -this.data[1].length + 0.51,

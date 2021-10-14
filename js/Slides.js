@@ -125,6 +125,7 @@ class Slides {
         desc.style.height = 'auto'
         this.slides[2][0].style.overflow = 'auto'
         this.slides[2][0].style.pointerEvents = 'all'
+        // this.slides[2][0].classList.add('show-desc')
       }
     })
     tl.to(desc, {
@@ -140,6 +141,7 @@ class Slides {
       opacity: 0, duration: 0.3, height: 0, onComplete: () => {
         this.slides[2][0].style.pointerEvents = 'none'
         this.slides[2][0].style.overflow = 'hidden'
+        // this.slides[2][0].classList.remove('show-desc')
       }
     })
     tl.to(header, { opacity: 1, height: "auto", duration: 1, })
@@ -151,8 +153,10 @@ class Slides {
     let desc = this.slides[this.part][this.currentIdx].querySelector('.slide-desc')
     let tl = gsap.timeline()
     tl.to(header, {
-      height: 0, duration: 0.5, opacity: 0, onComplete: () => {
+       duration: 0.5, opacity: 0, y: -100, onComplete: () => {
         desc.style.height = 'auto'
+        header.style.height = '0'
+        this.slides[this.part][this.currentIdx].classList.add('show-desc')
         this.slides[this.part][this.currentIdx].style.overflow = 'auto'
         this.slides[this.part][this.currentIdx].style.pointerEvents = 'all'
       }
@@ -164,6 +168,7 @@ class Slides {
   hideDesc(activeIndex) {
     let desc = this.slides[this.part][this.currentIdx].querySelector('.slide-desc')
     let header = this.slides[this.part][this.currentIdx].querySelectorAll('.slide-header')
+    this.slides[this.part][this.currentIdx].classList.remove('show-desc')
     let tl = gsap.timeline()
     tl.to(desc, {
       opacity: 0, duration: 0.3, height: 0, onComplete: () => {
@@ -171,7 +176,7 @@ class Slides {
         this.slides[this.part][this.currentIdx].style.overflow = 'hidden'
       }
     })
-    tl.to(header, { opacity: 1, height: "auto", duration: 1, })
+    tl.to(header, { opacity: 1, height: "auto", y: 0, duration: 1, })
   }
   onActiveIndexChange(activeIndex) {
     this.currentIdx = activeIndex;
@@ -191,17 +196,19 @@ class Slides {
     }
   }
   onMove(indexFloat) {
-    this.masterSlides[this.part].style.transform = `translateY(${(indexFloat * 100)}vh)`;
+    if(this.part === 1){
+      this.masterSlides[this.part].style.transform = `translateY(${((indexFloat * 50))}vh)`;
+    }
   }
   appear() {
-    this.container.classList.add("scrolling");
+    this.masterSlides[1].classList.add("scrolling");
     this.slides[this.part][this.currentIdx].classList.remove("show-meta");
   }
   disperse(activeIndex) {
     //this.currentIdx = activeIndex;
     if (this.part === 1) {
       this.slides[1][this.currentIdx].classList.add("show-meta");
-      this.container.classList.remove("scrolling");
+      this.masterSlides[1].classList.remove("scrolling");
       for (let index = 0; index < this.data[1].length; index++) {
         if (index > activeIndex) {
           this.slides[1][index].classList.add("next");
