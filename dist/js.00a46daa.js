@@ -49345,7 +49345,7 @@ var Slides = /*#__PURE__*/function () {
         } else {
           if (activeIndex > i) {
             this.slides[1][i].classList.remove("next");
-            this.slides[this.part][i].classList.add("prev");
+            this.slides[1][i].classList.add("prev");
           } else {
             this.slides[1][i].classList.add("next");
             this.slides[1][i].classList.remove("prev");
