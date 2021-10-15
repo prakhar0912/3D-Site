@@ -49930,9 +49930,9 @@ var Frame = /*#__PURE__*/function () {
       this.sectionShown = true;
       this.pauseSectionActivity = false;
       this.mobile = false;
-      this.addNextPrevListeners();
       this.addSectionListeners();
     } else {
+      this.addNextPrevListeners();
       this.mobile = true;
     }
   }

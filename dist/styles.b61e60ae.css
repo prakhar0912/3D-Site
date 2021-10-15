@@ -592,6 +592,9 @@ section:nth-of-type(3)>div>img {
   display: none;
 }
 
+.mobile-hide{
+  display: none;
+}
 
 @media (max-width: 1250px){
   .img-container > img{
@@ -736,6 +739,9 @@ section:nth-of-type(3)>div>img {
   .current-section{
     display: none;
   }
+  .mobile-hide{
+    display: block;
+  } 
 }
 
 @media (max-height: 850px) and (min-width: 800px) {
