@@ -326,7 +326,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
         this.setStickEffect()
         this.part = to
         this.GL.part = to
-        this.options.updateNavPart(to)
+        this.options.updatePart(to)
         if (to === 2) {
           setTimeout(() => {
             this.options.onPart3()
@@ -386,7 +386,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
           this.removeEvents()
         }
         this.setStickEffect()
-        this.options.updateNavPart(to)
+        this.options.updatePart(to)
         this.part = to
         this.GL.part = to
         this.inTransition = false

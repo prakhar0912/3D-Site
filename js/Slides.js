@@ -128,7 +128,6 @@ class Slides {
         desc.style.height = 'auto'
         this.slides[2][0].style.overflow = 'auto'
         this.slides[2][0].style.pointerEvents = 'all'
-        // this.slides[2][0].classList.add('show-desc')
       }
     })
     this.tl3.to(desc, {
@@ -147,7 +146,6 @@ class Slides {
       opacity: 0, duration: 0.3, height: 0, onComplete: () => {
         this.slides[2][0].style.pointerEvents = 'none'
         this.slides[2][0].style.overflow = 'hidden'
-        // this.slides[2][0].classList.remove('show-desc')
       }
     })
     this.tl3.to(header, { opacity: 1, height: "auto", duration: 1, })
