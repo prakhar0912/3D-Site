@@ -117,10 +117,13 @@ class Slides {
   }
 
   showPart3() {
+    if(this.tl3){
+      this.tl3.kill()
+    }
     let header = this.slides[2][0].querySelector('.slide-header')
     let desc = this.slides[2][0].querySelector('.slide-desc')
-    let tl = gsap.timeline()
-    tl.to(header, {
+    this.tl3 = gsap.timeline()
+    this.tl3.to(header, {
       height: 0, duration: 0.5, opacity: 0, onComplete: () => {
         desc.style.height = 'auto'
         this.slides[2][0].style.overflow = 'auto'
@@ -128,23 +131,26 @@ class Slides {
         // this.slides[2][0].classList.add('show-desc')
       }
     })
-    tl.to(desc, {
+    this.tl3.to(desc, {
       opacity: 1, duration: 0.1, height: 'auto'
     })
   }
 
   hidePart3() {
+    if(this.tl3){
+      this.tl3.kill()
+    }
     let desc = this.slides[2][0].querySelector('.slide-desc')
     let header = this.slides[2][0].querySelectorAll('.slide-header')
-    let tl = gsap.timeline()
-    tl.to(desc, {
+    this.tl3 = gsap.timeline()
+    this.tl3.to(desc, {
       opacity: 0, duration: 0.3, height: 0, onComplete: () => {
         this.slides[2][0].style.pointerEvents = 'none'
         this.slides[2][0].style.overflow = 'hidden'
         // this.slides[2][0].classList.remove('show-desc')
       }
     })
-    tl.to(header, { opacity: 1, height: "auto", duration: 1, })
+    this.tl3.to(header, { opacity: 1, height: "auto", duration: 1, })
   }
 
 
