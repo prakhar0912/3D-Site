@@ -226,6 +226,8 @@ canvas {
   transition: opacity 1500ms 300ms cubic-bezier(0.2, 1, 0.3, 1);
   width: 70%;
   overflow: hidden;
+  z-index: 14;
+
 }
 
 .desc-container {
@@ -657,6 +659,21 @@ section:nth-of-type(3)>div>img {
   body{
     height: calc(var(--vh, 1vh) * 100);
   }
+  main{
+    height: calc(var(--vh, 1vh) * 100);
+  }
+  .slide{
+    height: calc(var(--vh, 1vh) * 100);
+  }
+
+  .nav-container{
+    height: calc(var(--vh, 1vh) * 100);
+  }
+
+  .master-slide-container:nth-of-type(2) > .slide.show-desc{
+    height: calc(var(--vh, 1vh) * 100);
+  }
+
   .slide-title>p:nth-of-type(1) {
     /* font-family: mortendBold; */
     font-size: 4rem;
@@ -670,11 +687,12 @@ section:nth-of-type(3)>div>img {
   }
   .slide-more {
     margin: 0 auto;
-    margin-top: 50px;
+    margin-top: 20px;
   }
   .frame {
     padding: 0;
     pointer-events: none;
+    height: calc(var(--vh, 1vh) * 100);
   }
   .left {
     left: 0px;
@@ -721,7 +739,7 @@ section:nth-of-type(3)>div>img {
 
   .frame__tip{
     font-size: 1.2rem;
-    bottom: 70px;
+    bottom: 20px;
   }
   .mov>button {
     pointer-events: all;

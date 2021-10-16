@@ -50020,6 +50020,38 @@ var Frame = /*#__PURE__*/function () {
   }
 
   _createClass(Frame, [{
+    key: "hideNextPrev",
+    value: function hideNextPrev() {
+      _gsap.default.to(".mov", {
+        opacity: 0,
+        pointerEvents: 'none'
+      });
+    }
+  }, {
+    key: "showNextPrev",
+    value: function showNextPrev() {
+      _gsap.default.to(".mov", {
+        opacity: 1,
+        pointerEvents: 'all'
+      });
+    }
+  }, {
+    key: "hideHint",
+    value: function hideHint() {
+      _gsap.default.to(this.hintContainer, {
+        opacity: 0,
+        pointerEvents: 'none'
+      });
+    }
+  }, {
+    key: "showHint",
+    value: function showHint() {
+      _gsap.default.to(this.hintContainer, {
+        opacity: 1,
+        pointerEvents: 'all'
+      });
+    }
+  }, {
     key: "addSectionListeners",
     value: function addSectionListeners() {
       var _this = this;
@@ -50237,9 +50269,13 @@ var cursor = new _Cursor.Cursor(document.querySelector(".cursor"), mobileDevice)
 var slides = new _Slides.Slides(_slidesData.slidesData, {
   onTitleClickStart: function onTitleClickStart() {
     showcase.titleClickStart();
+    frame.hideNextPrev();
+    frame.hideHint();
     showcase.inTab = true;
   },
   onTitleClickEnd: function onTitleClickEnd() {
+    frame.showNextPrev();
+    frame.showHint();
     showcase.titleClickEnd();
   }
 });
@@ -50294,9 +50330,11 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
     }, 1000);
   },
   onPart3: function onPart3() {
+    frame.hideHint();
     slides.showPart3();
   },
   onHidePart3: function onHidePart3() {
+    frame.showHint();
     slides.hidePart3();
   },
   onActiveIndexChange: function onActiveIndexChange(activeIndex) {
@@ -50367,7 +50405,6 @@ window.addEventListener("resize", function () {
 window.addEventListener("mousemove", function (ev) {
   showcase.onMouseMove(ev);
 });
-console.log(mobileDevice);
 
 if (mobileDevice) {
   var nice = window.innerHeight * 0.01;

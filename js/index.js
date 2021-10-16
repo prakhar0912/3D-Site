@@ -20,9 +20,13 @@ const cursor = new Cursor(document.querySelector(".cursor"), mobileDevice);
 const slides = new Slides(slidesData, {
   onTitleClickStart: () => {
     showcase.titleClickStart()
+    frame.hideNextPrev()
+    frame.hideHint()
     showcase.inTab = true
   },
   onTitleClickEnd: () => {
+    frame.showNextPrev()
+    frame.showHint()
     showcase.titleClickEnd()
   },
 });
@@ -86,9 +90,11 @@ const showcase = new Showcase(slidesData, {
     }, 1000)
   },
   onPart3: () => {
+    frame.hideHint()
     slides.showPart3()
   },
   onHidePart3: () => {
+    frame.showHint()
     slides.hidePart3()
   },
   onActiveIndexChange: activeIndex => {
@@ -156,7 +162,6 @@ window.addEventListener("mousemove", function (ev) {
   showcase.onMouseMove(ev);
 });
 
-console.log(mobileDevice)
 
 if (mobileDevice) {
   let nice = window.innerHeight * 0.01;

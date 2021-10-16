@@ -22,6 +22,30 @@ class Frame {
         this.blowHint()
     }
 
+    hideNextPrev(){
+        gsap.to(".mov", {
+            opacity: 0, pointerEvents: 'none'
+        })
+    }
+
+    showNextPrev() {
+        gsap.to(".mov", {
+            opacity: 1, pointerEvents: 'all'
+        })
+    }
+
+    hideHint(){
+        gsap.to(this.hintContainer, {
+            opacity: 0, pointerEvents: 'none'
+        })
+    }
+
+    showHint(){
+        gsap.to(this.hintContainer, {
+            opacity: 1, pointerEvents: 'all'
+        })
+    }
+
     addSectionListeners() {
         this.sectionContainer.addEventListener('mouseenter', () => {
             this.showSection()
