@@ -26,6 +26,7 @@ class Cursor {
             this.DOM.circle = this.DOM.el.querySelector('.cursor__inner--circle');
             this.hintContainer = this.DOM.el.querySelector('.cursor-hint');
             this.bounds = { dot: this.DOM.dot.getBoundingClientRect(), circle: this.DOM.circle.getBoundingClientRect() };
+            this.triangles = this.DOM.el.querySelectorAll('.arrow')
             this.scale = 1;
             this.opacity = 1;
             this.mousePos = { x: 0, y: 0 };
@@ -60,6 +61,20 @@ class Cursor {
             y: this.lastMousePos.dot.y
         })
         requestAnimationFrame(() => this.render())
+    }
+
+    showTriangle() {
+        gsap.to(this.triangles, {
+            display: 'block', opacity: 1, duration: 0.5
+        })
+    }
+
+    hideTriangle() {
+        gsap.to(this.triangles, {
+            opacity: 0, duration: 0.5, onComplete: () => {
+                gsap.set(this.triangles, {display: 'none'})
+            }
+        })
     }
 
     killHint() {

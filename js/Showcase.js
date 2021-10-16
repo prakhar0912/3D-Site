@@ -320,7 +320,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
           this.applyEvents()
         }
         if (from === 1) {
-          console.log('okayy')
+          this.options.hideTriangle()
           this.removeEvents()
         }
         this.setStickEffect()
@@ -520,6 +520,7 @@ Showcase.prototype.onGrabStart = function () {
     if (this.inTab || this.inTransition) {
       return
     }
+    this.options.showTriangle()
     if (this.options.onZoomOutStart) {
       this.options.onZoomOutStart({
         activeIndex: this.index.active
@@ -595,6 +596,7 @@ Showcase.prototype.onGrabEnd = function () {
     if (this.inTab || this.inTransition) {
       return
     }
+    this.options.hideTriangle()
     if (this.options.onFullscreenStart) {
       this.options.onFullscreenStart({
         activeIndex: this.index.active

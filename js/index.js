@@ -84,6 +84,9 @@ const frame = new Frame({
 
 const showcase = new Showcase(slidesData, {
   killHint: () => {
+    if(showcase.part === 1){
+      cursor.killHint()
+    }
     setTimeout(() => {
       frame.killBlow()
       cursor.killHint()
@@ -97,6 +100,12 @@ const showcase = new Showcase(slidesData, {
     frame.showHint()
     slides.hidePart3()
   },
+  showTriangle: () => {
+    cursor.showTriangle()
+  },
+  hideTriangle: () => {
+    cursor.hideTriangle()
+  },
   onActiveIndexChange: activeIndex => {
     slides.onActiveIndexChange(activeIndex);
   },
@@ -104,21 +113,21 @@ const showcase = new Showcase(slidesData, {
     slides.onMove(index);
   },
   onZoomOutStart: ({ activeIndex }) => {
-    cursor.enter();
+    // cursor.enter();
     slides.appear();
   },
   onClickStart: ({ activeIndex }) => {
-    cursor.enter();
+    // cursor.enter();
     slides.disperse(activeIndex)
   },
   onClickEnd: ({ activeIndex }) => {
-    cursor.leave();
+    // cursor.leave();
     slides.disperse(activeIndex)
     showcase.inTab = false
   },
   onZoomOutFinish: ({ activeIndex }) => { },
   onFullscreenStart: ({ activeIndex }) => {
-    cursor.leave();
+    // cursor.leave();
     slides.disperse(activeIndex);
   },
   onFullscreenFinish: ({ activeIndex }) => { },

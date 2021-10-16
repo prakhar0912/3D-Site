@@ -48602,7 +48602,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
         }
 
         if (from === 1) {
-          console.log('okayy');
+          _this4.options.hideTriangle();
 
           _this4.removeEvents();
         }
@@ -48827,6 +48827,8 @@ Showcase.prototype.onGrabStart = function () {
       return;
     }
 
+    this.options.showTriangle();
+
     if (this.options.onZoomOutStart) {
       this.options.onZoomOutStart({
         activeIndex: this.index.active
@@ -48901,6 +48903,8 @@ Showcase.prototype.onGrabEnd = function () {
     if (this.inTab || this.inTransition) {
       return;
     }
+
+    this.options.hideTriangle();
 
     if (this.options.onFullscreenStart) {
       this.options.onFullscreenStart({
@@ -49460,6 +49464,7 @@ var Cursor = /*#__PURE__*/function () {
         dot: this.DOM.dot.getBoundingClientRect(),
         circle: this.DOM.circle.getBoundingClientRect()
       };
+      this.triangles = this.DOM.el.querySelectorAll('.arrow');
       this.scale = 1;
       this.opacity = 1;
       this.mousePos = {
@@ -49519,9 +49524,33 @@ var Cursor = /*#__PURE__*/function () {
       });
     }
   }, {
+    key: "showTriangle",
+    value: function showTriangle() {
+      _gsap.default.to(this.triangles, {
+        display: 'block',
+        opacity: 1,
+        duration: 0.5
+      });
+    }
+  }, {
+    key: "hideTriangle",
+    value: function hideTriangle() {
+      var _this4 = this;
+
+      _gsap.default.to(this.triangles, {
+        opacity: 0,
+        duration: 0.5,
+        onComplete: function onComplete() {
+          _gsap.default.set(_this4.triangles, {
+            display: 'none'
+          });
+        }
+      });
+    }
+  }, {
     key: "killHint",
     value: function killHint() {
-      var _this4 = this;
+      var _this5 = this;
 
       if (this.touch) return;
 
@@ -49532,7 +49561,7 @@ var Cursor = /*#__PURE__*/function () {
           scale: 1,
           duration: 0.3,
           onComplete: function onComplete() {
-            _this4.hintContainer.style.display = 'none';
+            _this5.hintContainer.style.display = 'none';
           }
         });
       }
@@ -49540,7 +49569,7 @@ var Cursor = /*#__PURE__*/function () {
   }, {
     key: "blowHint",
     value: function blowHint() {
-      var _this5 = this;
+      var _this6 = this;
 
       if (this.touch) return;
       this.killBlow();
@@ -49548,7 +49577,7 @@ var Cursor = /*#__PURE__*/function () {
       this.blowAnime = _gsap.default.timeline({
         repeat: 2,
         onComplete: function onComplete() {
-          _this5.hintContainer.style.display = 'none';
+          _this6.hintContainer.style.display = 'none';
         }
       });
       this.blowAnime.to(this.hintContainer, {
@@ -49957,20 +49986,20 @@ var slidesData = [[{
   position: 10
 }], [{
   image: _.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>KORaPUT</p>\n              <p>Coffee</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      "),
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>KORaPUT</p>\n              <p>Coffee</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      "),
   position: 0
 }, {
   image: _2.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>Sundowner</p>\n              <p>Cafe</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_2.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>Sundowner</p>\n              <p>Cafe</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_2.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
 }, {
   image: _3.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Cordwainers</p>\n              <p class=''>Marketing</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_3.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Cordwainers</p>\n              <p class=''>Marketing</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_3.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
 }, {
   image: _4.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Silver Sands</p>\n              <p class=''>Interior Design</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_4.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Silver Sands</p>\n              <p class=''>Interior Design</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_4.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
 }, {
   image: _5.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title long\">\n              <p class=\"\">Adisha</p>\n              <p class=\"\">Branding</p>\n            </div>\n            <a class=\"slide-more\">Click and Hold!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_5.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title long\">\n              <p class=\"\">Adisha</p>\n              <p class=\"\">Branding</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_5.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
 }], [{
   image: _contactBack.default,
   content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n          </div>\n          <div class=\"slide-desc slide-desc-last\">\n            <div class=\"contact-container\">\n                <section>\n                    <div class=\"cTitle cOne\">\n                        <div>\n                            <p>1</p>\n                        </div>\n                        <p>OUR SERVICES</p>\n                        <h1>HOW WE</h1>\n                        <h1>MAY HELP YOU</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We deliver logical campaigns made of stunning visuals!\n                            </h1>\n                            <p>\n                              We are a team of creative experts communicating modern day solutions with intricate designs & proven strategies. \n                            </p>\n                            <h1>\n                              Million Dreams - Million Designs\n                            </h1>\n                            <p>\n                              We love it when we create something that changes your story and this drives us further to create awesomeness every day. Have a look at what we have created recently.\n                            </p>\n                            <h1>\n                              We create meaningful experiences for you, your brand & its customers.\n                            </h1>\n                            <p>\n                              We are seasoned experts in crafting purpose-driven experiences, scaleable strategies and visual drama for your audience. We can help you and your brand get the audience which it oh! so rightly deserves.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cTwo\">\n                        <div>\n                            <p>2</p>\n                        </div>\n                        <p>OUR TEAM</p>\n                        <h1>YOU WILL BE</h1>\n                        <h1>IN SAFE HANDS</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We are an Award-Winning Global Design Studio\n                            </h1>\n                            <p>\n                              Working with clients from all over the world and building successful brands with empathy and creativity with our comprehensive range of services\n                            </p>\n                            <h1>\n                              Branding & Strategy\n                            </h1>\n                            <p>\n                              Building the foundations of a brand and making it equipped with a visual language for sustainability.\n                            </p>\n                            <h1>\n                              Marketing & Promotions\n                            </h1>\n                            <p>\n                              Helping a brand reach their core consumers and accelerating the flow of revenue.\n                            </p>\n                            <h1>\n                              Customer Experience\n                            </h1>\n                            <p>\n                              Developing the customer-brand relationship by building strategy, delivering interactions and more.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contactUs.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cThree\">\n                        <div>\n                            <p>3</p>\n                        </div>\n                        <p>OUR CLIENTS</p>\n                        <h1>PEOPLE WHO</h1>\n                        <h1>TRUST US</h1>\n                    </div>\n                    <div>\n                        <img src=\"").concat(_clients.default, "\" alt=\"\">\n                    </div>\n                </section>\n                <section class=\"contacts\">\n                  <div class=\"contacts-cont\">\n                    <h2>Contact</h2>\n                    <div>\n                        <p>514 656-0976</p>\n                        <p>info@whitepencil.com</p>\n                    </div>\n                    <h2>Address</h2>\n                    <div>\n                      <p>4030, rue Saint-Ambroise, suite 105</p>\n                      <p>Montr\xE9al (Qu\xE9bec) H4C 2C7</p>\n                      <p>Canada</p>\n                    </div>\n                    <div class=\"email\">\n                        <h2>Write to us</h2>\n                        <p>Email</p>\n                    </div>\n                  </div>\n                </section>\n            </div>\n          </div>\n        </div>\n      "),
@@ -50324,6 +50353,10 @@ var frame = new _Frame.Frame({
 }, mobileDevice);
 var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
   killHint: function killHint() {
+    if (showcase.part === 1) {
+      cursor.killHint();
+    }
+
     setTimeout(function () {
       frame.killBlow();
       cursor.killHint();
@@ -50337,6 +50370,12 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
     frame.showHint();
     slides.hidePart3();
   },
+  showTriangle: function showTriangle() {
+    cursor.showTriangle();
+  },
+  hideTriangle: function hideTriangle() {
+    cursor.hideTriangle();
+  },
   onActiveIndexChange: function onActiveIndexChange(activeIndex) {
     slides.onActiveIndexChange(activeIndex);
   },
@@ -50345,17 +50384,17 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
   },
   onZoomOutStart: function onZoomOutStart(_ref) {
     var activeIndex = _ref.activeIndex;
-    cursor.enter();
+    // cursor.enter();
     slides.appear();
   },
   onClickStart: function onClickStart(_ref2) {
     var activeIndex = _ref2.activeIndex;
-    cursor.enter();
+    // cursor.enter();
     slides.disperse(activeIndex);
   },
   onClickEnd: function onClickEnd(_ref3) {
     var activeIndex = _ref3.activeIndex;
-    cursor.leave();
+    // cursor.leave();
     slides.disperse(activeIndex);
     showcase.inTab = false;
   },
@@ -50364,7 +50403,7 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
   },
   onFullscreenStart: function onFullscreenStart(_ref5) {
     var activeIndex = _ref5.activeIndex;
-    cursor.leave();
+    // cursor.leave();
     slides.disperse(activeIndex);
   },
   onFullscreenFinish: function onFullscreenFinish(_ref6) {

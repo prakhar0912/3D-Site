@@ -41,7 +41,7 @@ const slidesData = [
               <p>KORaPUT</p>
               <p>Coffee</p>
             </div>
-            <a class="slide-more">Click and Hold!</a>
+            <a class="slide-more">Click to Know More!</a>
           </div>
           <div class="slide-desc">
             <div class="desc-container">
@@ -71,7 +71,7 @@ const slidesData = [
               <p>Sundowner</p>
               <p>Cafe</p>
             </div>
-            <a class="slide-more">Click and Hold!</a>
+            <a class="slide-more">Click to Know More!</a>
           </div>
           <div class="slide-desc">
             <div class="desc-container">
@@ -100,7 +100,7 @@ const slidesData = [
               <p class='mobile-small'>Cordwainers</p>
               <p class=''>Marketing</p>
             </div>
-            <a class="slide-more">Click and Hold!</a>
+            <a class="slide-more">Click to Know More!</a>
           </div>
           <div class="slide-desc">
             <div class="desc-container">
@@ -129,7 +129,7 @@ const slidesData = [
               <p class='mobile-small'>Silver Sands</p>
               <p class=''>Interior Design</p>
             </div>
-            <a class="slide-more">Click and Hold!</a>
+            <a class="slide-more">Click to Know More!</a>
           </div>
           <div class="slide-desc">
             <div class="desc-container">
@@ -158,7 +158,7 @@ const slidesData = [
               <p class="">Adisha</p>
               <p class="">Branding</p>
             </div>
-            <a class="slide-more">Click and Hold!</a>
+            <a class="slide-more">Click to Know More!</a>
           </div>
           <div class="slide-desc">
             <div class="desc-container">
