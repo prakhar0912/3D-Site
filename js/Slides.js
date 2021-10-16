@@ -39,6 +39,7 @@ class Slides {
       slides.push(innerSlides)
       this.container.appendChild(Mastercontainer)
     }
+    // this.container.appendChild(createEleWithClass("div", "overlay"))
     return slides
   }
 
@@ -117,7 +118,7 @@ class Slides {
   }
 
   showPart3() {
-    if(this.tl3){
+    if (this.tl3) {
       this.tl3.kill()
     }
     let header = this.slides[2][0].querySelector('.slide-header')
@@ -136,7 +137,7 @@ class Slides {
   }
 
   hidePart3() {
-    if(this.tl3){
+    if (this.tl3) {
       this.tl3.kill()
     }
     let desc = this.slides[2][0].querySelector('.slide-desc')
@@ -157,7 +158,7 @@ class Slides {
     let desc = this.slides[this.part][this.currentIdx].querySelector('.slide-desc')
     let tl = gsap.timeline()
     tl.to(header, {
-       duration: 0.5, opacity: 0, y: -100, onComplete: () => {
+      duration: 0.5, opacity: 0, y: -100, onComplete: () => {
         desc.style.height = 'auto'
         header.style.height = '0'
         this.slides[this.part][this.currentIdx].classList.add('show-desc')
@@ -200,7 +201,7 @@ class Slides {
     }
   }
   onMove(indexFloat) {
-    if(this.part === 1){
+    if (this.part === 1) {
       this.masterSlides[this.part].style.transform = `translateY(${((indexFloat * 50))}vh)`;
     }
   }

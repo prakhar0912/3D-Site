@@ -511,6 +511,7 @@ Showcase.prototype.endMoveToSection = function (from, to) {
 
 Showcase.prototype.onGrabStart = function () {
   this.options.blowUp()
+  this.options.killHint()
   if (this.part === 0) {
     this.inTransition = true
     this.startMoveToSection(0, 1)

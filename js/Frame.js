@@ -3,8 +3,8 @@ import gsap from "gsap"
 
 class Frame {
     constructor(options, mobileDevice) {
+        this.options = options
         if (!mobileDevice) {
-            this.options = options
             this.sectionContainer = document.querySelector('.current-section')
             this.sections = this.sectionContainer.querySelectorAll('p')
             this.nonActiveSections = this.sectionContainer.querySelectorAll('p:not(.active-section)')
@@ -18,6 +18,8 @@ class Frame {
             this.addNextPrevListeners()
             this.mobile = true
         }
+        this.hintContainer = document.querySelector('.hint')
+        this.blowHint()
     }
 
     addSectionListeners() {
@@ -41,34 +43,34 @@ class Frame {
     }
 
     addNextPrevListeners() {
-        document.querySelector("button.nextbtn").addEventListener("mousedown", () => {
-            this.options.nextSection('down', false)
-        })
+        // document.querySelector("button.nextbtn").addEventListener("mousedown", () => {
+        //     this.options.nextSection('down', false)
+        // })
 
         document.querySelector("button.nextbtn").addEventListener("touchstart", () => {
             this.options.nextSection('down', true)
         })
 
-        document.querySelector("button.nextbtn").addEventListener("mouseup", () => {
-            this.options.nextSection('up', false)
-        })
+        // document.querySelector("button.nextbtn").addEventListener("mouseup", () => {
+        //     this.options.nextSection('up', false)
+        // })
 
         document.querySelector("button.nextbtn").addEventListener("touchend", () => {
             this.options.nextSection('up', true)
         })
 
-        document.querySelector("button.prevbtn").addEventListener("mousedown", () => {
-            this.options.prevSection('down', false)
-        })
+        // document.querySelector("button.prevbtn").addEventListener("mousedown", () => {
+        //     this.options.prevSection('down', false)
+        // })
 
         document.querySelector("button.prevbtn").addEventListener("touchstart", () => {
             this.options.prevSection('down', true)
         })
 
 
-        document.querySelector("button.prevbtn").addEventListener("mouseup", () => {
-            this.options.prevSection('up', false)
-        })
+        // document.querySelector("button.prevbtn").addEventListener("mouseup", () => {
+        //     this.options.prevSection('up', false)
+        // })
 
         document.querySelector("button.prevbtn").addEventListener("touchend", () => {
             this.options.prevSection('up', true)
@@ -76,10 +78,49 @@ class Frame {
     }
 
     updatePart(index) {
+        this.part = index
         if(!this.mobile){
-            this.part = index
             this.paintSection()
         }
+        this.updateHint()
+    }
+
+    killBlow() {
+        if(this.blowAnime){
+            this.blowAnime.kill()
+            gsap.to(this.hintContainer, {
+                scale: 1,
+                duration: 0.3
+            })
+        }
+    }
+
+    blowHint() {
+        this.killBlow()
+        this.blowAnime = gsap.timeline({repeat: 4})
+        this.blowAnime.to(this.hintContainer, {
+            scale: 1.5,
+            duration: 1
+        })
+        this.blowAnime.to(this.hintContainer, {
+            scale: 1,
+            duration: 1
+        })
+    }
+
+    updateHint(){
+        let hint = ''
+        if(this.part === 0){
+            hint = `Click &amp; Hold`
+        }
+        else if(this.part === 1){
+            hint = 'Click, Hold then Drag'
+        }
+        else if(this.part === 2){
+            hint = 'Scroll'
+        }
+        this.hintContainer.innerHTML = hint
+        this.blowHint()
     }
 
 
