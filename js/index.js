@@ -92,6 +92,9 @@ const showcase = new Showcase(slidesData, {
       cursor.killHint()
     }, 1000)
   },
+  hideDesc: () => {
+    slides.hideDesc()
+  },
   onPart3: () => {
     frame.hideHint()
     slides.showPart3()
@@ -123,6 +126,7 @@ const showcase = new Showcase(slidesData, {
   onClickEnd: ({ activeIndex }) => {
     // cursor.leave();
     slides.disperse(activeIndex)
+    console.log('hereaars')
     showcase.inTab = false
   },
   onZoomOutFinish: ({ activeIndex }) => { },

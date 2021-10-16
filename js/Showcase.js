@@ -302,6 +302,10 @@ Showcase.prototype.startMoveToSection = function (from, to) {
     console.log(from, to)
     return
   }
+  if(from === 1 && this.inTab){
+    this.options.hideDesc()
+    this.inTab = false
+  }
   if (to > from) {
     if (this.zoom) {
       this.zoom.kill();

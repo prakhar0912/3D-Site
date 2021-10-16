@@ -48576,6 +48576,11 @@ Showcase.prototype.startMoveToSection = function (from, to) {
     return;
   }
 
+  if (from === 1 && this.inTab) {
+    this.options.hideDesc();
+    this.inTab = false;
+  }
+
   if (to > from) {
     if (this.zoom) {
       this.zoom.kill();
@@ -49208,25 +49213,17 @@ var Slides = /*#__PURE__*/function () {
 
       this.slides[1].forEach(function (slide) {
         slide.querySelector('.slide-more').addEventListener('click', function () {
-          _this3.options.onTitleClickStart();
-
           _this3.showDesc();
         });
         slide.querySelector('.slide-more').addEventListener('touchend', function () {
-          _this3.options.onTitleClickStart();
-
           _this3.showDesc();
         });
       });
       this.slides[1].forEach(function (slide) {
         slide.querySelector('.close').addEventListener('click', function () {
-          _this3.options.onTitleClickEnd();
-
           _this3.hideDesc();
         });
         slide.querySelector('.close').addEventListener('touchend', function () {
-          _this3.options.onTitleClickEnd();
-
           _this3.hideDesc();
         });
       });
@@ -49291,6 +49288,7 @@ var Slides = /*#__PURE__*/function () {
     value: function showDesc(activeIndex) {
       var _this6 = this;
 
+      this.options.onTitleClickStart();
       var header = this.slides[this.part][this.currentIdx].querySelector('.slide-header');
       var desc = this.slides[this.part][this.currentIdx].querySelector('.slide-desc');
 
@@ -49321,6 +49319,7 @@ var Slides = /*#__PURE__*/function () {
     value: function hideDesc(activeIndex) {
       var _this7 = this;
 
+      this.options.onTitleClickEnd();
       var desc = this.slides[this.part][this.currentIdx].querySelector('.slide-desc');
       var header = this.slides[this.part][this.currentIdx].querySelectorAll('.slide-header');
       this.slides[this.part][this.currentIdx].classList.remove('show-desc');
@@ -50362,6 +50361,9 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
       cursor.killHint();
     }, 1000);
   },
+  hideDesc: function hideDesc() {
+    slides.hideDesc();
+  },
   onPart3: function onPart3() {
     frame.hideHint();
     slides.showPart3();
@@ -50396,6 +50398,7 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
     var activeIndex = _ref3.activeIndex;
     // cursor.leave();
     slides.disperse(activeIndex);
+    console.log('hereaars');
     showcase.inTab = false;
   },
   onZoomOutFinish: function onZoomOutFinish(_ref4) {

@@ -97,21 +97,17 @@ class Slides {
   addClickEvents() {
     this.slides[1].forEach((slide) => {
       slide.querySelector('.slide-more').addEventListener('click', () => {
-        this.options.onTitleClickStart()
         this.showDesc()
       })
       slide.querySelector('.slide-more').addEventListener('touchend', () => {
-        this.options.onTitleClickStart()
         this.showDesc()
       })
     })
     this.slides[1].forEach((slide) => {
       slide.querySelector('.close').addEventListener('click', () => {
-        this.options.onTitleClickEnd()
         this.hideDesc()
       })
       slide.querySelector('.close').addEventListener('touchend', () => {
-        this.options.onTitleClickEnd()
         this.hideDesc()
       })
     })
@@ -154,6 +150,7 @@ class Slides {
 
 
   showDesc(activeIndex) {
+    this.options.onTitleClickStart()
     let header = this.slides[this.part][this.currentIdx].querySelector('.slide-header')
     let desc = this.slides[this.part][this.currentIdx].querySelector('.slide-desc')
     let tl = gsap.timeline()
@@ -171,6 +168,7 @@ class Slides {
     })
   }
   hideDesc(activeIndex) {
+    this.options.onTitleClickEnd()
     let desc = this.slides[this.part][this.currentIdx].querySelector('.slide-desc')
     let header = this.slides[this.part][this.currentIdx].querySelectorAll('.slide-header')
     this.slides[this.part][this.currentIdx].classList.remove('show-desc')

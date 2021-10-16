@@ -8,6 +8,31 @@
   src: url(../font/CelinePeachScript.ttf);
 }
 
+/* width */
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 3px;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+  background: #888;
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+  background: #d8d8d8;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(19, 19, 19);
+}
+
 body{
   cursor: none;
 }
