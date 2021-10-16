@@ -4,6 +4,7 @@ import { Cursor } from "./Cursor";
 import { Nav } from "./Nav";
 import { slidesData } from "./slidesData";
 import { Frame } from "./Frame";
+// import '../css/styles.css'
 
 
 let mobileAndTabletCheck = () => {

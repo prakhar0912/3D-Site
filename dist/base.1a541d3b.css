@@ -1,8 +1,12 @@
 
 @font-face {
   font-family: syncopate;
-  src: url(../font/Syncopate-Bold.ttf);
+  src: url(/Syncopate-Bold.d591b159.ttf);
 }
+
+
+
+
 
 article,
 aside,
@@ -448,3 +452,5 @@ a:focus {
     display: block;
   }
 }
+
+/*# sourceMappingURL=/base.1a541d3b.css.map */
