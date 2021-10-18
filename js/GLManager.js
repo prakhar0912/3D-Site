@@ -486,7 +486,7 @@ GLManager.prototype.render = function () {
   if (!this.initialRender) {
     this.initialRender = true;
   }
-  this.cursorRender()
+  // this.cursorRender()
   this.renderer.render(this.scene, this.camera);
 };
 GLManager.prototype.mount = function (container) {

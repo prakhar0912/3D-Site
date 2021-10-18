@@ -36,7 +36,7 @@ class Cursor {
             this.touch = false
             this.initEvents();
             this.blowHint()
-            // requestAnimationFrame(() => this.render());
+            requestAnimationFrame(() => this.render());
         }
         else{
             this.touch = true
@@ -58,7 +58,7 @@ class Cursor {
             x: this.lastMousePos.dot.x,
             y: this.lastMousePos.dot.y
         })
-        // requestAnimationFrame(() => this.render())
+        requestAnimationFrame(() => this.render())
     }
 
     showTriangle() {

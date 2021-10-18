@@ -37904,9 +37904,9 @@ GLManager.prototype.updateRgbEffect = function (_ref4) {
 GLManager.prototype.render = function () {
   if (!this.initialRender) {
     this.initialRender = true;
-  }
+  } // this.cursorRender()
 
-  this.cursorRender();
+
   this.renderer.render(this.scene, this.camera);
 };
 
@@ -49450,6 +49450,8 @@ var getMousePos = function getMousePos(e) {
 
 var Cursor = /*#__PURE__*/function () {
   function Cursor(el, mobile) {
+    var _this = this;
+
     _classCallCheck(this, Cursor);
 
     if (!mobile) {
@@ -49484,7 +49486,10 @@ var Cursor = /*#__PURE__*/function () {
       this.blowAnimation = null;
       this.touch = false;
       this.initEvents();
-      this.blowHint(); // requestAnimationFrame(() => this.render());
+      this.blowHint();
+      requestAnimationFrame(function () {
+        return _this.render();
+      });
     } else {
       this.touch = true;
     }
@@ -49493,15 +49498,17 @@ var Cursor = /*#__PURE__*/function () {
   _createClass(Cursor, [{
     key: "initEvents",
     value: function initEvents() {
-      var _this = this;
+      var _this2 = this;
 
       window.addEventListener('mousemove', function (ev) {
-        _this.mousePos = getMousePos(ev); // this.render()
+        _this2.mousePos = getMousePos(ev); // this.render()
       });
     }
   }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       this.lastMousePos.dot.x = this.mousePos.x - this.bounds.dot.width / 2;
       this.lastMousePos.dot.y = this.mousePos.y - this.bounds.dot.height / 2;
       this.lastMousePos.circle.x = this.mousePos.x - this.bounds.circle.width / 2;
@@ -49511,8 +49518,11 @@ var Cursor = /*#__PURE__*/function () {
       _gsap.default.set(this.DOM.el, {
         x: this.lastMousePos.dot.x,
         y: this.lastMousePos.dot.y
-      }); // requestAnimationFrame(() => this.render())
+      });
 
+      requestAnimationFrame(function () {
+        return _this3.render();
+      });
     }
   }, {
     key: "showTriangle",
@@ -49526,13 +49536,13 @@ var Cursor = /*#__PURE__*/function () {
   }, {
     key: "hideTriangle",
     value: function hideTriangle() {
-      var _this2 = this;
+      var _this4 = this;
 
       _gsap.default.to(this.triangles, {
         opacity: 0,
         duration: 0.5,
         onComplete: function onComplete() {
-          _gsap.default.set(_this2.triangles, {
+          _gsap.default.set(_this4.triangles, {
             display: 'none'
           });
         }
@@ -49541,7 +49551,7 @@ var Cursor = /*#__PURE__*/function () {
   }, {
     key: "killHint",
     value: function killHint() {
-      var _this3 = this;
+      var _this5 = this;
 
       if (this.touch) return;
 
@@ -49552,7 +49562,7 @@ var Cursor = /*#__PURE__*/function () {
           scale: 1,
           duration: 0.3,
           onComplete: function onComplete() {
-            _this3.hintContainer.style.display = 'none';
+            _this5.hintContainer.style.display = 'none';
           }
         });
       }
@@ -49560,7 +49570,7 @@ var Cursor = /*#__PURE__*/function () {
   }, {
     key: "blowHint",
     value: function blowHint() {
-      var _this4 = this;
+      var _this6 = this;
 
       if (this.touch) return;
       this.killBlow();
@@ -49568,7 +49578,7 @@ var Cursor = /*#__PURE__*/function () {
       this.blowAnime = _gsap.default.timeline({
         repeat: 2,
         onComplete: function onComplete() {
-          _this4.hintContainer.style.display = 'none';
+          _this6.hintContainer.style.display = 'none';
         }
       });
       this.blowAnime.to(this.hintContainer, {
