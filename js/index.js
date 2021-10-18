@@ -93,6 +93,9 @@ const showcase = new Showcase(slidesData, {
       cursor.killHint()
     }, 1000)
   },
+  cursorRender: () => {
+    cursor.render()
+  },
   hideDesc: () => {
     slides.hideDesc()
   },

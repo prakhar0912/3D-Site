@@ -14,11 +14,12 @@ import {
 import 'regenerator-runtime/runtime'
 import Stats from "stats.js";
 
-function GLManager(data) {
+function GLManager(data, cursorRender) {
   this.totalEntries = this.calculateTotalEntries(data);
   this.loadedEntries = 0;
   const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
   camera.position.z = 16;
+  this.cursorRender = cursorRender
   this.meshes = []
   const scene = new THREE.Scene();
   camera.lookAt = scene.position;
@@ -485,6 +486,7 @@ GLManager.prototype.render = function () {
   if (!this.initialRender) {
     this.initialRender = true;
   }
+  this.cursorRender()
   this.renderer.render(this.scene, this.camera);
 };
 GLManager.prototype.mount = function (container) {

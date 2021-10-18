@@ -21,7 +21,7 @@ import gsap from "gsap";
 // onAciveIndexChange
 // onIndexChange
 function Showcase(data, options = {}) {
-  this.GL = new GLManager(data);
+  this.GL = new GLManager(data, options.cursorRender);
 
   this.data = data;
 

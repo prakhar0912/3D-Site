@@ -36,7 +36,7 @@ class Cursor {
             this.touch = false
             this.initEvents();
             this.blowHint()
-            requestAnimationFrame(() => this.render());
+            // requestAnimationFrame(() => this.render());
         }
         else{
             this.touch = true
@@ -54,13 +54,11 @@ class Cursor {
         this.lastMousePos.circle.x = this.mousePos.x - this.bounds.circle.width / 2
         this.lastMousePos.circle.y = this.mousePos.y - this.bounds.circle.height / 2
         this.lastScale = this.scale;
-
-        // gsap.set()
         gsap.set(this.DOM.el, {
             x: this.lastMousePos.dot.x,
             y: this.lastMousePos.dot.y
         })
-        requestAnimationFrame(() => this.render())
+        // requestAnimationFrame(() => this.render())
     }
 
     showTriangle() {

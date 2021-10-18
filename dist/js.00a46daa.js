@@ -37344,13 +37344,14 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function GLManager(data) {
+function GLManager(data, cursorRender) {
   var _this = this;
 
   this.totalEntries = this.calculateTotalEntries(data);
   this.loadedEntries = 0;
   var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
   camera.position.z = 16;
+  this.cursorRender = cursorRender;
   this.meshes = [];
   var scene = new THREE.Scene();
   camera.lookAt = scene.position;
@@ -37905,6 +37906,7 @@ GLManager.prototype.render = function () {
     this.initialRender = true;
   }
 
+  this.cursorRender();
   this.renderer.render(this.scene, this.camera);
 };
 
@@ -48298,7 +48300,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // onIndexChange
 function Showcase(data) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  this.GL = new _GLManager.GLManager(data);
+  this.GL = new _GLManager.GLManager(data, options.cursorRender);
   this.data = data;
   this.progress = 0;
   this.initialProgress = 10;
@@ -49448,8 +49450,6 @@ var getMousePos = function getMousePos(e) {
 
 var Cursor = /*#__PURE__*/function () {
   function Cursor(el, mobile) {
-    var _this = this;
-
     _classCallCheck(this, Cursor);
 
     if (!mobile) {
@@ -49484,10 +49484,7 @@ var Cursor = /*#__PURE__*/function () {
       this.blowAnimation = null;
       this.touch = false;
       this.initEvents();
-      this.blowHint();
-      requestAnimationFrame(function () {
-        return _this.render();
-      });
+      this.blowHint(); // requestAnimationFrame(() => this.render());
     } else {
       this.touch = true;
     }
@@ -49496,31 +49493,26 @@ var Cursor = /*#__PURE__*/function () {
   _createClass(Cursor, [{
     key: "initEvents",
     value: function initEvents() {
-      var _this2 = this;
+      var _this = this;
 
       window.addEventListener('mousemove', function (ev) {
-        _this2.mousePos = getMousePos(ev); // this.render()
+        _this.mousePos = getMousePos(ev); // this.render()
       });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
-
       this.lastMousePos.dot.x = this.mousePos.x - this.bounds.dot.width / 2;
       this.lastMousePos.dot.y = this.mousePos.y - this.bounds.dot.height / 2;
       this.lastMousePos.circle.x = this.mousePos.x - this.bounds.circle.width / 2;
       this.lastMousePos.circle.y = this.mousePos.y - this.bounds.circle.height / 2;
-      this.lastScale = this.scale; // gsap.set()
+      this.lastScale = this.scale;
 
       _gsap.default.set(this.DOM.el, {
         x: this.lastMousePos.dot.x,
         y: this.lastMousePos.dot.y
-      });
+      }); // requestAnimationFrame(() => this.render())
 
-      requestAnimationFrame(function () {
-        return _this3.render();
-      });
     }
   }, {
     key: "showTriangle",
@@ -49534,13 +49526,13 @@ var Cursor = /*#__PURE__*/function () {
   }, {
     key: "hideTriangle",
     value: function hideTriangle() {
-      var _this4 = this;
+      var _this2 = this;
 
       _gsap.default.to(this.triangles, {
         opacity: 0,
         duration: 0.5,
         onComplete: function onComplete() {
-          _gsap.default.set(_this4.triangles, {
+          _gsap.default.set(_this2.triangles, {
             display: 'none'
           });
         }
@@ -49549,7 +49541,7 @@ var Cursor = /*#__PURE__*/function () {
   }, {
     key: "killHint",
     value: function killHint() {
-      var _this5 = this;
+      var _this3 = this;
 
       if (this.touch) return;
 
@@ -49560,7 +49552,7 @@ var Cursor = /*#__PURE__*/function () {
           scale: 1,
           duration: 0.3,
           onComplete: function onComplete() {
-            _this5.hintContainer.style.display = 'none';
+            _this3.hintContainer.style.display = 'none';
           }
         });
       }
@@ -49568,7 +49560,7 @@ var Cursor = /*#__PURE__*/function () {
   }, {
     key: "blowHint",
     value: function blowHint() {
-      var _this6 = this;
+      var _this4 = this;
 
       if (this.touch) return;
       this.killBlow();
@@ -49576,7 +49568,7 @@ var Cursor = /*#__PURE__*/function () {
       this.blowAnime = _gsap.default.timeline({
         repeat: 2,
         onComplete: function onComplete() {
-          _this6.hintContainer.style.display = 'none';
+          _this4.hintContainer.style.display = 'none';
         }
       });
       this.blowAnime.to(this.hintContainer, {
@@ -50362,6 +50354,9 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
       cursor.killHint();
     }, 1000);
   },
+  cursorRender: function cursorRender() {
+    cursor.render();
+  },
   hideDesc: function hideDesc() {
     slides.hideDesc();
   },
@@ -50485,7 +50480,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44457" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45089" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
