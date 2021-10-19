@@ -49510,7 +49510,8 @@ var Cursor = /*#__PURE__*/function () {
 
       _gsap.default.set(this.DOM.el, {
         x: this.lastMousePos.dot.x,
-        y: this.lastMousePos.dot.y
+        y: this.lastMousePos.dot.y,
+        force3D: !0
       }); // requestAnimationFrame(() => this.render())
 
     }
