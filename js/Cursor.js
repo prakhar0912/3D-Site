@@ -43,10 +43,10 @@ class Cursor {
         }
     }
     initEvents() {
-        window.addEventListener('mousemove', ev => {
+        window.onmousemove = (ev) => {
             this.mousePos = getMousePos(ev)
             // this.render()
-        });
+        };
     }
     render() {
         this.lastMousePos.dot.x = this.mousePos.x - this.bounds.dot.width / 2

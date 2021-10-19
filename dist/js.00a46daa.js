@@ -49495,9 +49495,9 @@ var Cursor = /*#__PURE__*/function () {
     value: function initEvents() {
       var _this = this;
 
-      window.addEventListener('mousemove', function (ev) {
+      window.onmousemove = function (ev) {
         _this.mousePos = getMousePos(ev); // this.render()
-      });
+      };
     }
   }, {
     key: "render",
@@ -50480,7 +50480,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45089" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44809" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
