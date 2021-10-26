@@ -5,17 +5,17 @@ class Frame {
     constructor(options, mobileDevice) {
         this.options = options
         if (!mobileDevice) {
-            this.sectionContainer = document.querySelector('.current-section')
-            this.sections = this.sectionContainer.querySelectorAll('p')
-            this.nonActiveSections = this.sectionContainer.querySelectorAll('p:not(.active-section)')
+            // this.sectionContainer = document.querySelector('.current-section')
+            // this.sections = this.sectionContainer.querySelectorAll('p')
+            // this.nonActiveSections = this.sectionContainer.querySelectorAll('p:not(.active-section)')
             this.part = 0
             this.sectionShown = true
             this.pauseSectionActivity = false
             this.mobile = false
-            this.addSectionListeners()
+            // this.addSectionListeners()
         }
         else{
-            this.addNextPrevListeners()
+            // this.addNextPrevListeners()
             this.mobile = true
         }
         this.hintContainer = document.querySelector('.hint')
@@ -183,6 +183,7 @@ class Frame {
     }
 
     paintSection() {
+        return
         this.sections.forEach((ele, i) => {
             if (i === this.part) {
                 ele.classList.add("active-section")

@@ -49,6 +49,7 @@ class Cursor {
         };
     }
     render() {
+        if(this.touch) return
         this.lastMousePos.dot.x = this.mousePos.x - this.bounds.dot.width / 2
         this.lastMousePos.dot.y = this.mousePos.y - this.bounds.dot.height / 2
         this.lastMousePos.circle.x = this.mousePos.x - this.bounds.circle.width / 2
@@ -63,12 +64,14 @@ class Cursor {
     }
 
     showTriangle() {
+        if(this.touch) return
         gsap.to(this.triangles, {
             display: 'block', opacity: 1, duration: 0.5
         })
     }
 
     hideTriangle() {
+        if(this.touch) return
         gsap.to(this.triangles, {
             opacity: 0, duration: 0.5, onComplete: () => {
                 gsap.set(this.triangles, {display: 'none'})
@@ -158,6 +161,16 @@ class Cursor {
         this.scale = 1;
         this.DOM.dot.style.display = '';
     }
+
+    remove(){
+        if(this.touch) return
+        this.DOM.el.style.display = 'none';
+    }
+    add(){
+        if(this.touch) return
+        this.DOM.el.style.display = 'block';
+    }
+
 }
 
 export { Cursor };

@@ -114,22 +114,22 @@ class Slides {
   }
 
   showPart3() {
-    // if (this.tl3) {
-    //   this.tl3.kill()
-    // }
-    // let header = this.slides[2][0].querySelector('.slide-header')
-    // let desc = this.slides[2][0].querySelector('.slide-desc')
-    // this.tl3 = gsap.timeline()
-    // this.tl3.to(header, {
-    //   height: 0, duration: 0.5, opacity: 0, onComplete: () => {
-    //     desc.style.height = 'auto'
-    //     this.slides[2][0].style.overflow = 'auto'
-    //     this.slides[2][0].style.pointerEvents = 'all'
-    //   }
-    // })
-    // this.tl3.to(desc, {
-    //   opacity: 1, duration: 0.1, height: 'auto'
-    // })
+    if (this.tl3) {
+      this.tl3.kill()
+    }
+    let header = this.slides[2][0].querySelector('.slide-header')
+    let desc = this.slides[2][0].querySelector('.slide-desc')
+    this.tl3 = gsap.timeline()
+    this.tl3.to(header, {
+      height: 0, duration: 0.5, opacity: 0, onComplete: () => {
+        desc.style.height = 'auto'
+        this.slides[2][0].style.overflow = 'auto'
+        this.slides[2][0].style.pointerEvents = 'all'
+      }
+    })
+    this.tl3.to(desc, {
+      opacity: 1, duration: 0.1, height: 'auto'
+    })
   }
 
   hidePart3() {
@@ -158,8 +158,9 @@ class Slides {
       duration: 0.5, opacity: 0, y: -100, onComplete: () => {
         desc.style.height = 'auto'
         header.style.height = '0'
+
         this.slides[this.part][this.currentIdx].classList.add('show-desc')
-        this.slides[this.part][this.currentIdx].style.overflow = 'auto'
+        // this.slides[this.part][this.currentIdx].style.overflow = 'auto'
         this.slides[this.part][this.currentIdx].style.pointerEvents = 'all'
       }
     })
@@ -176,7 +177,7 @@ class Slides {
     tl.to(desc, {
       opacity: 0, duration: 0.3, height: 0, onComplete: () => {
         this.slides[this.part][this.currentIdx].style.pointerEvents = 'none'
-        this.slides[this.part][this.currentIdx].style.overflow = 'hidden'
+        // this.slides[this.part][this.currentIdx].style.overflow = 'hidden'
       }
     })
     tl.to(header, { opacity: 1, height: "auto", y: 0, duration: 1, })

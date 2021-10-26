@@ -21,11 +21,13 @@ const cursor = new Cursor(document.querySelector(".cursor"), mobileDevice);
 const slides = new Slides(slidesData, {
   onTitleClickStart: () => {
     showcase.titleClickStart()
+    cursor.remove()
     frame.hideNextPrev()
     frame.hideHint()
     showcase.inTab = true
   },
   onTitleClickEnd: () => {
+    cursor.add()
     frame.showNextPrev()
     frame.showHint()
     showcase.titleClickEnd()
@@ -94,7 +96,9 @@ const showcase = new Showcase(slidesData, {
     }, 1000)
   },
   cursorRender: () => {
-    cursor.render()
+    if(!mobileDevice){
+      cursor.render()
+    }
   },
   hideDesc: () => {
     slides.hideDesc()

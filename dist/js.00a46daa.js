@@ -49233,27 +49233,36 @@ var Slides = /*#__PURE__*/function () {
     }
   }, {
     key: "showPart3",
-    value: function showPart3() {// if (this.tl3) {
-      //   this.tl3.kill()
-      // }
-      // let header = this.slides[2][0].querySelector('.slide-header')
-      // let desc = this.slides[2][0].querySelector('.slide-desc')
-      // this.tl3 = gsap.timeline()
-      // this.tl3.to(header, {
-      //   height: 0, duration: 0.5, opacity: 0, onComplete: () => {
-      //     desc.style.height = 'auto'
-      //     this.slides[2][0].style.overflow = 'auto'
-      //     this.slides[2][0].style.pointerEvents = 'all'
-      //   }
-      // })
-      // this.tl3.to(desc, {
-      //   opacity: 1, duration: 0.1, height: 'auto'
-      // })
+    value: function showPart3() {
+      var _this4 = this;
+
+      if (this.tl3) {
+        this.tl3.kill();
+      }
+
+      var header = this.slides[2][0].querySelector('.slide-header');
+      var desc = this.slides[2][0].querySelector('.slide-desc');
+      this.tl3 = _gsap.default.timeline();
+      this.tl3.to(header, {
+        height: 0,
+        duration: 0.5,
+        opacity: 0,
+        onComplete: function onComplete() {
+          desc.style.height = 'auto';
+          _this4.slides[2][0].style.overflow = 'auto';
+          _this4.slides[2][0].style.pointerEvents = 'all';
+        }
+      });
+      this.tl3.to(desc, {
+        opacity: 1,
+        duration: 0.1,
+        height: 'auto'
+      });
     }
   }, {
     key: "hidePart3",
     value: function hidePart3() {
-      var _this4 = this;
+      var _this5 = this;
 
       if (this.tl3) {
         this.tl3.kill();
@@ -49267,8 +49276,8 @@ var Slides = /*#__PURE__*/function () {
         duration: 0.3,
         height: 0,
         onComplete: function onComplete() {
-          _this4.slides[2][0].style.pointerEvents = 'none';
-          _this4.slides[2][0].style.overflow = 'hidden';
+          _this5.slides[2][0].style.pointerEvents = 'none';
+          _this5.slides[2][0].style.overflow = 'hidden';
         }
       });
       this.tl3.to(header, {
@@ -49280,7 +49289,7 @@ var Slides = /*#__PURE__*/function () {
   }, {
     key: "showDesc",
     value: function showDesc(activeIndex) {
-      var _this5 = this;
+      var _this6 = this;
 
       this.options.onTitleClickStart();
       var header = this.slides[this.part][this.currentIdx].querySelector('.slide-header');
@@ -49296,10 +49305,10 @@ var Slides = /*#__PURE__*/function () {
           desc.style.height = 'auto';
           header.style.height = '0';
 
-          _this5.slides[_this5.part][_this5.currentIdx].classList.add('show-desc');
+          _this6.slides[_this6.part][_this6.currentIdx].classList.add('show-desc'); // this.slides[this.part][this.currentIdx].style.overflow = 'auto'
 
-          _this5.slides[_this5.part][_this5.currentIdx].style.overflow = 'auto';
-          _this5.slides[_this5.part][_this5.currentIdx].style.pointerEvents = 'all';
+
+          _this6.slides[_this6.part][_this6.currentIdx].style.pointerEvents = 'all';
         }
       });
       tl.to(desc, {
@@ -49311,7 +49320,7 @@ var Slides = /*#__PURE__*/function () {
   }, {
     key: "hideDesc",
     value: function hideDesc(activeIndex) {
-      var _this6 = this;
+      var _this7 = this;
 
       this.options.onTitleClickEnd();
       var desc = this.slides[this.part][this.currentIdx].querySelector('.slide-desc');
@@ -49325,8 +49334,7 @@ var Slides = /*#__PURE__*/function () {
         duration: 0.3,
         height: 0,
         onComplete: function onComplete() {
-          _this6.slides[_this6.part][_this6.currentIdx].style.pointerEvents = 'none';
-          _this6.slides[_this6.part][_this6.currentIdx].style.overflow = 'hidden';
+          _this7.slides[_this7.part][_this7.currentIdx].style.pointerEvents = 'none'; // this.slides[this.part][this.currentIdx].style.overflow = 'hidden'
         }
       });
       tl.to(header, {
@@ -49494,6 +49502,7 @@ var Cursor = /*#__PURE__*/function () {
   }, {
     key: "render",
     value: function render() {
+      if (this.touch) return;
       this.lastMousePos.dot.x = this.mousePos.x - this.bounds.dot.width / 2;
       this.lastMousePos.dot.y = this.mousePos.y - this.bounds.dot.height / 2;
       this.lastMousePos.circle.x = this.mousePos.x - this.bounds.circle.width / 2;
@@ -49510,6 +49519,8 @@ var Cursor = /*#__PURE__*/function () {
   }, {
     key: "showTriangle",
     value: function showTriangle() {
+      if (this.touch) return;
+
       _gsap.default.to(this.triangles, {
         display: 'block',
         opacity: 1,
@@ -49520,6 +49531,8 @@ var Cursor = /*#__PURE__*/function () {
     key: "hideTriangle",
     value: function hideTriangle() {
       var _this2 = this;
+
+      if (this.touch) return;
 
       _gsap.default.to(this.triangles, {
         opacity: 0,
@@ -49634,6 +49647,18 @@ var Cursor = /*#__PURE__*/function () {
       if (this.touch) return;
       this.scale = 1;
       this.DOM.dot.style.display = '';
+    }
+  }, {
+    key: "remove",
+    value: function remove() {
+      if (this.touch) return;
+      this.DOM.el.style.display = 'none';
+    }
+  }, {
+    key: "add",
+    value: function add() {
+      if (this.touch) return;
+      this.DOM.el.style.display = 'block';
     }
   }]);
 
@@ -49973,20 +49998,14 @@ var slidesData = [[{
   position: 10
 }], [{
   image: _bg.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>KUVALYAM</p>\n              <p>Real Estate</p>\n            </div>\n            <a class=\"slide-more\" rel=\"prerender\" href=\"../kuv.e1d4d938.html\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_bg.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      "),
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>KUVALYAM</p>\n              <p>Real Estate</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ",
   position: 0
 }, {
   image: _.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>Sundowner</p>\n              <p>Cafe</p>\n            </div>\n            <a class=\"slide-more\" rel=\"prerender\" href=\"../kuv.e1d4d938.html\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>Sundowner</p>\n              <p>Cafe</p>\n            </div>\n            <a class=\"slide-more\" rel=\"prerender\" href=\"../kuv.e1d4d938.html\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              Close\n            </div>\n          </div>\n        </div>\n      "
 }, {
   image: _2.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Cordwainers</p>\n              <p class=''>Marketing</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_2.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
-}, {
-  image: _3.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Silver Sands</p>\n              <p class=''>Interior Design</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_3.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
-}, {
-  image: _4.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title long\">\n              <p class=\"\">Adisha</p>\n              <p class=\"\">Branding</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc\">\n            <div class=\"desc-container\">\n              <h3>Description</h3>\n              <img src=\"".concat(_4.default, "\" alt=\"\" class=\"desc-img\">\n              <div class=\"desc-content\">\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga eveniet harum, reprehenderit alias dicta obcaecati similique dolorum ipsa porro quod repellat? Commodi officiis sapiente id impedit voluptate omnis vero quod!Lorem\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam eaque eos harum? Aperiam necessitatibus quo aliquid! Eligendi sint commodi blanditiis. Labore sed quasi, blanditiis odit dolor reiciendis eaque quod magni.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ipsum, sint repellat, aut quo et culpa, harum explicabo natus quidem eum voluptatem cupiditate dolore vel repellendus perspiciatis dolorum quibusdam eaque?\n                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestias numquam nesciunt sed omnis! Optio, rerum. Consequatur corrupti, ad, id, dicta ea laboriosam cupiditate a quo non obcaecati itaque quisquam tempora!\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem explicabo repellat deleniti harum natus iste repudiandae voluptatum odio labore quasi unde, porro velit qui sapiente illo aliquam, vel dicta nostrum.\n                Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, omnis dolores. Facilis fuga quo laborum optio harum omnis qui magnam asperiores, itaque tempore, eos error minima! Explicabo eius quo iure.\n              </div>\n              <p class=\"close\">Close</p>\n            </div>\n          </div>\n        </div>\n      ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Cordwainers</p>\n              <p class=''>Marketing</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              Close\n            </div>\n          </div>\n        </div>\n      "
 }], [{
   image: _contactBack.default,
   content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n          </div>\n          <div class=\"slide-desc slide-desc-last\">\n            <div class=\"contact-container\">\n                <section>\n                    <div class=\"cTitle cOne\">\n                        <div>\n                            <p>1</p>\n                        </div>\n                        <p>OUR SERVICES</p>\n                        <h1>HOW WE</h1>\n                        <h1>MAY HELP YOU</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We deliver logical campaigns made of stunning visuals!\n                            </h1>\n                            <p>\n                              We are a team of creative experts communicating modern day solutions with intricate designs & proven strategies. \n                            </p>\n                            <h1>\n                              Million Dreams - Million Designs\n                            </h1>\n                            <p>\n                              We love it when we create something that changes your story and this drives us further to create awesomeness every day. Have a look at what we have created recently.\n                            </p>\n                            <h1>\n                              We create meaningful experiences for you, your brand & its customers.\n                            </h1>\n                            <p>\n                              We are seasoned experts in crafting purpose-driven experiences, scaleable strategies and visual drama for your audience. We can help you and your brand get the audience which it oh! so rightly deserves.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cTwo\">\n                        <div>\n                            <p>2</p>\n                        </div>\n                        <p>OUR TEAM</p>\n                        <h1>YOU WILL BE</h1>\n                        <h1>IN SAFE HANDS</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We are an Award-Winning Global Design Studio\n                            </h1>\n                            <p>\n                              Working with clients from all over the world and building successful brands with empathy and creativity with our comprehensive range of services\n                            </p>\n                            <h1>\n                              Branding & Strategy\n                            </h1>\n                            <p>\n                              Building the foundations of a brand and making it equipped with a visual language for sustainability.\n                            </p>\n                            <h1>\n                              Marketing & Promotions\n                            </h1>\n                            <p>\n                              Helping a brand reach their core consumers and accelerating the flow of revenue.\n                            </p>\n                            <h1>\n                              Customer Experience\n                            </h1>\n                            <p>\n                              Developing the customer-brand relationship by building strategy, delivering interactions and more.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contactUs.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cThree\">\n                        <div>\n                            <p>3</p>\n                        </div>\n                        <p>OUR CLIENTS</p>\n                        <h1>PEOPLE WHO</h1>\n                        <h1>TRUST US</h1>\n                    </div>\n                    <div>\n                        <img src=\"").concat(_clients.default, "\" alt=\"\">\n                    </div>\n                </section>\n                <section class=\"contacts\">\n                  <div class=\"contacts-cont\">\n                    <h2>Contact</h2>\n                    <div>\n                        <p>514 656-0976</p>\n                        <p>info@whitepencil.com</p>\n                    </div>\n                    <h2>Address</h2>\n                    <div>\n                      <p>4030, rue Saint-Ambroise, suite 105</p>\n                      <p>Montr\xE9al (Qu\xE9bec) H4C 2C7</p>\n                      <p>Canada</p>\n                    </div>\n                    <div class=\"email\">\n                        <h2>Write to us</h2>\n                        <p>Email</p>\n                    </div>\n                  </div>\n                </section>\n            </div>\n          </div>\n        </div>\n      "),
@@ -50018,16 +50037,15 @@ var Frame = /*#__PURE__*/function () {
     this.options = options;
 
     if (!mobileDevice) {
-      this.sectionContainer = document.querySelector('.current-section');
-      this.sections = this.sectionContainer.querySelectorAll('p');
-      this.nonActiveSections = this.sectionContainer.querySelectorAll('p:not(.active-section)');
+      // this.sectionContainer = document.querySelector('.current-section')
+      // this.sections = this.sectionContainer.querySelectorAll('p')
+      // this.nonActiveSections = this.sectionContainer.querySelectorAll('p:not(.active-section)')
       this.part = 0;
       this.sectionShown = true;
       this.pauseSectionActivity = false;
-      this.mobile = false;
-      this.addSectionListeners();
+      this.mobile = false; // this.addSectionListeners()
     } else {
-      this.addNextPrevListeners();
+      // this.addNextPrevListeners()
       this.mobile = true;
     }
 
@@ -50232,6 +50250,7 @@ var Frame = /*#__PURE__*/function () {
     value: function paintSection() {
       var _this5 = this;
 
+      return;
       this.sections.forEach(function (ele, i) {
         if (i === _this5.part) {
           ele.classList.add("active-section");
@@ -50286,11 +50305,13 @@ var cursor = new _Cursor.Cursor(document.querySelector(".cursor"), mobileDevice)
 var slides = new _Slides.Slides(_slidesData.slidesData, {
   onTitleClickStart: function onTitleClickStart() {
     showcase.titleClickStart();
+    cursor.remove();
     frame.hideNextPrev();
     frame.hideHint();
     showcase.inTab = true;
   },
   onTitleClickEnd: function onTitleClickEnd() {
+    cursor.add();
     frame.showNextPrev();
     frame.showHint();
     showcase.titleClickEnd();
@@ -50351,7 +50372,9 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
     }, 1000);
   },
   cursorRender: function cursorRender() {
-    cursor.render();
+    if (!mobileDevice) {
+      cursor.render();
+    }
   },
   hideDesc: function hideDesc() {
     slides.hideDesc();
@@ -50476,7 +50499,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43305" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41405" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
