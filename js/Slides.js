@@ -114,22 +114,22 @@ class Slides {
   }
 
   showPart3() {
-    if (this.tl3) {
-      this.tl3.kill()
-    }
-    let header = this.slides[2][0].querySelector('.slide-header')
-    let desc = this.slides[2][0].querySelector('.slide-desc')
-    this.tl3 = gsap.timeline()
-    this.tl3.to(header, {
-      height: 0, duration: 0.5, opacity: 0, onComplete: () => {
-        desc.style.height = 'auto'
-        this.slides[2][0].style.overflow = 'auto'
-        this.slides[2][0].style.pointerEvents = 'all'
-      }
-    })
-    this.tl3.to(desc, {
-      opacity: 1, duration: 0.1, height: 'auto'
-    })
+    // if (this.tl3) {
+    //   this.tl3.kill()
+    // }
+    // let header = this.slides[2][0].querySelector('.slide-header')
+    // let desc = this.slides[2][0].querySelector('.slide-desc')
+    // this.tl3 = gsap.timeline()
+    // this.tl3.to(header, {
+    //   height: 0, duration: 0.5, opacity: 0, onComplete: () => {
+    //     desc.style.height = 'auto'
+    //     this.slides[2][0].style.overflow = 'auto'
+    //     this.slides[2][0].style.pointerEvents = 'all'
+    //   }
+    // })
+    // this.tl3.to(desc, {
+    //   opacity: 1, duration: 0.1, height: 'auto'
+    // })
   }
 
   hidePart3() {

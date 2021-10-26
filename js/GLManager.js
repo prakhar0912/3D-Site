@@ -30,6 +30,7 @@ function GLManager(data, cursorRender) {
   this.part = 0
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setClearColor(0x000000, 0.3)
   this.camera = camera;
   this.scene = scene;
   this.renderer = renderer;

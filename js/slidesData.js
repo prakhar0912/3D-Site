@@ -1,4 +1,5 @@
-import image1 from "../images/11.jpg";
+// import image1 from "../images/11.jpg";
+import image1 from "../img/bg1.jpg"
 import image2 from "../images/22.jpg";
 import image3 from "../images/33.jpg";
 import image4 from "../images/44.jpg";
@@ -11,7 +12,7 @@ import contactImage2 from "../images/contact2.jpg"
 import contactImage3 from "../images/contactUs2.webp"
 import contactBack from "../images/contactBack.jpg"
 import clients from "../images/clients.jpg"
-
+import comeHtml from "../kuv.html"
 
 const slidesData = [
   [
@@ -38,10 +39,10 @@ const slidesData = [
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
-              <p>KORaPUT</p>
-              <p>Coffee</p>
+              <p>KUVALYAM</p>
+              <p>Real Estate</p>
             </div>
-            <a class="slide-more">Click to Know More!</a>
+            <a class="slide-more" rel="prerender" href="../kuv.e1d4d938.html">Click to Know More!</a>
           </div>
           <div class="slide-desc">
             <div class="desc-container">
@@ -71,7 +72,7 @@ const slidesData = [
               <p>Sundowner</p>
               <p>Cafe</p>
             </div>
-            <a class="slide-more">Click to Know More!</a>
+            <a class="slide-more" rel="prerender" href="../kuv.e1d4d938.html">Click to Know More!</a>
           </div>
           <div class="slide-desc">
             <div class="desc-container">
