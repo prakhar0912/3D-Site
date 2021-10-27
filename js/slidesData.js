@@ -1,5 +1,5 @@
 // import image1 from "../images/11.jpg";
-import image1 from "../img/bg1.jpg"
+import image1 from "../img/bg11.jpg"
 import image2 from "../images/22.jpg";
 import image3 from "../images/33.jpg";
 import image4 from "../images/44.jpg";
@@ -64,12 +64,13 @@ const slidesData = [
               <p>Sundowner</p>
               <p>Cafe</p>
             </div>
-            <a class="slide-more" rel="prerender" href="../kuv.e1d4d938.html">Click to Know More!</a>
+            <a class="slide-more">Click to Know More!</a>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
             <div class="close">
-              Close
+              <span></span>
+              <span></span>
             </div>
           </div>
         </div>
@@ -89,7 +90,8 @@ const slidesData = [
           <div class="slide-desc slide-desc-iframe">
             <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
             <div class="close">
-              Close
+              <span></span>
+              <span></span>
             </div>
           </div>
         </div>

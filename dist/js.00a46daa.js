@@ -37384,9 +37384,8 @@ function GLManager(data, cursorRender) {
 
     _this.createPlane(2, data[2][0].position);
 
-    _this.calcAspectRatios();
+    _this.calcAspectRatios(); // this.setUpGui()
 
-    _this.setUpGui();
 
     if (!_this.loopRaf) {
       _this.render();
@@ -37952,15 +37951,15 @@ GLManager.prototype.scheduleLoop = function () {
 };
 
 GLManager.prototype.loop = function () {
-  this.stats.begin();
+  // this.stats.begin()
   this.render();
   this.time += 0.1;
 
   for (var i = 0; i < this.meshes.length; i++) {
     this.meshes[i].material.uniforms.u_time.value = this.time;
-  }
+  } // this.stats.end()
 
-  this.stats.end();
+
   this.loopRaf = requestAnimationFrame(this.loop);
 };
 
@@ -49302,19 +49301,27 @@ var Slides = /*#__PURE__*/function () {
         opacity: 0,
         y: -100,
         onComplete: function onComplete() {
-          desc.style.height = 'auto';
           header.style.height = '0';
+          desc.style.display = 'block';
+          desc.style.height = '100%';
 
           _this6.slides[_this6.part][_this6.currentIdx].classList.add('show-desc'); // this.slides[this.part][this.currentIdx].style.overflow = 'auto'
 
 
           _this6.slides[_this6.part][_this6.currentIdx].style.pointerEvents = 'all';
         }
-      });
-      tl.to(desc, {
+      }); // tl.set(desc, {
+      //   display: 'block'
+      // })
+
+      tl.fromTo(desc, {
+        opacity: 0,
+        yPercent: 30
+      }, {
         opacity: 1,
-        duration: 0.1,
-        height: 'auto'
+        yPercent: 0,
+        duration: 1,
+        delay: 0.5
       });
     }
   }, {
@@ -49927,8 +49934,8 @@ var Nav = /*#__PURE__*/function () {
 }();
 
 exports.Nav = Nav;
-},{"gsap":"node_modules/gsap/index.js"}],"img/bg1.jpg":[function(require,module,exports) {
-module.exports = "/bg1.e7999784.jpg";
+},{"gsap":"node_modules/gsap/index.js"}],"img/bg11.jpg":[function(require,module,exports) {
+module.exports = "/bg11.227d36ae.jpg";
 },{}],"images/22.jpg":[function(require,module,exports) {
 module.exports = "/22.7f5b4566.jpg";
 },{}],"images/33.jpg":[function(require,module,exports) {
@@ -49961,7 +49968,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.slidesData = void 0;
 
-var _bg = _interopRequireDefault(require("../img/bg1.jpg"));
+var _bg = _interopRequireDefault(require("../img/bg11.jpg"));
 
 var _ = _interopRequireDefault(require("../images/22.jpg"));
 
@@ -50002,17 +50009,17 @@ var slidesData = [[{
   position: 0
 }, {
   image: _.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>Sundowner</p>\n              <p>Cafe</p>\n            </div>\n            <a class=\"slide-more\" rel=\"prerender\" href=\"../kuv.e1d4d938.html\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              Close\n            </div>\n          </div>\n        </div>\n      "
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>Sundowner</p>\n              <p>Cafe</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      "
 }, {
   image: _2.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Cordwainers</p>\n              <p class=''>Marketing</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              Close\n            </div>\n          </div>\n        </div>\n      "
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Cordwainers</p>\n              <p class=''>Marketing</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      "
 }], [{
   image: _contactBack.default,
   content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n          </div>\n          <div class=\"slide-desc slide-desc-last\">\n            <div class=\"contact-container\">\n                <section>\n                    <div class=\"cTitle cOne\">\n                        <div>\n                            <p>1</p>\n                        </div>\n                        <p>OUR SERVICES</p>\n                        <h1>HOW WE</h1>\n                        <h1>MAY HELP YOU</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We deliver logical campaigns made of stunning visuals!\n                            </h1>\n                            <p>\n                              We are a team of creative experts communicating modern day solutions with intricate designs & proven strategies. \n                            </p>\n                            <h1>\n                              Million Dreams - Million Designs\n                            </h1>\n                            <p>\n                              We love it when we create something that changes your story and this drives us further to create awesomeness every day. Have a look at what we have created recently.\n                            </p>\n                            <h1>\n                              We create meaningful experiences for you, your brand & its customers.\n                            </h1>\n                            <p>\n                              We are seasoned experts in crafting purpose-driven experiences, scaleable strategies and visual drama for your audience. We can help you and your brand get the audience which it oh! so rightly deserves.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cTwo\">\n                        <div>\n                            <p>2</p>\n                        </div>\n                        <p>OUR TEAM</p>\n                        <h1>YOU WILL BE</h1>\n                        <h1>IN SAFE HANDS</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We are an Award-Winning Global Design Studio\n                            </h1>\n                            <p>\n                              Working with clients from all over the world and building successful brands with empathy and creativity with our comprehensive range of services\n                            </p>\n                            <h1>\n                              Branding & Strategy\n                            </h1>\n                            <p>\n                              Building the foundations of a brand and making it equipped with a visual language for sustainability.\n                            </p>\n                            <h1>\n                              Marketing & Promotions\n                            </h1>\n                            <p>\n                              Helping a brand reach their core consumers and accelerating the flow of revenue.\n                            </p>\n                            <h1>\n                              Customer Experience\n                            </h1>\n                            <p>\n                              Developing the customer-brand relationship by building strategy, delivering interactions and more.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contactUs.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cThree\">\n                        <div>\n                            <p>3</p>\n                        </div>\n                        <p>OUR CLIENTS</p>\n                        <h1>PEOPLE WHO</h1>\n                        <h1>TRUST US</h1>\n                    </div>\n                    <div>\n                        <img src=\"").concat(_clients.default, "\" alt=\"\">\n                    </div>\n                </section>\n                <section class=\"contacts\">\n                  <div class=\"contacts-cont\">\n                    <h2>Contact</h2>\n                    <div>\n                        <p>514 656-0976</p>\n                        <p>info@whitepencil.com</p>\n                    </div>\n                    <h2>Address</h2>\n                    <div>\n                      <p>4030, rue Saint-Ambroise, suite 105</p>\n                      <p>Montr\xE9al (Qu\xE9bec) H4C 2C7</p>\n                      <p>Canada</p>\n                    </div>\n                    <div class=\"email\">\n                        <h2>Write to us</h2>\n                        <p>Email</p>\n                    </div>\n                  </div>\n                </section>\n            </div>\n          </div>\n        </div>\n      "),
   position: -10
 }]];
 exports.slidesData = slidesData;
-},{"../img/bg1.jpg":"img/bg1.jpg","../images/22.jpg":"images/22.jpg","../images/33.jpg":"images/33.jpg","../images/44.jpg":"images/44.jpg","../images/55.jpg":"images/55.jpg","../images/landing.jpg":"images/landing.jpg","../images/landingLogo.svg":"images/landingLogo.svg","../images/studio.svg":"images/studio.svg","../images/contact1.webp":"images/contact1.webp","../images/contact2.jpg":"images/contact2.jpg","../images/contactUs2.webp":"images/contactUs2.webp","../images/contactBack.jpg":"images/contactBack.jpg","../images/clients.jpg":"images/clients.jpg","../kuv.html":"kuv.html"}],"js/Frame.js":[function(require,module,exports) {
+},{"../img/bg11.jpg":"img/bg11.jpg","../images/22.jpg":"images/22.jpg","../images/33.jpg":"images/33.jpg","../images/44.jpg":"images/44.jpg","../images/55.jpg":"images/55.jpg","../images/landing.jpg":"images/landing.jpg","../images/landingLogo.svg":"images/landingLogo.svg","../images/studio.svg":"images/studio.svg","../images/contact1.webp":"images/contact1.webp","../images/contact2.jpg":"images/contact2.jpg","../images/contactUs2.webp":"images/contactUs2.webp","../images/contactBack.jpg":"images/contactBack.jpg","../images/clients.jpg":"images/clients.jpg","../kuv.html":"kuv.html"}],"js/Frame.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -50304,7 +50311,7 @@ var container = document.getElementById("app");
 var cursor = new _Cursor.Cursor(document.querySelector(".cursor"), mobileDevice);
 var slides = new _Slides.Slides(_slidesData.slidesData, {
   onTitleClickStart: function onTitleClickStart() {
-    showcase.titleClickStart();
+    // showcase.titleClickStart()
     cursor.remove();
     frame.hideNextPrev();
     frame.hideHint();
@@ -50314,7 +50321,7 @@ var slides = new _Slides.Slides(_slidesData.slidesData, {
     cursor.add();
     frame.showNextPrev();
     frame.showHint();
-    showcase.titleClickEnd();
+    showcase.inTab = false; // showcase.titleClickEnd()
   }
 });
 var frame = new _Frame.Frame({
@@ -50499,7 +50506,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41405" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42295" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

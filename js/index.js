@@ -20,7 +20,7 @@ const cursor = new Cursor(document.querySelector(".cursor"), mobileDevice);
 
 const slides = new Slides(slidesData, {
   onTitleClickStart: () => {
-    showcase.titleClickStart()
+    // showcase.titleClickStart()
     cursor.remove()
     frame.hideNextPrev()
     frame.hideHint()
@@ -30,7 +30,8 @@ const slides = new Slides(slidesData, {
     cursor.add()
     frame.showNextPrev()
     frame.showHint()
-    showcase.titleClickEnd()
+    showcase.inTab = false
+    // showcase.titleClickEnd()
   },
 });
 

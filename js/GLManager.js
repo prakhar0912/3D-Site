@@ -50,7 +50,7 @@ function GLManager(data, cursorRender) {
     this.createPlane(1, data[1][0].position)
     this.createPlane(2, data[2][0].position)
     this.calcAspectRatios()
-    this.setUpGui()
+    // this.setUpGui()
     if (!this.loopRaf) {
       this.render();
     }
@@ -525,13 +525,13 @@ GLManager.prototype.scheduleLoop = function () {
 };
 
 GLManager.prototype.loop = function () {
-  this.stats.begin()
+  // this.stats.begin()
   this.render();
   this.time += 0.1;
   for (let i = 0; i < this.meshes.length; i++) {
     this.meshes[i].material.uniforms.u_time.value = this.time;
   }
-  this.stats.end()
+  // this.stats.end()
   this.loopRaf = requestAnimationFrame(this.loop);
 };
 

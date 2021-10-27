@@ -156,16 +156,22 @@ class Slides {
     let tl = gsap.timeline()
     tl.to(header, {
       duration: 0.5, opacity: 0, y: -100, onComplete: () => {
-        desc.style.height = 'auto'
         header.style.height = '0'
+        desc.style.display = 'block'
+        desc.style.height = '100%'
 
         this.slides[this.part][this.currentIdx].classList.add('show-desc')
         // this.slides[this.part][this.currentIdx].style.overflow = 'auto'
         this.slides[this.part][this.currentIdx].style.pointerEvents = 'all'
       }
     })
-    tl.to(desc, {
-      opacity: 1, duration: 0.1, height: 'auto'
+    // tl.set(desc, {
+    //   display: 'block'
+    // })
+    tl.fromTo(desc, {
+      opacity: 0, yPercent: 30
+    }, {
+      opacity: 1, yPercent: 0, duration: 1, delay: 0.5
     })
   }
   hideDesc(activeIndex) {
