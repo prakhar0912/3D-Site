@@ -4,6 +4,7 @@ import { Cursor } from "./Cursor";
 import { Nav } from "./Nav";
 import { slidesData } from "./slidesData";
 import { Frame } from "./Frame";
+import { TriangleFanDrawMode } from "three";
 // import '../css/styles.css'
 
 
@@ -20,7 +21,8 @@ const cursor = new Cursor(document.querySelector(".cursor"), mobileDevice);
 
 const slides = new Slides(slidesData, {
   onTitleClickStart: () => {
-    // showcase.titleClickStart()
+    showcase.titleClickStart()
+    frame.hideLogo()
     cursor.remove()
     frame.hideNextPrev()
     frame.hideHint()
@@ -28,10 +30,11 @@ const slides = new Slides(slidesData, {
   },
   onTitleClickEnd: () => {
     cursor.add()
+    frame.showLogo()
     frame.showNextPrev()
     frame.showHint()
     showcase.inTab = false
-    // showcase.titleClickEnd()
+    showcase.titleClickEnd()
   },
 });
 

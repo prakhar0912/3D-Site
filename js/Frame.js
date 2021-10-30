@@ -14,15 +14,16 @@ class Frame {
             this.mobile = false
             // this.addSectionListeners()
         }
-        else{
+        else {
             // this.addNextPrevListeners()
             this.mobile = true
         }
+        this.logo = document.querySelector('.main-logo')
         this.hintContainer = document.querySelector('.hint')
         this.blowHint()
     }
 
-    hideNextPrev(){
+    hideNextPrev() {
         gsap.to(".mov", {
             opacity: 0, pointerEvents: 'none'
         })
@@ -34,16 +35,24 @@ class Frame {
         })
     }
 
-    hideHint(){
+    hideHint() {
         gsap.to(this.hintContainer, {
             opacity: 0, pointerEvents: 'none'
         })
     }
 
-    showHint(){
+    showHint() {
         gsap.to(this.hintContainer, {
             opacity: 1, pointerEvents: 'all'
         })
+    }
+
+    hideLogo(){
+        gsap.to(this.logo, {opacity: 0})
+    }
+
+    showLogo(){
+        gsap.to(this.logo, {opacity: 1})
     }
 
     addSectionListeners() {
@@ -103,14 +112,45 @@ class Frame {
 
     updatePart(index) {
         this.part = index
-        if(!this.mobile){
+        if (!this.mobile) {
             this.paintSection()
         }
         this.updateHint()
+        this.updateLogo()
+    }
+
+    updateLogo() {
+        if (this.logoAnime) {
+            this.logoAnime.kill()
+        }
+        if (this.part == 0) {
+            this.logoAnime = gsap.timeline()
+            this.logoAnime.to(this.logo, { opacity: 0, duration: 0.4 })
+            this.logoAnime.set(this.logo, {
+                width: "100px",
+                top: "-10px",
+                left: "50%",
+                xPercent: -50,
+                rotate: -30,
+            })
+            this.logoAnime.to(this.logo, { opacity: 1, duration: 0.3 })
+        }
+        else if (this.part == 1 || this.part == 2) {
+            this.logoAnime = gsap.timeline()
+            this.logoAnime.to(this.logo, { opacity: 0, duration: 0.4 })
+            this.logoAnime.set(this.logo, {
+                top: "3%",
+                left: "2%",
+                width: "50px",
+                xPercent: 0,
+                rotate: 0,
+            })
+            this.logoAnime.to(this.logo, { opacity: 1, duration: 0.3 })
+        }
     }
 
     killBlow() {
-        if(this.blowAnime){
+        if (this.blowAnime) {
             this.blowAnime.kill()
             gsap.to(this.hintContainer, {
                 scale: 1,
@@ -121,9 +161,9 @@ class Frame {
 
     blowHint() {
         this.killBlow()
-        this.blowAnime = gsap.timeline({repeat: 4})
+        this.blowAnime = gsap.timeline({ repeat: 4 })
         this.blowAnime.to(this.hintContainer, {
-            scale: 1.5,
+            scale: 1.2,
             duration: 1
         })
         this.blowAnime.to(this.hintContainer, {
@@ -132,15 +172,15 @@ class Frame {
         })
     }
 
-    updateHint(){
+    updateHint() {
         let hint = ''
-        if(this.part === 0){
+        if (this.part === 0) {
             hint = `Click &amp; Hold`
         }
-        else if(this.part === 1){
+        else if (this.part === 1) {
             hint = 'Click, Hold then Drag'
         }
-        else if(this.part === 2){
+        else if (this.part === 2) {
             hint = 'Scroll'
         }
         this.hintContainer.innerHTML = hint
@@ -160,7 +200,7 @@ class Frame {
             opacity: 1, duration: 0.3, width: '100%', marginRight: '25px', onComplete: () => {
                 this.sectionShown = true
                 console.log(nextFunc)
-                if(nextFunc){
+                if (nextFunc) {
                     this.hideSection()
                 }
             }

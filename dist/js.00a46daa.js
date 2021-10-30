@@ -48509,35 +48509,33 @@ Showcase.prototype.titleClickStart = function () {
       this.GLStickPop.stop();
     }
 
-    this.GL.scheduleLoop();
-    var directionSpring = (0, _popmotion.spring)({
-      from: this.progress === 0 ? 0 : this.direction,
-      to: 0,
-      mass: 1,
-      stiffness: 800,
-      damping: 2000
-    });
-    var progressSpring = (0, _popmotion.spring)({
-      from: this.progress,
-      to: 1,
-      mass: 5,
-      stiffness: 350,
-      damping: 500
-    });
+    this.GL.scheduleLoop(); // const directionSpring = spring({
+    //   from: this.progress === 0 ? 0 : this.direction,
+    //   to: 0,
+    //   mass: 1,
+    //   stiffness: 800,
+    //   damping: 2000
+    // });
+    // const progressSpring = spring({
+    //   from: this.progress,
+    //   to: 1,
+    //   mass: 5,
+    //   stiffness: 350,
+    //   damping: 500
+    // });
+
     var waveIntensitySpring = (0, _popmotion.spring)({
       from: this.waveIntensity,
-      to: this.waveIntensityRange[1],
+      to: this.waveIntensityRange[1] - 0.33,
       mass: 5,
       stiffness: 10,
       damping: 200
     });
-    this.GLStickPop = (0, _popmotion.parallel)(progressSpring, directionSpring, waveIntensitySpring).start({
+    this.GLStickPop = (0, _popmotion.parallel)(waveIntensitySpring).start({
       update: function update(values) {
         if (_this3.progress !== values[0]) {}
 
-        _this3.progress = values[0];
-        _this3.direction = values[1];
-        _this3.waveIntensity = values[2];
+        _this3.waveIntensity = values[0];
 
         _this3.GL.updateStickEffect({
           progress: _this3.progress,
@@ -48547,11 +48545,9 @@ Showcase.prototype.titleClickStart = function () {
         });
       },
       complete: function complete() {
-        if (_this3.options.onZoomOutFinish) {
-          _this3.options.onZoomOutFinish({
-            activeIndex: _this3.index.active
-          });
-        }
+        setTimeout(function () {
+          _this3.titleClickEnd();
+        }, 2000);
       }
     });
   }
@@ -49013,23 +49009,23 @@ Showcase.prototype.titleClickEnd = function () {
 
     if (this.GLStickPop) {
       this.GLStickPop.stop();
-    }
+    } // const directionSpring = spring({
+    //   from: this.progress === 1 ? 1 : this.direction,
+    //   to: 1,
+    //   mass: 1,
+    //   stiffness: 800,
+    //   damping: 2000
+    // });
+    // const progressSpring = spring({
+    //   from: this.progress,
+    //   to: 0,
+    //   mass: 4,
+    //   stiffness: 400,
+    //   damping: 70,
+    //   restDelta: 0.0001
+    // });
 
-    var directionSpring = (0, _popmotion.spring)({
-      from: this.progress === 1 ? 1 : this.direction,
-      to: 1,
-      mass: 1,
-      stiffness: 800,
-      damping: 2000
-    });
-    var progressSpring = (0, _popmotion.spring)({
-      from: this.progress,
-      to: 0,
-      mass: 4,
-      stiffness: 400,
-      damping: 70,
-      restDelta: 0.0001
-    });
+
     var waveIntensitySpring = (0, _popmotion.spring)({
       from: this.waveIntensity,
       to: this.waveIntensityRange[0],
@@ -49037,11 +49033,13 @@ Showcase.prototype.titleClickEnd = function () {
       stiffness: 800,
       damping: 50
     });
-    this.GLStickPop = (0, _popmotion.parallel)(progressSpring, directionSpring, waveIntensitySpring).start({
+    this.GLStickPop = (0, _popmotion.parallel)( // progressSpring,
+    // directionSpring,
+    waveIntensitySpring).start({
       update: function update(values) {
-        _this9.progress = values[0];
-        _this9.direction = values[1];
-        _this9.waveIntensity = values[2];
+        // this.progress = values[0];
+        // this.direction = values[1];
+        _this9.waveIntensity = values[0];
 
         _this9.GL.updateStickEffect({
           progress: _this9.progress,
@@ -49050,14 +49048,12 @@ Showcase.prototype.titleClickEnd = function () {
           part: _this9.part
         });
       },
-      complete: function complete() {
-        if (_this9.options.onClickEnd) {
-          _this9.options.onClickEnd({
-            activeIndex: _this9.index.active
-          });
-        }
-
-        _this9.GL.cancelLoop();
+      complete: function complete() {// if (this.options.onClickEnd) {
+        //   this.options.onClickEnd({
+        //     activeIndex: this.index.active
+        //   });
+        // }
+        // this.GL.cancelLoop();
       }
     });
   }
@@ -49762,15 +49758,17 @@ var Nav = /*#__PURE__*/function () {
 
       // this.killAnimation(false)
       this.startBurgerAnimation.to(this.lines[0], {
-        rotate: "43deg",
+        top: 0,
+        rotate: "45deg",
         duration: 0.1
-      });
+      }); // this.startBurgerAnimation.to(this.lines[1], {
+      //     opacity: "0",
+      //     duration: 0.1,
+      //     delay: -0.1
+      // })
+
       this.startBurgerAnimation.to(this.lines[1], {
-        opacity: "0",
-        duration: 0.1,
-        delay: -0.1
-      });
-      this.startBurgerAnimation.to(this.lines[2], {
+        top: "90%",
         rotate: "-45deg",
         duration: 0.1,
         delay: -0.1
@@ -49800,15 +49798,17 @@ var Nav = /*#__PURE__*/function () {
 
       // this.killAnimation(true)
       this.endBurgerAnimation.to(this.lines[0], {
+        top: "40%",
         rotation: 0,
         duration: 0.1
-      });
+      }); // this.endBurgerAnimation.to(this.lines[1], {
+      //     opacity: "1",
+      //     duration: 0.1,
+      //     delay: -0.1
+      // })
+
       this.endBurgerAnimation.to(this.lines[1], {
-        opacity: "1",
-        duration: 0.1,
-        delay: -0.1
-      });
-      this.endBurgerAnimation.to(this.lines[2], {
+        top: "80%",
         rotation: 0,
         duration: 0.1,
         delay: -0.1
@@ -50001,21 +50001,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // import image1 from "../images/11.jpg";
 var slidesData = [[{
   image: _landing.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n            <p style=\"text-align: center;\">Click and Hold to Progress!</p>\n          </div>\n        </div>\n      "),
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title title-center\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n            <p style=\"text-align: center;\">Click and Hold to Progress!</p>\n          </div>\n        </div>\n      "),
   position: 10
 }], [{
   image: _bg.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>KUVALYAM</p>\n              <p>Real Estate</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ",
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>KUVALYAM</p>\n              <div>\n                <p>Industry</p>\n                <p>Real Estate</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">Click to Know More</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ",
   position: 0
 }, {
   image: _.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>Sundowner</p>\n              <p>Cafe</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      "
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>Sundowner</p>\n              <div>\n                <p>Industry</p>\n                <p>Cafe</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">Click to Know More</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      "
 }, {
   image: _2.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Cordwainers</p>\n              <p class=''>Marketing</p>\n            </div>\n            <a class=\"slide-more\">Click to Know More!</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      "
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Cordwainers</p>\n              <div>\n                <p>Industry</p>\n                <p>Marketing</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">Click to Know More</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      "
 }], [{
   image: _contactBack.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n          </div>\n          <div class=\"slide-desc slide-desc-last\">\n            <div class=\"contact-container\">\n                <section>\n                    <div class=\"cTitle cOne\">\n                        <div>\n                            <p>1</p>\n                        </div>\n                        <p>OUR SERVICES</p>\n                        <h1>HOW WE</h1>\n                        <h1>MAY HELP YOU</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We deliver logical campaigns made of stunning visuals!\n                            </h1>\n                            <p>\n                              We are a team of creative experts communicating modern day solutions with intricate designs & proven strategies. \n                            </p>\n                            <h1>\n                              Million Dreams - Million Designs\n                            </h1>\n                            <p>\n                              We love it when we create something that changes your story and this drives us further to create awesomeness every day. Have a look at what we have created recently.\n                            </p>\n                            <h1>\n                              We create meaningful experiences for you, your brand & its customers.\n                            </h1>\n                            <p>\n                              We are seasoned experts in crafting purpose-driven experiences, scaleable strategies and visual drama for your audience. We can help you and your brand get the audience which it oh! so rightly deserves.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cTwo\">\n                        <div>\n                            <p>2</p>\n                        </div>\n                        <p>OUR TEAM</p>\n                        <h1>YOU WILL BE</h1>\n                        <h1>IN SAFE HANDS</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We are an Award-Winning Global Design Studio\n                            </h1>\n                            <p>\n                              Working with clients from all over the world and building successful brands with empathy and creativity with our comprehensive range of services\n                            </p>\n                            <h1>\n                              Branding & Strategy\n                            </h1>\n                            <p>\n                              Building the foundations of a brand and making it equipped with a visual language for sustainability.\n                            </p>\n                            <h1>\n                              Marketing & Promotions\n                            </h1>\n                            <p>\n                              Helping a brand reach their core consumers and accelerating the flow of revenue.\n                            </p>\n                            <h1>\n                              Customer Experience\n                            </h1>\n                            <p>\n                              Developing the customer-brand relationship by building strategy, delivering interactions and more.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contactUs.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cThree\">\n                        <div>\n                            <p>3</p>\n                        </div>\n                        <p>OUR CLIENTS</p>\n                        <h1>PEOPLE WHO</h1>\n                        <h1>TRUST US</h1>\n                    </div>\n                    <div>\n                        <img src=\"").concat(_clients.default, "\" alt=\"\">\n                    </div>\n                </section>\n                <section class=\"contacts\">\n                  <div class=\"contacts-cont\">\n                    <h2>Contact</h2>\n                    <div>\n                        <p>514 656-0976</p>\n                        <p>info@whitepencil.com</p>\n                    </div>\n                    <h2>Address</h2>\n                    <div>\n                      <p>4030, rue Saint-Ambroise, suite 105</p>\n                      <p>Montr\xE9al (Qu\xE9bec) H4C 2C7</p>\n                      <p>Canada</p>\n                    </div>\n                    <div class=\"email\">\n                        <h2>Write to us</h2>\n                        <p>Email</p>\n                    </div>\n                  </div>\n                </section>\n            </div>\n          </div>\n        </div>\n      "),
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title title-center\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n          </div>\n          <div class=\"slide-desc slide-desc-last\">\n            <div class=\"contact-container\">\n                <section>\n                    <div class=\"cTitle cOne\">\n                        <div>\n                            <p>1</p>\n                        </div>\n                        <p>OUR SERVICES</p>\n                        <h1>HOW WE</h1>\n                        <h1>MAY HELP YOU</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We deliver logical campaigns made of stunning visuals!\n                            </h1>\n                            <p>\n                              We are a team of creative experts communicating modern day solutions with intricate designs & proven strategies. \n                            </p>\n                            <h1>\n                              Million Dreams - Million Designs\n                            </h1>\n                            <p>\n                              We love it when we create something that changes your story and this drives us further to create awesomeness every day. Have a look at what we have created recently.\n                            </p>\n                            <h1>\n                              We create meaningful experiences for you, your brand & its customers.\n                            </h1>\n                            <p>\n                              We are seasoned experts in crafting purpose-driven experiences, scaleable strategies and visual drama for your audience. We can help you and your brand get the audience which it oh! so rightly deserves.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cTwo\">\n                        <div>\n                            <p>2</p>\n                        </div>\n                        <p>OUR TEAM</p>\n                        <h1>YOU WILL BE</h1>\n                        <h1>IN SAFE HANDS</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We are an Award-Winning Global Design Studio\n                            </h1>\n                            <p>\n                              Working with clients from all over the world and building successful brands with empathy and creativity with our comprehensive range of services\n                            </p>\n                            <h1>\n                              Branding & Strategy\n                            </h1>\n                            <p>\n                              Building the foundations of a brand and making it equipped with a visual language for sustainability.\n                            </p>\n                            <h1>\n                              Marketing & Promotions\n                            </h1>\n                            <p>\n                              Helping a brand reach their core consumers and accelerating the flow of revenue.\n                            </p>\n                            <h1>\n                              Customer Experience\n                            </h1>\n                            <p>\n                              Developing the customer-brand relationship by building strategy, delivering interactions and more.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contactUs.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cThree\">\n                        <div>\n                            <p>3</p>\n                        </div>\n                        <p>OUR CLIENTS</p>\n                        <h1>PEOPLE WHO</h1>\n                        <h1>TRUST US</h1>\n                    </div>\n                    <div>\n                        <img src=\"").concat(_clients.default, "\" alt=\"\">\n                    </div>\n                </section>\n                <section class=\"contacts\">\n                  <div class=\"contacts-cont\">\n                    <h2>Contact</h2>\n                    <div>\n                        <p>514 656-0976</p>\n                        <p>info@whitepencil.com</p>\n                    </div>\n                    <h2>Address</h2>\n                    <div>\n                      <p>4030, rue Saint-Ambroise, suite 105</p>\n                      <p>Montr\xE9al (Qu\xE9bec) H4C 2C7</p>\n                      <p>Canada</p>\n                    </div>\n                    <div class=\"email\">\n                        <h2>Write to us</h2>\n                        <p>Email</p>\n                    </div>\n                  </div>\n                </section>\n            </div>\n          </div>\n        </div>\n      "),
   position: -10
 }]];
 exports.slidesData = slidesData;
@@ -50056,6 +50056,7 @@ var Frame = /*#__PURE__*/function () {
       this.mobile = true;
     }
 
+    this.logo = document.querySelector('.main-logo');
     this.hintContainer = document.querySelector('.hint');
     this.blowHint();
   }
@@ -50090,6 +50091,20 @@ var Frame = /*#__PURE__*/function () {
       _gsap.default.to(this.hintContainer, {
         opacity: 1,
         pointerEvents: 'all'
+      });
+    }
+  }, {
+    key: "hideLogo",
+    value: function hideLogo() {
+      _gsap.default.to(this.logo, {
+        opacity: 0
+      });
+    }
+  }, {
+    key: "showLogo",
+    value: function showLogo() {
+      _gsap.default.to(this.logo, {
+        opacity: 1
       });
     }
   }, {
@@ -50155,6 +50170,50 @@ var Frame = /*#__PURE__*/function () {
       }
 
       this.updateHint();
+      this.updateLogo();
+    }
+  }, {
+    key: "updateLogo",
+    value: function updateLogo() {
+      if (this.logoAnime) {
+        this.logoAnime.kill();
+      }
+
+      if (this.part == 0) {
+        this.logoAnime = _gsap.default.timeline();
+        this.logoAnime.to(this.logo, {
+          opacity: 0,
+          duration: 0.4
+        });
+        this.logoAnime.set(this.logo, {
+          width: "100px",
+          top: "-10px",
+          left: "50%",
+          xPercent: -50,
+          rotate: -30
+        });
+        this.logoAnime.to(this.logo, {
+          opacity: 1,
+          duration: 0.3
+        });
+      } else if (this.part == 1 || this.part == 2) {
+        this.logoAnime = _gsap.default.timeline();
+        this.logoAnime.to(this.logo, {
+          opacity: 0,
+          duration: 0.4
+        });
+        this.logoAnime.set(this.logo, {
+          top: "3%",
+          left: "2%",
+          width: "50px",
+          xPercent: 0,
+          rotate: 0
+        });
+        this.logoAnime.to(this.logo, {
+          opacity: 1,
+          duration: 0.3
+        });
+      }
     }
   }, {
     key: "killBlow",
@@ -50176,7 +50235,7 @@ var Frame = /*#__PURE__*/function () {
         repeat: 4
       });
       this.blowAnime.to(this.hintContainer, {
-        scale: 1.5,
+        scale: 1.2,
         duration: 1
       });
       this.blowAnime.to(this.hintContainer, {
@@ -50295,6 +50354,8 @@ var _slidesData = require("./slidesData");
 
 var _Frame = require("./Frame");
 
+var _three = require("three");
+
 // import '../css/styles.css'
 var mobileAndTabletCheck = function mobileAndTabletCheck() {
   var check = false;
@@ -50311,7 +50372,8 @@ var container = document.getElementById("app");
 var cursor = new _Cursor.Cursor(document.querySelector(".cursor"), mobileDevice);
 var slides = new _Slides.Slides(_slidesData.slidesData, {
   onTitleClickStart: function onTitleClickStart() {
-    // showcase.titleClickStart()
+    showcase.titleClickStart();
+    frame.hideLogo();
     cursor.remove();
     frame.hideNextPrev();
     frame.hideHint();
@@ -50319,9 +50381,11 @@ var slides = new _Slides.Slides(_slidesData.slidesData, {
   },
   onTitleClickEnd: function onTitleClickEnd() {
     cursor.add();
+    frame.showLogo();
     frame.showNextPrev();
     frame.showHint();
-    showcase.inTab = false; // showcase.titleClickEnd()
+    showcase.inTab = false;
+    showcase.titleClickEnd();
   }
 });
 var frame = new _Frame.Frame({
@@ -50478,7 +50542,7 @@ if (mobileDevice) {
     document.documentElement.style.setProperty('--vh', "".concat(nice, "px"));
   }, false);
 }
-},{"./Showcase":"js/Showcase.js","./Slides":"js/Slides.js","./Cursor":"js/Cursor.js","./Nav":"js/Nav.js","./slidesData":"js/slidesData.js","./Frame":"js/Frame.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./Showcase":"js/Showcase.js","./Slides":"js/Slides.js","./Cursor":"js/Cursor.js","./Nav":"js/Nav.js","./slidesData":"js/slidesData.js","./Frame":"js/Frame.js","three":"node_modules/three/build/three.module.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -50506,7 +50570,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42295" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43275" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

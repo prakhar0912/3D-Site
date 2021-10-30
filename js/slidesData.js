@@ -21,7 +21,7 @@ const slidesData = [
       content: `
         <div class="slide-container">
           <div class="slide-header">
-            <div class="slide-title">
+            <div class="slide-title title-center">
               <img src="${landingLogo}">
               <img src="${landingStudio}">
             </div>
@@ -40,9 +40,12 @@ const slidesData = [
           <div class="slide-header">
             <div class="slide-title">
               <p>KUVALYAM</p>
-              <p>Real Estate</p>
+              <div>
+                <p>Industry</p>
+                <p>Real Estate</p>
+              </div>
             </div>
-            <a class="slide-more">Click to Know More!</a>
+            <a class="slide-more">Click to Know More</a>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
@@ -62,9 +65,12 @@ const slidesData = [
           <div class="slide-header">
             <div class="slide-title">
               <p>Sundowner</p>
-              <p>Cafe</p>
+              <div>
+                <p>Industry</p>
+                <p>Cafe</p>
+              </div>
             </div>
-            <a class="slide-more">Click to Know More!</a>
+            <a class="slide-more">Click to Know More</a>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
@@ -83,9 +89,12 @@ const slidesData = [
           <div class="slide-header">
             <div class="slide-title">
               <p class='mobile-small'>Cordwainers</p>
-              <p class=''>Marketing</p>
+              <div>
+                <p>Industry</p>
+                <p>Marketing</p>
+              </div>
             </div>
-            <a class="slide-more">Click to Know More!</a>
+            <a class="slide-more">Click to Know More</a>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
@@ -104,7 +113,7 @@ const slidesData = [
       content: `
         <div class="slide-container">
           <div class="slide-header">
-            <div class="slide-title">
+            <div class="slide-title title-center">
               <img src="${landingLogo}">
               <img src="${landingStudio}">
             </div>

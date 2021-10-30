@@ -231,38 +231,34 @@ Showcase.prototype.titleClickStart = function () {
     }
     this.GL.scheduleLoop();
 
-    const directionSpring = spring({
-      from: this.progress === 0 ? 0 : this.direction,
-      to: 0,
-      mass: 1,
-      stiffness: 800,
-      damping: 2000
-    });
-    const progressSpring = spring({
-      from: this.progress,
-      to: 1,
-      mass: 5,
-      stiffness: 350,
-      damping: 500
-    });
+    // const directionSpring = spring({
+    //   from: this.progress === 0 ? 0 : this.direction,
+    //   to: 0,
+    //   mass: 1,
+    //   stiffness: 800,
+    //   damping: 2000
+    // });
+    // const progressSpring = spring({
+    //   from: this.progress,
+    //   to: 1,
+    //   mass: 5,
+    //   stiffness: 350,
+    //   damping: 500
+    // });
 
     const waveIntensitySpring = spring({
       from: this.waveIntensity,
-      to: this.waveIntensityRange[1],
+      to: this.waveIntensityRange[1]-0.33,
       mass: 5,
       stiffness: 10,
       damping: 200
     });
     this.GLStickPop = parallel(
-      progressSpring,
-      directionSpring,
       waveIntensitySpring
     ).start({
       update: values => {
         if (this.progress !== values[0]) { }
-        this.progress = values[0];
-        this.direction = values[1];
-        this.waveIntensity = values[2];
+        this.waveIntensity = values[0];
 
         this.GL.updateStickEffect({
           progress: this.progress,
@@ -272,11 +268,9 @@ Showcase.prototype.titleClickStart = function () {
         });
       },
       complete: () => {
-        if (this.options.onZoomOutFinish) {
-          this.options.onZoomOutFinish({
-            activeIndex: this.index.active
-          });
-        }
+        setTimeout(() => {
+          this.titleClickEnd()
+        }, 2000)
       }
     });
   }
@@ -700,21 +694,21 @@ Showcase.prototype.titleClickEnd = function () {
     if (this.GLStickPop) {
       this.GLStickPop.stop();
     }
-    const directionSpring = spring({
-      from: this.progress === 1 ? 1 : this.direction,
-      to: 1,
-      mass: 1,
-      stiffness: 800,
-      damping: 2000
-    });
-    const progressSpring = spring({
-      from: this.progress,
-      to: 0,
-      mass: 4,
-      stiffness: 400,
-      damping: 70,
-      restDelta: 0.0001
-    });
+    // const directionSpring = spring({
+    //   from: this.progress === 1 ? 1 : this.direction,
+    //   to: 1,
+    //   mass: 1,
+    //   stiffness: 800,
+    //   damping: 2000
+    // });
+    // const progressSpring = spring({
+    //   from: this.progress,
+    //   to: 0,
+    //   mass: 4,
+    //   stiffness: 400,
+    //   damping: 70,
+    //   restDelta: 0.0001
+    // });
     const waveIntensitySpring = spring({
       from: this.waveIntensity,
       to: this.waveIntensityRange[0],
@@ -724,14 +718,14 @@ Showcase.prototype.titleClickEnd = function () {
     });
 
     this.GLStickPop = parallel(
-      progressSpring,
-      directionSpring,
+      // progressSpring,
+      // directionSpring,
       waveIntensitySpring
     ).start({
       update: values => {
-        this.progress = values[0];
-        this.direction = values[1];
-        this.waveIntensity = values[2];
+        // this.progress = values[0];
+        // this.direction = values[1];
+        this.waveIntensity = values[0];
         this.GL.updateStickEffect({
           progress: this.progress,
           direction: this.direction,
@@ -740,12 +734,12 @@ Showcase.prototype.titleClickEnd = function () {
         });
       },
       complete: () => {
-        if (this.options.onClickEnd) {
-          this.options.onClickEnd({
-            activeIndex: this.index.active
-          });
-        }
-        this.GL.cancelLoop();
+        // if (this.options.onClickEnd) {
+        //   this.options.onClickEnd({
+        //     activeIndex: this.index.active
+        //   });
+        // }
+        // this.GL.cancelLoop();
       }
     });
   }

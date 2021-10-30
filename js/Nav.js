@@ -52,15 +52,17 @@ class Nav {
     showNav() {
         // this.killAnimation(false)
         this.startBurgerAnimation.to(this.lines[0], {
-            rotate: "43deg",
+            top: 0,
+            rotate: "45deg",
             duration: 0.1,
         })
+        // this.startBurgerAnimation.to(this.lines[1], {
+        //     opacity: "0",
+        //     duration: 0.1,
+        //     delay: -0.1
+        // })
         this.startBurgerAnimation.to(this.lines[1], {
-            opacity: "0",
-            duration: 0.1,
-            delay: -0.1
-        })
-        this.startBurgerAnimation.to(this.lines[2], {
+            top: "90%",
             rotate: "-45deg",
             duration: 0.1,
             delay: -0.1
@@ -89,15 +91,17 @@ class Nav {
     hideNav() {
         // this.killAnimation(true)
         this.endBurgerAnimation.to(this.lines[0], {
+            top: "40%",
             rotation: 0,
             duration: 0.1
         })
+        // this.endBurgerAnimation.to(this.lines[1], {
+        //     opacity: "1",
+        //     duration: 0.1,
+        //     delay: -0.1
+        // })
         this.endBurgerAnimation.to(this.lines[1], {
-            opacity: "1",
-            duration: 0.1,
-            delay: -0.1
-        })
-        this.endBurgerAnimation.to(this.lines[2], {
+            top: "80%",
             rotation: 0,
             duration: 0.1,
             delay: -0.1
