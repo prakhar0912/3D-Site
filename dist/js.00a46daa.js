@@ -50203,9 +50203,9 @@ var Frame = /*#__PURE__*/function () {
           duration: 0.4
         });
         this.logoAnime.set(this.logo, {
-          top: "1%",
-          left: "3%",
-          width: "50px",
+          top: "-3px",
+          left: "5px",
+          width: "70px",
           xPercent: 0,
           rotate: 0
         });
