@@ -50203,7 +50203,7 @@ var Frame = /*#__PURE__*/function () {
           duration: 0.4
         });
         this.logoAnime.set(this.logo, {
-          top: "3%",
+          top: "2%",
           left: "3%",
           width: "50px",
           xPercent: 0,
