@@ -49466,7 +49466,7 @@ var Cursor = /*#__PURE__*/function () {
         dot: this.DOM.dot.getBoundingClientRect(),
         circle: this.DOM.circle.getBoundingClientRect()
       };
-      this.triangles = this.DOM.el.querySelectorAll('.arrow');
+      this.triangles = this.DOM.el.querySelectorAll('.cursor > .arrow');
 
       _gsap.default.set(this.hintContainer, {
         xPercent: -50
@@ -49963,6 +49963,8 @@ module.exports = "/contact2.9872ccad.jpg";
 module.exports = "/contactUs2.de8ce58a.webp";
 },{}],"images/contactBack.jpg":[function(require,module,exports) {
 module.exports = "/contactBack.1e01978f.jpg";
+},{}],"images/arrow.svg":[function(require,module,exports) {
+module.exports = "/arrow.305c14c2.svg";
 },{}],"images/clients.jpg":[function(require,module,exports) {
 module.exports = "/clients.89e11f67.jpg";
 },{}],"js/slidesData.js":[function(require,module,exports) {
@@ -49997,6 +49999,8 @@ var _contactUs = _interopRequireDefault(require("../images/contactUs2.webp"));
 
 var _contactBack = _interopRequireDefault(require("../images/contactBack.jpg"));
 
+var _arrow = _interopRequireDefault(require("../images/arrow.svg"));
+
 var _clients = _interopRequireDefault(require("../images/clients.jpg"));
 
 var _kuv = _interopRequireDefault(require("../kuv.html"));
@@ -50010,21 +50014,21 @@ var slidesData = [[{
   position: 10
 }], [{
   image: _bg.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>KUVALYAM</p>\n              <div>\n                <p>Industry</p>\n                <p>Real Estate</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">Click to Know More</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ",
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>KUVALYAM</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>REAL ESTATE</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">READ MORE<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      "),
   position: 0
 }, {
   image: _.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>Sundowner</p>\n              <div>\n                <p>Industry</p>\n                <p>Cafe</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">Click to Know More</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      "
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>Sundowner</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>CAFE</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">READ MORE<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
 }, {
   image: _2.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Cordwainers</p>\n              <div>\n                <p>Industry</p>\n                <p>Marketing</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">Click to Know More</a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      "
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Cordwainers</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>MARKETING</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">READ MORE<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
 }], [{
   image: _contactBack.default,
   content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title title-center\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n          </div>\n          <div class=\"slide-desc slide-desc-last\">\n            <div class=\"contact-container\">\n                <section>\n                    <div class=\"cTitle cOne\">\n                        <div>\n                            <p>1</p>\n                        </div>\n                        <p>OUR SERVICES</p>\n                        <h1>HOW WE</h1>\n                        <h1>MAY HELP YOU</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We deliver logical campaigns made of stunning visuals!\n                            </h1>\n                            <p>\n                              We are a team of creative experts communicating modern day solutions with intricate designs & proven strategies. \n                            </p>\n                            <h1>\n                              Million Dreams - Million Designs\n                            </h1>\n                            <p>\n                              We love it when we create something that changes your story and this drives us further to create awesomeness every day. Have a look at what we have created recently.\n                            </p>\n                            <h1>\n                              We create meaningful experiences for you, your brand & its customers.\n                            </h1>\n                            <p>\n                              We are seasoned experts in crafting purpose-driven experiences, scaleable strategies and visual drama for your audience. We can help you and your brand get the audience which it oh! so rightly deserves.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cTwo\">\n                        <div>\n                            <p>2</p>\n                        </div>\n                        <p>OUR TEAM</p>\n                        <h1>YOU WILL BE</h1>\n                        <h1>IN SAFE HANDS</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We are an Award-Winning Global Design Studio\n                            </h1>\n                            <p>\n                              Working with clients from all over the world and building successful brands with empathy and creativity with our comprehensive range of services\n                            </p>\n                            <h1>\n                              Branding & Strategy\n                            </h1>\n                            <p>\n                              Building the foundations of a brand and making it equipped with a visual language for sustainability.\n                            </p>\n                            <h1>\n                              Marketing & Promotions\n                            </h1>\n                            <p>\n                              Helping a brand reach their core consumers and accelerating the flow of revenue.\n                            </p>\n                            <h1>\n                              Customer Experience\n                            </h1>\n                            <p>\n                              Developing the customer-brand relationship by building strategy, delivering interactions and more.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contactUs.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cThree\">\n                        <div>\n                            <p>3</p>\n                        </div>\n                        <p>OUR CLIENTS</p>\n                        <h1>PEOPLE WHO</h1>\n                        <h1>TRUST US</h1>\n                    </div>\n                    <div>\n                        <img src=\"").concat(_clients.default, "\" alt=\"\">\n                    </div>\n                </section>\n                <section class=\"contacts\">\n                  <div class=\"contacts-cont\">\n                    <h2>Contact</h2>\n                    <div>\n                        <p>514 656-0976</p>\n                        <p>info@whitepencil.com</p>\n                    </div>\n                    <h2>Address</h2>\n                    <div>\n                      <p>4030, rue Saint-Ambroise, suite 105</p>\n                      <p>Montr\xE9al (Qu\xE9bec) H4C 2C7</p>\n                      <p>Canada</p>\n                    </div>\n                    <div class=\"email\">\n                        <h2>Write to us</h2>\n                        <p>Email</p>\n                    </div>\n                  </div>\n                </section>\n            </div>\n          </div>\n        </div>\n      "),
   position: -10
 }]];
 exports.slidesData = slidesData;
-},{"../img/bg11.jpg":"img/bg11.jpg","../images/22.jpg":"images/22.jpg","../images/33.jpg":"images/33.jpg","../images/44.jpg":"images/44.jpg","../images/55.jpg":"images/55.jpg","../images/landing.jpg":"images/landing.jpg","../images/landingLogo.svg":"images/landingLogo.svg","../images/studio.svg":"images/studio.svg","../images/contact1.webp":"images/contact1.webp","../images/contact2.jpg":"images/contact2.jpg","../images/contactUs2.webp":"images/contactUs2.webp","../images/contactBack.jpg":"images/contactBack.jpg","../images/clients.jpg":"images/clients.jpg","../kuv.html":"kuv.html"}],"js/Frame.js":[function(require,module,exports) {
+},{"../img/bg11.jpg":"img/bg11.jpg","../images/22.jpg":"images/22.jpg","../images/33.jpg":"images/33.jpg","../images/44.jpg":"images/44.jpg","../images/55.jpg":"images/55.jpg","../images/landing.jpg":"images/landing.jpg","../images/landingLogo.svg":"images/landingLogo.svg","../images/studio.svg":"images/studio.svg","../images/contact1.webp":"images/contact1.webp","../images/contact2.jpg":"images/contact2.jpg","../images/contactUs2.webp":"images/contactUs2.webp","../images/contactBack.jpg":"images/contactBack.jpg","../images/arrow.svg":"images/arrow.svg","../images/clients.jpg":"images/clients.jpg","../kuv.html":"kuv.html"}],"js/Frame.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -50063,10 +50067,35 @@ var Frame = /*#__PURE__*/function () {
 
     this.logo = document.querySelector('.main-logo');
     this.hintContainer = document.querySelector('.hint');
+    this.rotContainer = document.querySelector(".rot");
+    this.projContainer = document.querySelector(".proj");
+    this.lineTop = this.projContainer.querySelector(".on");
+    this.lineBottom = this.projContainer.querySelector(".tw");
+    this.projP = this.projContainer.querySelector("p");
+    this.numProjs = 3;
+    this.addRotListeners();
     this.blowHint();
   }
 
   _createClass(Frame, [{
+    key: "addRotListeners",
+    value: function addRotListeners() {
+      var _this = this;
+
+      this.rotAnime = _gsap.default.to(this.rotContainer, {
+        rotation: 360,
+        repeat: -1,
+        duration: 9,
+        ease: "linear"
+      });
+      this.rotContainer.addEventListener('mouseover', function () {
+        _this.rotAnime.pause();
+      });
+      this.rotContainer.addEventListener('mouseleave', function () {
+        _this.rotAnime.play();
+      });
+    }
+  }, {
     key: "hideNextPrev",
     value: function hideNextPrev() {
       _gsap.default.to(".mov", {
@@ -50115,22 +50144,22 @@ var Frame = /*#__PURE__*/function () {
   }, {
     key: "addSectionListeners",
     value: function addSectionListeners() {
-      var _this = this;
+      var _this2 = this;
 
       this.sectionContainer.addEventListener('mouseenter', function () {
-        _this.showSection();
+        _this2.showSection();
       });
       this.sectionContainer.addEventListener('mouseleave', function () {
-        _this.hideSection();
+        _this2.hideSection();
       });
       this.sections.forEach(function (ele, i) {
         ele.addEventListener('click', function () {
-          _this.pauseSectionActivity = true;
+          _this2.pauseSectionActivity = true;
 
           if (i === 3) {
-            _this.options.moveToSection(2);
+            _this2.options.moveToSection(2);
           } else {
-            _this.options.moveToSection(i);
+            _this2.options.moveToSection(i);
           }
         });
       });
@@ -50138,31 +50167,66 @@ var Frame = /*#__PURE__*/function () {
   }, {
     key: "addNextPrevListeners",
     value: function addNextPrevListeners() {
-      var _this2 = this;
+      var _this3 = this;
 
       // document.querySelector("button.nextbtn").addEventListener("mousedown", () => {
       //     this.options.nextSection('down', false)
       // })
       document.querySelector("button.nextbtn").addEventListener("touchstart", function () {
-        _this2.options.nextSection('down', true);
+        _this3.options.nextSection('down', true);
       }); // document.querySelector("button.nextbtn").addEventListener("mouseup", () => {
       //     this.options.nextSection('up', false)
       // })
 
       document.querySelector("button.nextbtn").addEventListener("touchend", function () {
-        _this2.options.nextSection('up', true);
+        _this3.options.nextSection('up', true);
       }); // document.querySelector("button.prevbtn").addEventListener("mousedown", () => {
       //     this.options.prevSection('down', false)
       // })
 
       document.querySelector("button.prevbtn").addEventListener("touchstart", function () {
-        _this2.options.prevSection('down', true);
+        _this3.options.prevSection('down', true);
       }); // document.querySelector("button.prevbtn").addEventListener("mouseup", () => {
       //     this.options.prevSection('up', false)
       // })
 
       document.querySelector("button.prevbtn").addEventListener("touchend", function () {
-        _this2.options.prevSection('up', true);
+        _this3.options.prevSection('up', true);
+      });
+    }
+  }, {
+    key: "updateProj",
+    value: function updateProj(index) {
+      if (this.part === 1) {
+        _gsap.default.to(this.lineTop, {
+          height: "".concat(10 + 80 / this.numProjs * -index, "%")
+        });
+
+        _gsap.default.to(this.lineBottom, {
+          height: "calc(".concat(10 + 80 / this.numProjs * (this.numProjs + index), "% - 2rem)")
+        });
+
+        if (index < 0.2 && index > -0.2) {
+          this.projP.innerHTML = "1/" + this.numProjs;
+        } else if (index < -0.8 && index > -1.2) {
+          this.projP.innerHTML = "2/" + this.numProjs;
+        } else if (index < -1.8 && index > -2.2) {
+          this.projP.innerHTML = "3/" + this.numProjs;
+        }
+      }
+    }
+  }, {
+    key: "showProj",
+    value: function showProj() {
+      _gsap.default.to(this.projContainer, {
+        opacity: 1
+      });
+    }
+  }, {
+    key: "hideProj",
+    value: function hideProj() {
+      _gsap.default.to(this.projContainer, {
+        opacity: 0
       });
     }
   }, {
@@ -50176,6 +50240,12 @@ var Frame = /*#__PURE__*/function () {
 
       this.updateHint();
       this.updateLogo();
+
+      if (this.part === 1) {
+        this.showProj();
+      } else {
+        this.hideProj();
+      }
     }
   }, {
     key: "updateLogo",
@@ -50267,7 +50337,7 @@ var Frame = /*#__PURE__*/function () {
   }, {
     key: "showSection",
     value: function showSection(nextFunc) {
-      var _this3 = this;
+      var _this4 = this;
 
       // console.log(this.sectionShown, this.pauseSectionActivity)
       if (this.sectionShown && !nextFunc || this.pauseSectionActivity) {
@@ -50284,11 +50354,11 @@ var Frame = /*#__PURE__*/function () {
         width: '100%',
         marginRight: '25px',
         onComplete: function onComplete() {
-          _this3.sectionShown = true;
+          _this4.sectionShown = true;
           console.log(nextFunc);
 
           if (nextFunc) {
-            _this3.hideSection();
+            _this4.hideSection();
           }
         }
       });
@@ -50296,7 +50366,7 @@ var Frame = /*#__PURE__*/function () {
   }, {
     key: "hideSection",
     value: function hideSection() {
-      var _this4 = this;
+      var _this5 = this;
 
       if (!this.sectionShown || this.pauseSectionActivity) {
         return;
@@ -50312,29 +50382,29 @@ var Frame = /*#__PURE__*/function () {
         width: 0,
         marginRight: 0,
         onComplete: function onComplete() {
-          _this4.sectionShown = false;
+          _this5.sectionShown = false;
         }
       });
     }
   }, {
     key: "paintSection",
     value: function paintSection() {
-      var _this5 = this;
+      var _this6 = this;
 
       return;
       this.sections.forEach(function (ele, i) {
-        if (i === _this5.part) {
+        if (i === _this6.part) {
           ele.classList.add("active-section");
         } else {
           ele.classList.remove("active-section");
         }
 
-        if (i === _this5.sections.length - 1) {
-          _this5.nonActiveSections = _this5.sectionContainer.querySelectorAll('p:not(.active-section)');
-          _this5.pauseSectionActivity = false;
+        if (i === _this6.sections.length - 1) {
+          _this6.nonActiveSections = _this6.sectionContainer.querySelectorAll('p:not(.active-section)');
+          _this6.pauseSectionActivity = false;
           console.log('here');
 
-          _this5.showSection(true);
+          _this6.showSection(true);
         }
       });
     }
@@ -50378,6 +50448,7 @@ var cursor = new _Cursor.Cursor(document.querySelector(".cursor"), mobileDevice)
 var slides = new _Slides.Slides(_slidesData.slidesData, {
   onTitleClickStart: function onTitleClickStart() {
     showcase.titleClickStart();
+    frame.hideProj();
     frame.hideLogo();
     cursor.remove();
     frame.hideNextPrev();
@@ -50387,6 +50458,7 @@ var slides = new _Slides.Slides(_slidesData.slidesData, {
   onTitleClickEnd: function onTitleClickEnd() {
     cursor.add();
     frame.showLogo();
+    frame.showProj();
     frame.showNextPrev();
     frame.showHint();
     showcase.inTab = false;
@@ -50473,6 +50545,7 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
     slides.onActiveIndexChange(activeIndex);
   },
   onIndexChange: function onIndexChange(index) {
+    frame.updateProj(index);
     slides.onMove(index);
   },
   onZoomOutStart: function onZoomOutStart(_ref) {

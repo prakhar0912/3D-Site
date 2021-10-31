@@ -22,6 +22,7 @@ const cursor = new Cursor(document.querySelector(".cursor"), mobileDevice);
 const slides = new Slides(slidesData, {
   onTitleClickStart: () => {
     showcase.titleClickStart()
+    frame.hideProj()
     frame.hideLogo()
     cursor.remove()
     frame.hideNextPrev()
@@ -31,6 +32,7 @@ const slides = new Slides(slidesData, {
   onTitleClickEnd: () => {
     cursor.add()
     frame.showLogo()
+    frame.showProj()
     frame.showNextPrev()
     frame.showHint()
     showcase.inTab = false
@@ -125,6 +127,7 @@ const showcase = new Showcase(slidesData, {
     slides.onActiveIndexChange(activeIndex);
   },
   onIndexChange: index => {
+    frame.updateProj(index)
     slides.onMove(index);
   },
   onZoomOutStart: ({ activeIndex }) => {

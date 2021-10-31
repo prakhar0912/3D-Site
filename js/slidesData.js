@@ -11,6 +11,7 @@ import contactImage1 from "../images/contact1.webp"
 import contactImage2 from "../images/contact2.jpg"
 import contactImage3 from "../images/contactUs2.webp"
 import contactBack from "../images/contactBack.jpg"
+import arrow from "../images/arrow.svg"
 import clients from "../images/clients.jpg"
 import comeHtml from "../kuv.html"
 
@@ -41,11 +42,11 @@ const slidesData = [
             <div class="slide-title">
               <p>KUVALYAM</p>
               <div>
-                <p>Industry</p>
-                <p>Real Estate</p>
+                <p>INDUSTRY</p>
+                <p>REAL ESTATE</p>
               </div>
             </div>
-            <a class="slide-more">Click to Know More</a>
+            <a class="slide-more">READ MORE<img src="${arrow}"></a>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
@@ -66,11 +67,11 @@ const slidesData = [
             <div class="slide-title">
               <p>Sundowner</p>
               <div>
-                <p>Industry</p>
-                <p>Cafe</p>
+                <p>INDUSTRY</p>
+                <p>CAFE</p>
               </div>
             </div>
-            <a class="slide-more">Click to Know More</a>
+            <a class="slide-more">READ MORE<img src="${arrow}"></a>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
@@ -90,11 +91,11 @@ const slidesData = [
             <div class="slide-title">
               <p class='mobile-small'>Cordwainers</p>
               <div>
-                <p>Industry</p>
-                <p>Marketing</p>
+                <p>INDUSTRY</p>
+                <p>MARKETING</p>
               </div>
             </div>
-            <a class="slide-more">Click to Know More</a>
+            <a class="slide-more">READ MORE<img src="${arrow}"></a>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>

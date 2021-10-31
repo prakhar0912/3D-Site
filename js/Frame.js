@@ -20,7 +20,25 @@ class Frame {
         }
         this.logo = document.querySelector('.main-logo')
         this.hintContainer = document.querySelector('.hint')
+        this.rotContainer = document.querySelector(".rot")
+        this.projContainer = document.querySelector(".proj")
+        this.lineTop = this.projContainer.querySelector(".on")
+        this.lineBottom = this.projContainer.querySelector(".tw")
+        this.projP = this.projContainer.querySelector("p")
+        this.numProjs = 3
+        this.addRotListeners()
         this.blowHint()
+    }
+
+
+    addRotListeners() {
+        this.rotAnime = gsap.to(this.rotContainer, { rotation: 360, repeat: -1, duration: 9, ease: "linear" })
+        this.rotContainer.addEventListener('mouseover', () => {
+            this.rotAnime.pause()
+        })
+        this.rotContainer.addEventListener('mouseleave', () => {
+            this.rotAnime.play()
+        })
     }
 
     hideNextPrev() {
@@ -47,12 +65,12 @@ class Frame {
         })
     }
 
-    hideLogo(){
-        gsap.to(this.logo, {opacity: 0})
+    hideLogo() {
+        gsap.to(this.logo, { opacity: 0 })
     }
 
-    showLogo(){
-        gsap.to(this.logo, {opacity: 1})
+    showLogo() {
+        gsap.to(this.logo, { opacity: 1 })
     }
 
     addSectionListeners() {
@@ -111,6 +129,39 @@ class Frame {
         })
     }
 
+    updateProj(index) {
+        if (this.part === 1) {
+            gsap.to(this.lineTop, {
+                height: `${10 + ((80 / this.numProjs) * (-index))}%`
+            })
+            gsap.to(this.lineBottom, {
+                height: `calc(${10 + ((80 / this.numProjs) * (this.numProjs + index))}% - 2rem)`
+            })
+            if(index < 0.2 && index > -0.2){
+                this.projP.innerHTML = "1/" + this.numProjs
+            }
+            else if(index < -0.8 && index > -1.2){
+                this.projP.innerHTML = "2/" + this.numProjs
+            }
+            else if(index < -1.8 && index > -2.2){
+                this.projP.innerHTML = "3/" + this.numProjs
+            }
+
+        }
+    }
+
+    showProj() {
+        gsap.to(this.projContainer, {
+            opacity: 1
+        })
+    }
+
+    hideProj() {
+        gsap.to(this.projContainer, {
+            opacity: 0
+        })
+    }
+
     updatePart(index) {
         this.part = index
         if (!this.mobile) {
@@ -118,6 +169,12 @@ class Frame {
         }
         this.updateHint()
         this.updateLogo()
+        if (this.part === 1) {
+            this.showProj()
+        }
+        else {
+            this.hideProj()
+        }
     }
 
     updateLogo() {
