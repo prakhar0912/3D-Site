@@ -75,6 +75,7 @@ class Frame {
         })
     }
 
+
     addNextPrevListeners() {
         // document.querySelector("button.nextbtn").addEventListener("mousedown", () => {
         //     this.options.nextSection('down', false)
@@ -139,8 +140,8 @@ class Frame {
             this.logoAnime = gsap.timeline()
             this.logoAnime.to(this.logo, { opacity: 0, duration: 0.4 })
             this.logoAnime.set(this.logo, {
-                top: "7px",
-                left: "20px",
+                top: this.mobile ? "5px" : "7px",
+                left: this.mobile ? "5px" : "20px",
                 width: "70px",
                 xPercent: 0,
                 rotate: 0,

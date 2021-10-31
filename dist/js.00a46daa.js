@@ -50208,8 +50208,8 @@ var Frame = /*#__PURE__*/function () {
           duration: 0.4
         });
         this.logoAnime.set(this.logo, {
-          top: "7px",
-          left: "20px",
+          top: this.mobile ? "5px" : "7px",
+          left: this.mobile ? "5px" : "20px",
           width: "70px",
           xPercent: 0,
           rotate: 0
