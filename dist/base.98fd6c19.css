@@ -356,6 +356,7 @@ a:focus {
   position: absolute;
   margin-top: 10px;
   left: 50%;
+  text-align: center;
   transform: translateX(-50%);
   color: rgba(255, 255, 255, 0.842);
 }

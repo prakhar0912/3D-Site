@@ -139,8 +139,8 @@ class Frame {
             this.logoAnime = gsap.timeline()
             this.logoAnime.to(this.logo, { opacity: 0, duration: 0.4 })
             this.logoAnime.set(this.logo, {
-                top: "-3px",
-                left: "5px",
+                top: "7px",
+                left: "20px",
                 width: "70px",
                 xPercent: 0,
                 rotate: 0,

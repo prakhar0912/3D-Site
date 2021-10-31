@@ -49467,6 +49467,11 @@ var Cursor = /*#__PURE__*/function () {
         circle: this.DOM.circle.getBoundingClientRect()
       };
       this.triangles = this.DOM.el.querySelectorAll('.arrow');
+
+      _gsap.default.set(this.hintContainer, {
+        xPercent: -50
+      });
+
       this.scale = 1;
       this.opacity = 1;
       this.mousePos = {
@@ -50203,8 +50208,8 @@ var Frame = /*#__PURE__*/function () {
           duration: 0.4
         });
         this.logoAnime.set(this.logo, {
-          top: "-3px",
-          left: "5px",
+          top: "7px",
+          left: "20px",
           width: "70px",
           xPercent: 0,
           rotate: 0

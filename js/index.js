@@ -91,7 +91,7 @@ const frame = new Frame({
 
 const showcase = new Showcase(slidesData, {
   killHint: () => {
-    if(showcase.part === 1){
+    if (showcase.part === 1) {
       cursor.killHint()
     }
     setTimeout(() => {
@@ -100,7 +100,7 @@ const showcase = new Showcase(slidesData, {
     }, 2000)
   },
   cursorRender: () => {
-    if(!mobileDevice){
+    if (!mobileDevice) {
       cursor.render()
     }
   },
@@ -192,7 +192,7 @@ if (mobileDevice) {
   let nice = window.innerHeight * 0.01;
   document.documentElement.style.setProperty('--vh', `${nice}px`);
   window.addEventListener("resize", function () {
-      nice = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${nice}px`);
+    nice = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${nice}px`);
   }, false);
 }

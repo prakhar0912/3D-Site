@@ -27,6 +27,7 @@ class Cursor {
             this.hintContainer = this.DOM.el.querySelector('.cursor-hint');
             this.bounds = { dot: this.DOM.dot.getBoundingClientRect(), circle: this.DOM.circle.getBoundingClientRect() };
             this.triangles = this.DOM.el.querySelectorAll('.arrow')
+            gsap.set(this.hintContainer, {xPercent: -50})
             this.scale = 1;
             this.opacity = 1;
             this.mousePos = { x: 0, y: 0 };
