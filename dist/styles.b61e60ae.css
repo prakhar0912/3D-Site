@@ -888,8 +888,9 @@ section:nth-of-type(3)>div>img {
     margin: auto;
   }
   .close {
-    top: 5px;
-    left: 25px;
+    top: 1%;
+    left: 5%;
+    margin: 0;
   }
   body {
     touch-action: none;

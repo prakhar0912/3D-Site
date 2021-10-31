@@ -140,7 +140,7 @@ class Frame {
             this.logoAnime.to(this.logo, { opacity: 0, duration: 0.4 })
             this.logoAnime.set(this.logo, {
                 top: "3%",
-                left: "2%",
+                left: "3%",
                 width: "50px",
                 xPercent: 0,
                 rotate: 0,
