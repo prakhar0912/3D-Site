@@ -50440,7 +50440,7 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
     setTimeout(function () {
       frame.killBlow();
       cursor.killHint();
-    }, 1000);
+    }, 2000);
   },
   cursorRender: function cursorRender() {
     if (!mobileDevice) {

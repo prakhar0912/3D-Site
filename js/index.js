@@ -97,7 +97,7 @@ const showcase = new Showcase(slidesData, {
     setTimeout(() => {
       frame.killBlow()
       cursor.killHint()
-    }, 1000)
+    }, 2000)
   },
   cursorRender: () => {
     if(!mobileDevice){
