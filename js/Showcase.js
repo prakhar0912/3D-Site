@@ -167,7 +167,7 @@ Showcase.prototype.onGrabMove = function (scroll) {
     if (this.index.active !== index) {
       this.index.active = index;
       if (this.options.onActiveIndexChange) {
-        this.options.onActiveIndexChange(this.index.active);
+        this.options.onActiveIndexChange(this.part,this.index.active);
       }
       // this.slides.onActiveIndexChange(this.index.active);
 
@@ -324,7 +324,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
         this.setStickEffect()
         this.part = to
         this.GL.part = to
-        this.options.updatePart(to)
+        this.options.updatePart(to, this.index.active)
         if (to === 2) {
           setTimeout(() => {
             this.options.onPart3()
@@ -384,7 +384,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
           this.removeEvents()
         }
         this.setStickEffect()
-        this.options.updatePart(to)
+        this.options.updatePart(to, this.index.active)
         this.part = to
         this.GL.part = to
         this.inTransition = false

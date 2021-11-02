@@ -91,7 +91,7 @@ canvas {
   user-select: none; */
   pointer-events: none;
   visibility: visible;
-  z-index: 1;
+  z-index: 2;
 }
 
 .master-slide-container {
@@ -164,7 +164,6 @@ canvas {
 
 .slide-more {
   /* border-bottom: 1px solid; */
-
   margin: 10px 20% 10px auto;
   text-align: center;
   color: white;
@@ -174,11 +173,11 @@ canvas {
   pointer-events: all;
   visibility: visible;
   cursor: pointer;
-  font-family: gotham,'Times New Roman', Times, serif;
+  font-family: gotham, 'Times New Roman', Times, serif;
   /* border-bottom: 1px solid rgb(180, 180, 180); */
 }
 
-.slide-more > img{
+.slide-more>img {
   /* transform: translateY(1px); */
   margin-left: 20px;
 }
@@ -207,7 +206,7 @@ canvas {
   position: relative;
 }
 
-.title-center{
+.title-center {
   width: max-content;
   margin: 0 auto;
 }
@@ -221,13 +220,13 @@ canvas {
   font-size: 6rem;
 }
 
-.slide-title>div{
+.slide-title>div {
   margin-top: 5px;
   margin-left: 35px;
   padding: 3px 0;
   padding-left: 20px;
   border-left: 2px white solid;
-  font-family: gotham,'Times New Roman', Times, serif;
+  font-family: gotham, 'Times New Roman', Times, serif;
   font-weight: 100;
 }
 
@@ -239,7 +238,7 @@ canvas {
   line-height: 1.1rem;
 }
 
-.slide-title>div>p:nth-of-type(1){
+.slide-title>div>p:nth-of-type(1) {
   color: rgb(192, 192, 192);
   margin-bottom: 5px;
 }
@@ -358,7 +357,7 @@ canvas {
   width: 30px;
 }
 
-.main-logo{
+.main-logo {
   /* transform: rotate(-30deg); */
   width: max-content;
   margin: 0;
@@ -370,12 +369,10 @@ canvas {
   /* transition: opacity 1s ease-in; */
 }
 
-.main-logo > img{
+.main-logo>img {
   height: 100%;
   width: 100%;
 }
-
-
 
 .close>span:nth-of-type(1) {
   top: 0px;
@@ -789,7 +786,7 @@ section:nth-of-type(3)>div>img {
   transform: translate(-50%, 15px)
 }
 
-.proj{
+.proj {
   position: absolute;
   right: 10px;
   top: 50%;
@@ -800,7 +797,7 @@ section:nth-of-type(3)>div>img {
   opacity: 0;
 }
 
-.proj > .lien{
+.proj>.lien {
   position: relative;
   width: 2px;
   background-color: grey;
@@ -808,13 +805,13 @@ section:nth-of-type(3)>div>img {
   transform: translateX(-50%);
 }
 
-.proj > .num{
+.proj>.num {
   position: relative;
   margin: 0;
   height: 2rem;
 }
 
-.proj > .num > p{
+.proj>.num>p {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -823,29 +820,40 @@ section:nth-of-type(3)>div>img {
   color: white;
 }
 
-.on{
+.on {
   top: 0;
   height: 10%;
   background-color: white!important;
 }
 
-.tw{
+.tw {
   /* display: none; */
   /* height: 90%; */
   height: calc(90% - 2rem);
 }
-
 
 .arrow {
   opacity: 0;
   display: none;
 }
 
-.proj > .arrow{
+.proj>.arrow {
   opacity: 1;
   display: block;
   mix-blend-mode: difference;
+}
 
+.video {
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+}
+
+.video>video {
+  width: 100%;
 }
 
 .hide {
@@ -889,7 +897,7 @@ section:nth-of-type(3)>div>img {
   .master-slide-container:nth-of-type(2)>.slide.show-desc {
     height: calc(var(--vh, 1vh) * 100);
   }
-  .slide-title{
+  .slide-title {
     width: max-content;
     margin: 0 auto 0 10vw;
   }
@@ -904,7 +912,7 @@ section:nth-of-type(3)>div>img {
     /* font-family: celinePeach; */
     font-size: 3.5rem;
   }
-  .slide-title>div{
+  .slide-title>div {
     margin: 0;
     margin-left: 20px;
     margin-top: 5px;
@@ -936,7 +944,7 @@ section:nth-of-type(3)>div>img {
   .desc-container {
     font-size: 2rem;
   }
-  .slide-header{
+  .slide-header {
     width: 100%;
   }
   .long {
@@ -1000,7 +1008,7 @@ section:nth-of-type(3)>div>img {
     font-size: 3.8rem;
     margin: 5px 0;
   }
-  .proj{
+  .proj {
     height: 130px;
   }
   .contact-container {
@@ -1033,6 +1041,10 @@ section:nth-of-type(3)>div>img {
   }
   .img-container {
     width: 100%;
+  }
+  .video>video {
+    width: initial;
+    height: 100%;
   }
   .img-container>img {
     display: block;
@@ -1072,7 +1084,7 @@ section:nth-of-type(3)>div>img {
   .slide-title>p:nth-of-type(1) {
     font-size: 3.7rem;
   }
-  .slide-title>div>p{
+  .slide-title>div>p {
     font-size: 0.9rem;
   }
   .long {
@@ -1094,20 +1106,20 @@ section:nth-of-type(3)>div>img {
   .center>img {
     width: 17vw;
   }
-  .rot{
+  .rot {
     width: 70px;
   }
   .text {
     font-size: 3.6rem;
   }
-  .slide-more{
+  .slide-more {
     margin-right: 15%;
   }
   .current-section {
     right: 60px;
     font-size: 0.9rem;
   }
-  .hint{
+  .hint {
     font-size: 1rem;
   }
 }

@@ -2,7 +2,7 @@ import gsap from "gsap"
 
 
 class Frame {
-    constructor(options, mobileDevice) {
+    constructor(options, mobileDevice, numProjs) {
         this.options = options
         if (!mobileDevice) {
             // this.sectionContainer = document.querySelector('.current-section')
@@ -25,7 +25,7 @@ class Frame {
         this.lineTop = this.projContainer.querySelector(".on")
         this.lineBottom = this.projContainer.querySelector(".tw")
         this.projP = this.projContainer.querySelector("p")
-        this.numProjs = 3
+        this.numProjs = numProjs
         this.addRotListeners()
         this.blowHint()
     }
@@ -137,16 +137,7 @@ class Frame {
             gsap.to(this.lineBottom, {
                 height: `calc(${10 + ((80 / this.numProjs) * (this.numProjs + index))}% - 2rem)`
             })
-            if(index < 0.2 && index > -0.2){
-                this.projP.innerHTML = "1/" + this.numProjs
-            }
-            else if(index < -0.8 && index > -1.2){
-                this.projP.innerHTML = "2/" + this.numProjs
-            }
-            else if(index < -1.8 && index > -2.2){
-                this.projP.innerHTML = "3/" + this.numProjs
-            }
-
+            this.projP.innerHTML = (Math.round(-index)+1) + "/" + this.numProjs
         }
     }
 

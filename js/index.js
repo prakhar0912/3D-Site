@@ -4,8 +4,7 @@ import { Cursor } from "./Cursor";
 import { Nav } from "./Nav";
 import { slidesData } from "./slidesData";
 import { Frame } from "./Frame";
-import { TriangleFanDrawMode } from "three";
-// import '../css/styles.css'
+import { Video } from "./Video"
 
 
 let mobileAndTabletCheck = () => {
@@ -25,16 +24,18 @@ const slides = new Slides(slidesData, {
     frame.hideProj()
     frame.hideLogo()
     cursor.remove()
-    frame.hideNextPrev()
+    // frame.hideNextPrev()
     frame.hideHint()
+    videos.hideVideo()
     showcase.inTab = true
   },
   onTitleClickEnd: () => {
     cursor.add()
     frame.showLogo()
     frame.showProj()
-    frame.showNextPrev()
+    // frame.showNextPrev()
     frame.showHint()
+    videos.showVideo()
     showcase.inTab = false
     showcase.titleClickEnd()
   },
@@ -89,7 +90,9 @@ const frame = new Frame({
   moveToSection: (index) => {
     showcase.startMoveToSection(showcase.part, index)
   }
-}, mobileDevice)
+}, mobileDevice, slidesData[1].length)
+
+const videos = new Video(slidesData)
 
 const showcase = new Showcase(slidesData, {
   killHint: () => {
@@ -123,8 +126,9 @@ const showcase = new Showcase(slidesData, {
   hideTriangle: () => {
     cursor.hideTriangle()
   },
-  onActiveIndexChange: activeIndex => {
+  onActiveIndexChange: (part,activeIndex) => {
     slides.onActiveIndexChange(activeIndex);
+    videos.changePartSection(part, activeIndex)
   },
   onIndexChange: index => {
     frame.updateProj(index)
@@ -133,6 +137,7 @@ const showcase = new Showcase(slidesData, {
   onZoomOutStart: ({ activeIndex }) => {
     // cursor.enter();
     slides.appear();
+    videos.hideVideo()
   },
   onClickStart: ({ activeIndex }) => {
     // cursor.enter();
@@ -141,25 +146,28 @@ const showcase = new Showcase(slidesData, {
   onClickEnd: ({ activeIndex }) => {
     // cursor.leave();
     slides.disperse(activeIndex)
-    console.log('hereaars')
     showcase.inTab = false
   },
   onZoomOutFinish: ({ activeIndex }) => { },
   onFullscreenStart: ({ activeIndex }) => {
     // cursor.leave();
     slides.disperse(activeIndex);
+    videos.showVideo()
   },
   onFullscreenFinish: ({ activeIndex }) => { },
   startTransitionPage: (from, to) => {
     slides.startTransitionParts(from, to)
+    videos.hideVideo()
   },
   endTransitionPage: (from, to) => {
     slides.endTransitionParts(from, to)
+    videos.showVideo()
   },
-  updatePart: (index) => {
+  updatePart: (index, section) => {
     nav.updatePart(index)
     frame.updatePart(index)
     cursor.updateHint(index)
+    videos.changePartSection(index, section)
   },
   blowUp: () => {
     cursor.blowUp()
@@ -168,6 +176,7 @@ const showcase = new Showcase(slidesData, {
     cursor.blowDown()
   }
 });
+
 
 const nav = new Nav({
   onSectionSelected: (index) => {

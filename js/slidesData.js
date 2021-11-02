@@ -1,9 +1,9 @@
 // import image1 from "../images/11.jpg";
-import image1 from "../img/bg11.jpg"
-import image2 from "../images/22.jpg";
-import image3 from "../images/33.jpg";
-import image4 from "../images/44.jpg";
-import image5 from "../images/55.jpg";
+import image1 from "../images/img1.jpg"
+import image2 from "../images/img2.jpg";
+import image3 from "../images/img3.jpg";
+import image4 from "../images/img4.jpg";
+import image5 from "../images/img5.jpg";
 import landingImage from "../images/landing.jpg"
 import landingLogo from "../images/landingLogo.svg"
 import landingStudio from "../images/studio.svg"
@@ -13,6 +13,7 @@ import contactImage3 from "../images/contactUs2.webp"
 import contactBack from "../images/contactBack.jpg"
 import arrow from "../images/arrow.svg"
 import clients from "../images/clients.jpg"
+import video1 from "../video/KingsAuto.mp4"
 import comeHtml from "../kuv.html"
 
 const slidesData = [
@@ -36,17 +37,18 @@ const slidesData = [
   [
     {
       image: image1,
+      video: video1,
       content: `
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
-              <p>KUVALYAM</p>
+              <p>Kings Auto</p>
               <div>
                 <p>INDUSTRY</p>
-                <p>REAL ESTATE</p>
+                <p>AUTOMOBILE</p>
               </div>
             </div>
-            <a class="slide-more">READ MORE<img src="${arrow}"></a>
+            <a class="slide-more">COMING SOON<img src="${arrow}"></a>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
@@ -65,13 +67,13 @@ const slidesData = [
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
-              <p>Sundowner</p>
+              <p>AdsNUrl</p>
               <div>
                 <p>INDUSTRY</p>
-                <p>CAFE</p>
+                <p>APP DESIGN</p>
               </div>
             </div>
-            <a class="slide-more">READ MORE<img src="${arrow}"></a>
+            <a class="slide-more">COMING SOON<img src="${arrow}"></a>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
@@ -89,13 +91,61 @@ const slidesData = [
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
-              <p class='mobile-small'>Cordwainers</p>
+              <p class='mobile-small'>DearPet</p>
               <div>
                 <p>INDUSTRY</p>
-                <p>MARKETING</p>
+                <p>PETS</p>
               </div>
             </div>
-            <a class="slide-more">READ MORE<img src="${arrow}"></a>
+            <a class="slide-more">COMING SOON<img src="${arrow}"></a>
+          </div>
+          <div class="slide-desc slide-desc-iframe">
+            <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
+            <div class="close">
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      `
+    },
+    {
+      image: image4,
+      content: `
+        <div class="slide-container">
+          <div class="slide-header">
+            <div class="slide-title">
+              <p class='mobile-small'>TCP</p>
+              <div>
+                <p>INDUSTRY</p>
+                <p>FOOD</p>
+              </div>
+            </div>
+            <a class="slide-more">COMING SOON<img src="${arrow}"></a>
+          </div>
+          <div class="slide-desc slide-desc-iframe">
+            <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
+            <div class="close">
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      `
+    },
+    {
+      image: image5,
+      content: `
+        <div class="slide-container">
+          <div class="slide-header">
+            <div class="slide-title">
+              <p class='mobile-small'>Elverde<br>Botanics</p>
+              <div>
+                <p>INDUSTRY</p>
+                <p>SKIN CARE</p>
+              </div>
+            </div>
+            <a class="slide-more">COMING SOON<img src="${arrow}"></a>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>

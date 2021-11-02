@@ -48439,7 +48439,7 @@ Showcase.prototype.onGrabMove = function (scroll) {
       this.index.active = index;
 
       if (this.options.onActiveIndexChange) {
-        this.options.onActiveIndexChange(this.index.active);
+        this.options.onActiveIndexChange(this.part, this.index.active);
       } // this.slides.onActiveIndexChange(this.index.active);
 
 
@@ -48615,7 +48615,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
         _this4.part = to;
         _this4.GL.part = to;
 
-        _this4.options.updatePart(to);
+        _this4.options.updatePart(to, _this4.index.active);
 
         if (to === 2) {
           setTimeout(function () {
@@ -48687,7 +48687,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
 
         _this4.setStickEffect();
 
-        _this4.options.updatePart(to);
+        _this4.options.updatePart(to, _this4.index.active);
 
         _this4.part = to;
         _this4.GL.part = to;
@@ -49140,8 +49140,7 @@ var Slides = /*#__PURE__*/function () {
   }, {
     key: "mount",
     value: function mount(container) {
-      container.appendChild(this.container);
-      this.addClickEvents();
+      container.appendChild(this.container); // this.addClickEvents()
     }
   }, {
     key: "startTransitionParts",
@@ -49939,16 +49938,16 @@ var Nav = /*#__PURE__*/function () {
 }();
 
 exports.Nav = Nav;
-},{"gsap":"node_modules/gsap/index.js"}],"img/bg11.jpg":[function(require,module,exports) {
-module.exports = "/bg11.227d36ae.jpg";
-},{}],"images/22.jpg":[function(require,module,exports) {
-module.exports = "/22.7f5b4566.jpg";
-},{}],"images/33.jpg":[function(require,module,exports) {
-module.exports = "/33.39ab3870.jpg";
-},{}],"images/44.jpg":[function(require,module,exports) {
-module.exports = "/44.e23d4e23.jpg";
-},{}],"images/55.jpg":[function(require,module,exports) {
-module.exports = "/55.9af8514e.jpg";
+},{"gsap":"node_modules/gsap/index.js"}],"images/img1.jpg":[function(require,module,exports) {
+module.exports = "/img1.b5344f23.jpg";
+},{}],"images/img2.jpg":[function(require,module,exports) {
+module.exports = "/img2.0dfbc994.jpg";
+},{}],"images/img3.jpg":[function(require,module,exports) {
+module.exports = "/img3.eb0e9daa.jpg";
+},{}],"images/img4.jpg":[function(require,module,exports) {
+module.exports = "/img4.6519e925.jpg";
+},{}],"images/img5.jpg":[function(require,module,exports) {
+module.exports = "/img5.f653c870.jpg";
 },{}],"images/landing.jpg":[function(require,module,exports) {
 module.exports = "/landing.10726b6b.jpg";
 },{}],"images/landingLogo.svg":[function(require,module,exports) {
@@ -49967,6 +49966,8 @@ module.exports = "/contactBack.1e01978f.jpg";
 module.exports = "/arrow.305c14c2.svg";
 },{}],"images/clients.jpg":[function(require,module,exports) {
 module.exports = "/clients.89e11f67.jpg";
+},{}],"video/KingsAuto.mp4":[function(require,module,exports) {
+module.exports = "/KingsAuto.d7019de4.mp4";
 },{}],"js/slidesData.js":[function(require,module,exports) {
 "use strict";
 
@@ -49975,15 +49976,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.slidesData = void 0;
 
-var _bg = _interopRequireDefault(require("../img/bg11.jpg"));
+var _img = _interopRequireDefault(require("../images/img1.jpg"));
 
-var _ = _interopRequireDefault(require("../images/22.jpg"));
+var _img2 = _interopRequireDefault(require("../images/img2.jpg"));
 
-var _2 = _interopRequireDefault(require("../images/33.jpg"));
+var _img3 = _interopRequireDefault(require("../images/img3.jpg"));
 
-var _3 = _interopRequireDefault(require("../images/44.jpg"));
+var _img4 = _interopRequireDefault(require("../images/img4.jpg"));
 
-var _4 = _interopRequireDefault(require("../images/55.jpg"));
+var _img5 = _interopRequireDefault(require("../images/img5.jpg"));
 
 var _landing = _interopRequireDefault(require("../images/landing.jpg"));
 
@@ -50003,6 +50004,8 @@ var _arrow = _interopRequireDefault(require("../images/arrow.svg"));
 
 var _clients = _interopRequireDefault(require("../images/clients.jpg"));
 
+var _KingsAuto = _interopRequireDefault(require("../video/KingsAuto.mp4"));
+
 var _kuv = _interopRequireDefault(require("../kuv.html"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -50013,22 +50016,29 @@ var slidesData = [[{
   content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title title-center\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n            <p style=\"text-align: center;\">Click and Hold to Progress!</p>\n          </div>\n        </div>\n      "),
   position: 10
 }], [{
-  image: _bg.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>KUVALYAM</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>REAL ESTATE</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">READ MORE<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      "),
+  image: _img.default,
+  video: _KingsAuto.default,
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>Kings Auto</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>AUTOMOBILE</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      "),
   position: 0
 }, {
-  image: _.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>Sundowner</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>CAFE</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">READ MORE<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
+  image: _img2.default,
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>AdsNUrl</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>APP DESIGN</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
 }, {
-  image: _2.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Cordwainers</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>MARKETING</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">READ MORE<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
+  image: _img3.default,
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>DearPet</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>PETS</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
+}, {
+  image: _img4.default,
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>TCP</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>FOOD</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
+}, {
+  image: _img5.default,
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>Elverde<br>Botanics</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>SKIN CARE</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
 }], [{
   image: _contactBack.default,
   content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title title-center\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n          </div>\n          <div class=\"slide-desc slide-desc-last\">\n            <div class=\"contact-container\">\n                <section>\n                    <div class=\"cTitle cOne\">\n                        <div>\n                            <p>1</p>\n                        </div>\n                        <p>OUR SERVICES</p>\n                        <h1>HOW WE</h1>\n                        <h1>MAY HELP YOU</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We deliver logical campaigns made of stunning visuals!\n                            </h1>\n                            <p>\n                              We are a team of creative experts communicating modern day solutions with intricate designs & proven strategies. \n                            </p>\n                            <h1>\n                              Million Dreams - Million Designs\n                            </h1>\n                            <p>\n                              We love it when we create something that changes your story and this drives us further to create awesomeness every day. Have a look at what we have created recently.\n                            </p>\n                            <h1>\n                              We create meaningful experiences for you, your brand & its customers.\n                            </h1>\n                            <p>\n                              We are seasoned experts in crafting purpose-driven experiences, scaleable strategies and visual drama for your audience. We can help you and your brand get the audience which it oh! so rightly deserves.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cTwo\">\n                        <div>\n                            <p>2</p>\n                        </div>\n                        <p>OUR TEAM</p>\n                        <h1>YOU WILL BE</h1>\n                        <h1>IN SAFE HANDS</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We are an Award-Winning Global Design Studio\n                            </h1>\n                            <p>\n                              Working with clients from all over the world and building successful brands with empathy and creativity with our comprehensive range of services\n                            </p>\n                            <h1>\n                              Branding & Strategy\n                            </h1>\n                            <p>\n                              Building the foundations of a brand and making it equipped with a visual language for sustainability.\n                            </p>\n                            <h1>\n                              Marketing & Promotions\n                            </h1>\n                            <p>\n                              Helping a brand reach their core consumers and accelerating the flow of revenue.\n                            </p>\n                            <h1>\n                              Customer Experience\n                            </h1>\n                            <p>\n                              Developing the customer-brand relationship by building strategy, delivering interactions and more.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contactUs.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cThree\">\n                        <div>\n                            <p>3</p>\n                        </div>\n                        <p>OUR CLIENTS</p>\n                        <h1>PEOPLE WHO</h1>\n                        <h1>TRUST US</h1>\n                    </div>\n                    <div>\n                        <img src=\"").concat(_clients.default, "\" alt=\"\">\n                    </div>\n                </section>\n                <section class=\"contacts\">\n                  <div class=\"contacts-cont\">\n                    <h2>Contact</h2>\n                    <div>\n                        <p>514 656-0976</p>\n                        <p>info@whitepencil.com</p>\n                    </div>\n                    <h2>Address</h2>\n                    <div>\n                      <p>4030, rue Saint-Ambroise, suite 105</p>\n                      <p>Montr\xE9al (Qu\xE9bec) H4C 2C7</p>\n                      <p>Canada</p>\n                    </div>\n                    <div class=\"email\">\n                        <h2>Write to us</h2>\n                        <p>Email</p>\n                    </div>\n                  </div>\n                </section>\n            </div>\n          </div>\n        </div>\n      "),
   position: -10
 }]];
 exports.slidesData = slidesData;
-},{"../img/bg11.jpg":"img/bg11.jpg","../images/22.jpg":"images/22.jpg","../images/33.jpg":"images/33.jpg","../images/44.jpg":"images/44.jpg","../images/55.jpg":"images/55.jpg","../images/landing.jpg":"images/landing.jpg","../images/landingLogo.svg":"images/landingLogo.svg","../images/studio.svg":"images/studio.svg","../images/contact1.webp":"images/contact1.webp","../images/contact2.jpg":"images/contact2.jpg","../images/contactUs2.webp":"images/contactUs2.webp","../images/contactBack.jpg":"images/contactBack.jpg","../images/arrow.svg":"images/arrow.svg","../images/clients.jpg":"images/clients.jpg","../kuv.html":"kuv.html"}],"js/Frame.js":[function(require,module,exports) {
+},{"../images/img1.jpg":"images/img1.jpg","../images/img2.jpg":"images/img2.jpg","../images/img3.jpg":"images/img3.jpg","../images/img4.jpg":"images/img4.jpg","../images/img5.jpg":"images/img5.jpg","../images/landing.jpg":"images/landing.jpg","../images/landingLogo.svg":"images/landingLogo.svg","../images/studio.svg":"images/studio.svg","../images/contact1.webp":"images/contact1.webp","../images/contact2.jpg":"images/contact2.jpg","../images/contactUs2.webp":"images/contactUs2.webp","../images/contactBack.jpg":"images/contactBack.jpg","../images/arrow.svg":"images/arrow.svg","../images/clients.jpg":"images/clients.jpg","../video/KingsAuto.mp4":"video/KingsAuto.mp4","../kuv.html":"kuv.html"}],"js/Frame.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -50047,7 +50057,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var Frame = /*#__PURE__*/function () {
-  function Frame(options, mobileDevice) {
+  function Frame(options, mobileDevice, numProjs) {
     _classCallCheck(this, Frame);
 
     this.options = options;
@@ -50072,7 +50082,7 @@ var Frame = /*#__PURE__*/function () {
     this.lineTop = this.projContainer.querySelector(".on");
     this.lineBottom = this.projContainer.querySelector(".tw");
     this.projP = this.projContainer.querySelector("p");
-    this.numProjs = 3;
+    this.numProjs = numProjs;
     this.addRotListeners();
     this.blowHint();
   }
@@ -50206,13 +50216,7 @@ var Frame = /*#__PURE__*/function () {
           height: "calc(".concat(10 + 80 / this.numProjs * (this.numProjs + index), "% - 2rem)")
         });
 
-        if (index < 0.2 && index > -0.2) {
-          this.projP.innerHTML = "1/" + this.numProjs;
-        } else if (index < -0.8 && index > -1.2) {
-          this.projP.innerHTML = "2/" + this.numProjs;
-        } else if (index < -1.8 && index > -2.2) {
-          this.projP.innerHTML = "3/" + this.numProjs;
-        }
+        this.projP.innerHTML = Math.round(-index) + 1 + "/" + this.numProjs;
       }
     }
   }, {
@@ -50414,6 +50418,122 @@ var Frame = /*#__PURE__*/function () {
 }();
 
 exports.Frame = Frame;
+},{"gsap":"node_modules/gsap/index.js"}],"js/Video.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Video = void 0;
+
+var _gsap = _interopRequireDefault(require("gsap"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Video = /*#__PURE__*/function () {
+  function Video(data) {
+    _classCallCheck(this, Video);
+
+    this.part = 0;
+    this.section = 0;
+    this.videos = this.createVideos(data);
+    this.videoContainer = document.querySelector('.video');
+  }
+
+  _createClass(Video, [{
+    key: "createVideos",
+    value: function createVideos(data) {
+      var videos = [];
+
+      for (var i = 0; i < data.length; i++) {
+        var innerVideos = [];
+
+        for (var j = 0; j < data[i].length; j++) {
+          var videoLink = void 0;
+
+          if (data[i][j].video) {
+            videoLink = data[i][j].video;
+          } else {
+            videoLink = false;
+          }
+
+          innerVideos.push(videoLink);
+        }
+
+        videos.push(innerVideos);
+      }
+
+      console.log(videos);
+      return videos;
+    }
+  }, {
+    key: "changePartSection",
+    value: function changePartSection(part, section) {
+      this.part = part;
+      this.section = section;
+      console.log(this.videos[this.part][this.section]);
+
+      if (this.videos[this.part][this.section] != false) {
+        console.log('arst');
+        this.videoChange();
+      } else {
+        this.removeVideo();
+      }
+    }
+  }, {
+    key: "videoChange",
+    value: function videoChange() {
+      var videoDiv = document.createElement("video");
+      videoDiv.autoplay = true;
+      videoDiv.muted = true;
+      videoDiv.loop = true;
+      videoDiv.src = this.videos[this.part][this.section];
+      this.videoContainer.appendChild(videoDiv);
+    }
+  }, {
+    key: "removeVideo",
+    value: function removeVideo() {
+      var _this = this;
+
+      this.videoAnime = _gsap.default.to(this.videoContainer, {
+        opacity: 0,
+        duration: 0.2,
+        onComplete: function onComplete() {
+          _this.videoContainer.innerHTML = '';
+        }
+      });
+    }
+  }, {
+    key: "hideVideo",
+    value: function hideVideo() {
+      var duration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.3;
+      this.videoAnime = _gsap.default.to(this.videoContainer, {
+        opacity: 0,
+        duration: duration
+      });
+    }
+  }, {
+    key: "showVideo",
+    value: function showVideo() {
+      var duration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.3;
+      this.videoAnime = _gsap.default.to(this.videoContainer, {
+        opacity: 1,
+        duration: duration,
+        delay: 1
+      });
+    }
+  }]);
+
+  return Video;
+}();
+
+exports.Video = Video;
 },{"gsap":"node_modules/gsap/index.js"}],"js/index.js":[function(require,module,exports) {
 "use strict";
 
@@ -50429,9 +50549,8 @@ var _slidesData = require("./slidesData");
 
 var _Frame = require("./Frame");
 
-var _three = require("three");
+var _Video = require("./Video");
 
-// import '../css/styles.css'
 var mobileAndTabletCheck = function mobileAndTabletCheck() {
   var check = false;
 
@@ -50450,17 +50569,19 @@ var slides = new _Slides.Slides(_slidesData.slidesData, {
     showcase.titleClickStart();
     frame.hideProj();
     frame.hideLogo();
-    cursor.remove();
-    frame.hideNextPrev();
+    cursor.remove(); // frame.hideNextPrev()
+
     frame.hideHint();
+    videos.hideVideo();
     showcase.inTab = true;
   },
   onTitleClickEnd: function onTitleClickEnd() {
     cursor.add();
     frame.showLogo();
-    frame.showProj();
-    frame.showNextPrev();
+    frame.showProj(); // frame.showNextPrev()
+
     frame.showHint();
+    videos.showVideo();
     showcase.inTab = false;
     showcase.titleClickEnd();
   }
@@ -50507,7 +50628,8 @@ var frame = new _Frame.Frame({
   moveToSection: function moveToSection(index) {
     showcase.startMoveToSection(showcase.part, index);
   }
-}, mobileDevice);
+}, mobileDevice, _slidesData.slidesData[1].length);
+var videos = new _Video.Video(_slidesData.slidesData);
 var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
   killHint: function killHint() {
     if (showcase.part === 1) {
@@ -50541,8 +50663,9 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
   hideTriangle: function hideTriangle() {
     cursor.hideTriangle();
   },
-  onActiveIndexChange: function onActiveIndexChange(activeIndex) {
+  onActiveIndexChange: function onActiveIndexChange(part, activeIndex) {
     slides.onActiveIndexChange(activeIndex);
+    videos.changePartSection(part, activeIndex);
   },
   onIndexChange: function onIndexChange(index) {
     frame.updateProj(index);
@@ -50552,6 +50675,7 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
     var activeIndex = _ref.activeIndex;
     // cursor.enter();
     slides.appear();
+    videos.hideVideo();
   },
   onClickStart: function onClickStart(_ref2) {
     var activeIndex = _ref2.activeIndex;
@@ -50562,7 +50686,6 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
     var activeIndex = _ref3.activeIndex;
     // cursor.leave();
     slides.disperse(activeIndex);
-    console.log('hereaars');
     showcase.inTab = false;
   },
   onZoomOutFinish: function onZoomOutFinish(_ref4) {
@@ -50572,20 +50695,24 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
     var activeIndex = _ref5.activeIndex;
     // cursor.leave();
     slides.disperse(activeIndex);
+    videos.showVideo();
   },
   onFullscreenFinish: function onFullscreenFinish(_ref6) {
     var activeIndex = _ref6.activeIndex;
   },
   startTransitionPage: function startTransitionPage(from, to) {
     slides.startTransitionParts(from, to);
+    videos.hideVideo();
   },
   endTransitionPage: function endTransitionPage(from, to) {
     slides.endTransitionParts(from, to);
+    videos.showVideo();
   },
-  updatePart: function updatePart(index) {
+  updatePart: function updatePart(index, section) {
     nav.updatePart(index);
     frame.updatePart(index);
     cursor.updateHint(index);
+    videos.changePartSection(index, section);
   },
   blowUp: function blowUp() {
     cursor.blowUp();
@@ -50620,7 +50747,7 @@ if (mobileDevice) {
     document.documentElement.style.setProperty('--vh', "".concat(nice, "px"));
   }, false);
 }
-},{"./Showcase":"js/Showcase.js","./Slides":"js/Slides.js","./Cursor":"js/Cursor.js","./Nav":"js/Nav.js","./slidesData":"js/slidesData.js","./Frame":"js/Frame.js","three":"node_modules/three/build/three.module.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./Showcase":"js/Showcase.js","./Slides":"js/Slides.js","./Cursor":"js/Cursor.js","./Nav":"js/Nav.js","./slidesData":"js/slidesData.js","./Frame":"js/Frame.js","./Video":"js/Video.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

@@ -49,7 +49,7 @@ class Slides {
 
   mount(container) {
     container.appendChild(this.container);
-    this.addClickEvents()
+    // this.addClickEvents()
   }
 
   startTransitionParts(from, to) {
