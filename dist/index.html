@@ -9,7 +9,11 @@
   <meta name="keywords" content="three.js, sticky, animation, webgl, javascript, scroll, drag">
   <meta name="author" content="Codrops">
   <link rel="stylesheet" href="https://use.typekit.net/ncw8xrb.css">
-  <link rel="stylesheet" type="text/css" href="/base.98fd6c19.css"><link rel="stylesheet" type="text/css" href="/styles.b61e60ae.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/base.98fd6c19.css">
+  <link rel="stylesheet" type="text/css" href="/styles.b61e60ae.css">
   <script>document.documentElement.className = "js";
 
 var supportsCssVars = function supportsCssVars() {
@@ -23,15 +27,24 @@ supportsCssVars() || alert("Please view this demo in a modern browser that suppo
 <script src="/base.98fd6c19.js"></script><script src="/styles.b61e60ae.js"></script></head>
 
 <body>
+  <div class="preloader">
+    <div class="">
+      <img src="/mainlogo.318899a4.png" alt="">
+      <div class="loader">
+        <div class="loader-line"></div>
+      </div>
+    </div>
+  </div>
   <main>
     <div class="content" id="app">
       <!-- the content -->
     </div>
   </main>
+  <div class="main-logo">
+    <img src="/mainlogo.318899a4.png" alt="">
+  </div>
   <div class="frame">
-    <div class="main-logo">
-      <img src="/mainlogo.318899a4.png" alt="">
-    </div>
+
     <!-- <div class="mov mobile-hide">
       <button class="nextbtn">
         <p class="unselectable">Next</p>
@@ -58,7 +71,7 @@ supportsCssVars() || alert("Please view this demo in a modern browser that suppo
       <div class="lien tw"></div>
       <div class="arrow-down arrow"></div>
     </div>
-    <p class="frame__tip hint">Click &amp; hold</p>
+    <p class="frame__tip hint">CLICK &amp; HOLD</p>
   </div>
   <img src="/rot.a8fc8391.svg" alt="" class="rot">
   <div class="video">

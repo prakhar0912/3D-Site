@@ -227,7 +227,7 @@ body {
   --color-link-hover: #fff;
   color: var(--color-text);
   background-color: var(--color-bg);
-  font-family: covik-sans, sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .cursor {
@@ -373,7 +373,7 @@ a:focus {
 
 .left{
   position: absolute;
-  font-family: syncopate;
+  font-family: 'Roboto', sans-serif;
   left: 10px;
   top: 50%;
   transform: translateY(-100%) rotate(-90deg);

@@ -1,4 +1,3 @@
-// import image1 from "../images/11.jpg";
 import image1 from "../images/img1.jpg"
 import image2 from "../images/img2.jpg";
 import image3 from "../images/img3.jpg";
@@ -10,6 +9,7 @@ import landingStudio from "../images/studio.svg"
 import contactImage1 from "../images/contact1.webp"
 import contactImage2 from "../images/contact2.jpg"
 import contactImage3 from "../images/contactUs2.webp"
+import contactImage4 from "../images/contact4.jpg"
 import contactBack from "../images/contactBack.jpg"
 import arrow from "../images/arrow.svg"
 import clients from "../images/clients.jpg"
@@ -21,13 +21,12 @@ const slidesData = [
     {
       image: landingImage,
       content: `
-        <div class="slide-container">
+        <div class="slide-container move-up">
           <div class="slide-header">
-            <div class="slide-title title-center">
+            <div class="slide-title title-center ">
               <img src="${landingLogo}">
               <img src="${landingStudio}">
             </div>
-            <p style="text-align: center;">Click and Hold to Progress!</p>
           </div>
         </div>
       `,
@@ -42,7 +41,7 @@ const slidesData = [
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
-              <p>Kings Auto</p>
+              <p>KINGS AUTO</p>
               <div>
                 <p>INDUSTRY</p>
                 <p>AUTOMOBILE</p>
@@ -67,7 +66,7 @@ const slidesData = [
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
-              <p>AdsNUrl</p>
+              <p>ADSNURL</p>
               <div>
                 <p>INDUSTRY</p>
                 <p>APP DESIGN</p>
@@ -91,7 +90,7 @@ const slidesData = [
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
-              <p class='mobile-small'>DearPet</p>
+              <p class='mobile-small'>DEARPET</p>
               <div>
                 <p>INDUSTRY</p>
                 <p>PETS</p>
@@ -115,7 +114,7 @@ const slidesData = [
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
-              <p class='mobile-small'>TCP</p>
+              <p class='mobile-small'>THE CHILLI<br>PROJECT</p>
               <div>
                 <p>INDUSTRY</p>
                 <p>FOOD</p>
@@ -139,7 +138,7 @@ const slidesData = [
         <div class="slide-container">
           <div class="slide-header">
             <div class="slide-title">
-              <p class='mobile-small'>Elverde<br>Botanics</p>
+              <p class='mobile-small'>ELVERDE<br>BOTANICS</p>
               <div>
                 <p>INDUSTRY</p>
                 <p>SKIN CARE</p>
@@ -247,7 +246,7 @@ const slidesData = [
                               Developing the customer-brand relationship by building strategy, delivering interactions and more.
                             </p>
                             <div class="img-container">
-                                <img src="${contactImage2}" alt="">
+                                <img class='size' src="${contactImage4}" alt="">
                             </div>
                         </div>
                         <div class="right">
@@ -272,20 +271,19 @@ const slidesData = [
                 </section>
                 <section class="contacts">
                   <div class="contacts-cont">
-                    <h2>Contact</h2>
+                    <h2>CONTACT</h2>
                     <div>
-                        <p>514 656-0976</p>
-                        <p>info@whitepencil.com</p>
+                        <p>+91 79820 03024</p>
+                        <p>info@whitepencilstudio.com</p>
                     </div>
-                    <h2>Address</h2>
+                    <h2>ADDRESS</h2>
                     <div>
-                      <p>4030, rue Saint-Ambroise, suite 105</p>
-                      <p>Montréal (Québec) H4C 2C7</p>
-                      <p>Canada</p>
+                      <p>B-81, Block B, Nariana Industrial Area Phase-2,</p>
+                      <p>Naraina, New Delhi,</p>
+                      <p>Delhi 110028</p>
                     </div>
                     <div class="email">
-                        <h2>Write to us</h2>
-                        <p>Email</p>
+                        <a href="mailto:info@whitepencilstudio.com" class="mail">WRITE TO US</a>
                     </div>
                   </div>
                 </section>

@@ -28,6 +28,9 @@ class Frame {
         this.numProjs = numProjs
         this.addRotListeners()
         this.blowHint()
+        this.logo.addEventListener('click', () => {
+            this.options.moveToSection(0)
+        })
     }
 
 
@@ -159,7 +162,7 @@ class Frame {
             this.paintSection()
         }
         this.updateHint()
-        this.updateLogo()
+        // this.updateLogo()
         if (this.part === 1) {
             this.showProj()
         }
@@ -224,13 +227,13 @@ class Frame {
     updateHint() {
         let hint = ''
         if (this.part === 0) {
-            hint = `Click &amp; Hold`
+            hint = `CLICK &amp; HOLD`
         }
         else if (this.part === 1) {
-            hint = 'Click, Hold then Drag'
+            hint = 'CLICK, HOLD THEN DRAG'
         }
         else if (this.part === 2) {
-            hint = 'Scroll'
+            hint = 'SCROLL'
         }
         this.hintContainer.innerHTML = hint
         this.blowHint()

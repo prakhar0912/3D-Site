@@ -5,6 +5,7 @@ import { Nav } from "./Nav";
 import { slidesData } from "./slidesData";
 import { Frame } from "./Frame";
 import { Video } from "./Video"
+import { Preloader } from "./Preloader"
 
 
 let mobileAndTabletCheck = () => {
@@ -94,7 +95,12 @@ const frame = new Frame({
 
 const videos = new Video(slidesData)
 
+const preloader = new Preloader()
+
 const showcase = new Showcase(slidesData, {
+  updatePre: (part, total) => {
+    preloader.update(part, total)
+  },
   killHint: () => {
     if (showcase.part === 1) {
       cursor.killHint()

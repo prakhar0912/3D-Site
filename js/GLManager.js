@@ -14,12 +14,13 @@ import {
 import 'regenerator-runtime/runtime'
 import Stats from "stats.js";
 
-function GLManager(data, cursorRender) {
+function GLManager(data, cursorRender, updatePre) {
   this.totalEntries = this.calculateTotalEntries(data);
   this.loadedEntries = 0;
   const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
   camera.position.z = 16;
   this.cursorRender = cursorRender
+  this.updatePre = updatePre
   this.meshes = []
   const scene = new THREE.Scene();
   camera.lookAt = scene.position;
@@ -104,6 +105,7 @@ GLManager.prototype.loadTexture = function (data, i, j) {
     new THREE.TextureLoader().load(data.image, (texture) => {
       if (this.initialRender) {
         this.loadedEntries++;
+        this.updatePre(this.loadedEntries, this.totalEntries)
         this.calculateAspectRatioFactor.bind(this, i, j)
         if (this.loadedEntries === this.totalEntries) {
           document.body.classList.remove('loading');
