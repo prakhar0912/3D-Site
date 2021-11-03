@@ -24,7 +24,10 @@ class Frame {
         this.projContainer = document.querySelector(".proj")
         this.lineTop = this.projContainer.querySelector(".on")
         this.lineBottom = this.projContainer.querySelector(".tw")
+        this.checkScrollContainer = null
         this.projP = this.projContainer.querySelector("p")
+        this.scrollContainer = document.querySelector('.scroll')
+        this.scrollLine = this.scrollContainer.querySelector('.scroll-line')
         this.numProjs = numProjs
         this.addRotListeners()
         this.blowHint()
@@ -54,6 +57,7 @@ class Frame {
         gsap.to(".mov", {
             opacity: 1, pointerEvents: 'all'
         })
+
     }
 
     hideHint() {
@@ -292,9 +296,39 @@ class Frame {
         })
     }
 
-    showScroll(){
-
+    updateScroll(e){
+        if(this.scrollAnime){
+            this.scrollAnime.kill()
+        }
+        this.scrollAnime = gsap.to(this.scrollLine, {
+            height: (this.checkScrollContainer.scrollTop+this.docHeight)*100/this.checkScroll.offsetHeight + "%",
+            duration: 0.4
+        })
     }
+
+    onResize(){
+        this.docHeight = Math.max( document.body.scrollHeight, document.body.offsetHeight);
+    }
+
+    showScroll(){
+        this.docHeight = Math.max( document.body.scrollHeight, document.body.offsetHeight);
+        this.checkScrollContainer = document.querySelector('.master-slide-container:nth-of-type(3) > .slide')
+        this.checkScroll = this.checkScrollContainer.querySelector('div > .slide-desc')
+        this.updateScroll()
+        this.checkScrollContainer.addEventListener('scroll', this.updateScroll.bind(this))
+        gsap.to(this.scrollContainer, {
+            opacity: 1, duration: 0.8
+        })
+    }
+
+    hideScroll(){
+        this.checkScrollContainer.removeEventListener('scroll', this.updateScroll)
+        gsap.to(this.scrollContainer, {
+            opacity: 0, duration: 0.8
+        })
+    }
+
+
 }
 
 export { Frame }

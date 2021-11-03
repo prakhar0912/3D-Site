@@ -144,11 +144,23 @@ class Nav {
                 this.lettersAnimation(i)
             })
             textWrapper.addEventListener('click', () => {
-                this.moveToSection(i)
+                if(this.part !== i){
+                    if(this.part === 2 && i === 3){
+                        console.log('arst')
+                        this.hideNav()
+                        this.options.scrollToContact()
+                    }
+                    else{
+                        this.moveToSection(i)
+                    }
+                }
+                else{
+                    this.hideNav()
+                }
             })
-            textWrapper.addEventListener('touchend', () => {
-                this.moveToSection(i)
-            })
+            // textWrapper.addEventListener('touchend', () => {
+            //     this.moveToSection(i)
+            // })
         })
     }
 
@@ -162,14 +174,17 @@ class Nav {
         //     }
         // })
         this.hideNav()
-        if(this.part === 2){
+        if (this.part === 2) {
             this.options.onHidePart3()
         }
         if (index === 3) {
-            index = 2
+            this.part = index
+            this.options.onSectionSelected(2, true)
         }
-        this.part = index
-        this.options.onSectionSelected(index)
+        else {
+            this.part = index
+            this.options.onSectionSelected(index)
+        }
     }
 
     setLetters() {

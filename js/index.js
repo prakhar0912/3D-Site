@@ -101,6 +101,8 @@ const preloader = new Preloader({
   }
 })
 
+console.log('arst')
+
 const showcase = new Showcase(slidesData, {
   updatePre: (part, total) => {
     preloader.update(part, total)
@@ -122,13 +124,15 @@ const showcase = new Showcase(slidesData, {
   hideDesc: () => {
     slides.hideDesc()
   },
-  onPart3: () => {
+  onPart3: (spec) => {
     frame.hideHint()
-    slides.showPart3()
+    slides.showPart3(spec)
+    frame.showScroll()
   },
   onHidePart3: () => {
     frame.showHint()
     slides.hidePart3()
+    frame.hideScroll()
   },
   showTriangle: () => {
     cursor.showTriangle()
@@ -189,12 +193,20 @@ const showcase = new Showcase(slidesData, {
 
 
 const nav = new Nav({
-  onSectionSelected: (index) => {
+  onSectionSelected: (index, spec) => {
     showcase.inTransition = true
-    showcase.startMoveToSection(showcase.part, index)
+    if(spec){
+      showcase.startMoveToSection(showcase.part, index, true)
+    }
+    else{
+      showcase.startMoveToSection(showcase.part, index)
+    }
   },
   onHidePart3: () => {
     slides.hidePart3()
+  },
+  scrollToContact: () => {
+    slides.scrollToContact()
   }
 })
 
@@ -204,6 +216,7 @@ showcase.render();
 
 window.addEventListener("resize", function () {
   showcase.onResize();
+  frame.onResize()
 });
 
 window.addEventListener("mousemove", function (ev) {

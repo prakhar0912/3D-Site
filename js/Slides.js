@@ -113,7 +113,7 @@ class Slides {
     })
   }
 
-  showPart3() {
+  showPart3(spec) {
     if (this.tl3) {
       this.tl3.kill()
     }
@@ -128,7 +128,19 @@ class Slides {
       }
     })
     this.tl3.to(desc, {
-      opacity: 1, duration: 0.1, height: 'auto'
+      opacity: 1, duration: 0.1, height: 'auto', onComplete: () => {
+        if(spec == true){
+          // document.querySelector('.contact-container')
+          this.scrollToContact()
+        }
+      }
+    })
+  }
+
+  scrollToContact(){
+    let obj = document.querySelector('.master-slide-container:nth-of-type(3) > .slide')
+    gsap.to(obj, {
+      scrollTop: obj.scrollHeight
     })
   }
 

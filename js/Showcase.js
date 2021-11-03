@@ -291,7 +291,7 @@ Showcase.prototype.setStickEffect = function () {
 
 
 
-Showcase.prototype.startMoveToSection = function (from, to) {
+Showcase.prototype.startMoveToSection = function (from, to, spec) {
   if (to < 0 || to > this.data.length - 1 || from === to) {
     console.log(from, to)
     return
@@ -327,7 +327,7 @@ Showcase.prototype.startMoveToSection = function (from, to) {
         this.options.updatePart(to, this.index.active)
         if (to === 2) {
           setTimeout(() => {
-            this.options.onPart3()
+            this.options.onPart3(spec)
           }, 500)
         }
         this.inTransition = false
