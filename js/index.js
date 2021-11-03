@@ -95,7 +95,11 @@ const frame = new Frame({
 
 const videos = new Video(slidesData)
 
-const preloader = new Preloader()
+const preloader = new Preloader({
+  loaded: () => {
+    cursor.add()
+  }
+})
 
 const showcase = new Showcase(slidesData, {
   updatePre: (part, total) => {

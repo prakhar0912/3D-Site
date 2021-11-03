@@ -50,7 +50,6 @@ const slidesData = [
             <a class="slide-more">COMING SOON<img src="${arrow}"></a>
           </div>
           <div class="slide-desc slide-desc-iframe">
-            <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
             <div class="close">
               <span></span>
               <span></span>
@@ -75,7 +74,6 @@ const slidesData = [
             <a class="slide-more">COMING SOON<img src="${arrow}"></a>
           </div>
           <div class="slide-desc slide-desc-iframe">
-            <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
             <div class="close">
               <span></span>
               <span></span>
@@ -99,7 +97,6 @@ const slidesData = [
             <a class="slide-more">COMING SOON<img src="${arrow}"></a>
           </div>
           <div class="slide-desc slide-desc-iframe">
-            <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
             <div class="close">
               <span></span>
               <span></span>
@@ -123,7 +120,6 @@ const slidesData = [
             <a class="slide-more">COMING SOON<img src="${arrow}"></a>
           </div>
           <div class="slide-desc slide-desc-iframe">
-            <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
             <div class="close">
               <span></span>
               <span></span>
@@ -147,7 +143,6 @@ const slidesData = [
             <a class="slide-more">COMING SOON<img src="${arrow}"></a>
           </div>
           <div class="slide-desc slide-desc-iframe">
-            <iframe src="../kuv.e1d4d938.html" frameborder="0" width='100%'></iframe>
             <div class="close">
               <span></span>
               <span></span>

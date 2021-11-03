@@ -1,7 +1,8 @@
 import gsap from "gsap"
 
 class Preloader{
-    constructor(){
+    constructor(options){
+        this.options = options
         this.preloaderContainer = document.querySelector('.preloader')
         this.imgs = this.preloaderContainer.querySelector('div')
         this.line = this.preloaderContainer.querySelector('.loader-line')
@@ -33,11 +34,16 @@ class Preloader{
         if(this.loaderAnime){
             this.loaderAnime.kill()
         }
+        if(part > 3){
+            part = 3
+        }
+        total = 3
         this.loaderAnime = gsap.to(this.line, {
             width: `${part*100/total}%`, duration: 1.5, ease: 'Power4.out', onComplete: () => {
                 if(part === total){
                     console.log('done')
                     this.removePreloader()
+                    this.options.loaded()
                 }
             }
         })

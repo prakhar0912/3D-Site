@@ -37,6 +37,7 @@ class Cursor {
             this.touch = false
             this.initEvents();
             this.blowHint()
+            this.remove()
             // requestAnimationFrame(() => this.render());
         }
         else{

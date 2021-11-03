@@ -49494,7 +49494,8 @@ var Cursor = /*#__PURE__*/function () {
       this.blowAnimation = null;
       this.touch = false;
       this.initEvents();
-      this.blowHint(); // requestAnimationFrame(() => this.render());
+      this.blowHint();
+      this.remove(); // requestAnimationFrame(() => this.render());
     } else {
       this.touch = true;
     }
@@ -50025,20 +50026,20 @@ var slidesData = [[{
 }], [{
   image: _img.default,
   video: _KingsAuto.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>KINGS AUTO</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>AUTOMOBILE</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      "),
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>KINGS AUTO</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>AUTOMOBILE</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      "),
   position: 0
 }, {
   image: _img2.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>ADSNURL</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>APP DESIGN</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p>ADSNURL</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>APP DESIGN</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
 }, {
   image: _img3.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>DEARPET</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>PETS</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>DEARPET</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>PETS</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
 }, {
   image: _img4.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>THE CHILLI<br>PROJECT</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>FOOD</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>THE CHILLI<br>PROJECT</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>FOOD</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
 }, {
   image: _img5.default,
-  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>ELVERDE<br>BOTANICS</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>SKIN CARE</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <iframe src=\"../kuv.e1d4d938.html\" frameborder=\"0\" width='100%'></iframe>\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
+  content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title\">\n              <p class='mobile-small'>ELVERDE<br>BOTANICS</p>\n              <div>\n                <p>INDUSTRY</p>\n                <p>SKIN CARE</p>\n              </div>\n            </div>\n            <a class=\"slide-more\">COMING SOON<img src=\"".concat(_arrow.default, "\"></a>\n          </div>\n          <div class=\"slide-desc slide-desc-iframe\">\n            <div class=\"close\">\n              <span></span>\n              <span></span>\n            </div>\n          </div>\n        </div>\n      ")
 }], [{
   image: _contactBack.default,
   content: "\n        <div class=\"slide-container\">\n          <div class=\"slide-header\">\n            <div class=\"slide-title title-center\">\n              <img src=\"".concat(_landingLogo.default, "\">\n              <img src=\"").concat(_studio.default, "\">\n            </div>\n          </div>\n          <div class=\"slide-desc slide-desc-last\">\n            <div class=\"contact-container\">\n                <section>\n                    <div class=\"cTitle cOne\">\n                        <div>\n                            <p>1</p>\n                        </div>\n                        <p>OUR SERVICES</p>\n                        <h1>HOW WE</h1>\n                        <h1>MAY HELP YOU</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We deliver logical campaigns made of stunning visuals!\n                            </h1>\n                            <p>\n                              We are a team of creative experts communicating modern day solutions with intricate designs & proven strategies. \n                            </p>\n                            <h1>\n                              Million Dreams - Million Designs\n                            </h1>\n                            <p>\n                              We love it when we create something that changes your story and this drives us further to create awesomeness every day. Have a look at what we have created recently.\n                            </p>\n                            <h1>\n                              We create meaningful experiences for you, your brand & its customers.\n                            </h1>\n                            <p>\n                              We are seasoned experts in crafting purpose-driven experiences, scaleable strategies and visual drama for your audience. We can help you and your brand get the audience which it oh! so rightly deserves.\n                            </p>\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact2.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contact.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cTwo\">\n                        <div>\n                            <p>2</p>\n                        </div>\n                        <p>OUR TEAM</p>\n                        <h1>YOU WILL BE</h1>\n                        <h1>IN SAFE HANDS</h1>\n                    </div>\n                    <div class=\"cContent\">\n                        <div class=\"cLeft\">\n                            <h1>\n                              We are an Award-Winning Global Design Studio\n                            </h1>\n                            <p>\n                              Working with clients from all over the world and building successful brands with empathy and creativity with our comprehensive range of services\n                            </p>\n                            <h1>\n                              Branding & Strategy\n                            </h1>\n                            <p>\n                              Building the foundations of a brand and making it equipped with a visual language for sustainability.\n                            </p>\n                            <h1>\n                              Marketing & Promotions\n                            </h1>\n                            <p>\n                              Helping a brand reach their core consumers and accelerating the flow of revenue.\n                            </p>\n                            <h1>\n                              Customer Experience\n                            </h1>\n                            <p>\n                              Developing the customer-brand relationship by building strategy, delivering interactions and more.\n                            </p>\n                            <div class=\"img-container\">\n                                <img class='size' src=\"").concat(_contact3.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                        <div class=\"right\">\n                            <div class=\"img-container\">\n                                <img src=\"").concat(_contactUs.default, "\" alt=\"\">\n                            </div>\n                        </div>\n                    </div>\n                </section>\n                <section>\n                    <div class=\"cTitle cThree\">\n                        <div>\n                            <p>3</p>\n                        </div>\n                        <p>OUR CLIENTS</p>\n                        <h1>PEOPLE WHO</h1>\n                        <h1>TRUST US</h1>\n                    </div>\n                    <div>\n                        <img src=\"").concat(_clients.default, "\" alt=\"\">\n                    </div>\n                </section>\n                <section class=\"contacts\">\n                  <div class=\"contacts-cont\">\n                    <h2>CONTACT</h2>\n                    <div>\n                        <p>+91 79820 03024</p>\n                        <p>info@whitepencilstudio.com</p>\n                    </div>\n                    <h2>ADDRESS</h2>\n                    <div>\n                      <p>B-81, Block B, Nariana Industrial Area Phase-2,</p>\n                      <p>Naraina, New Delhi,</p>\n                      <p>Delhi 110028</p>\n                    </div>\n                    <div class=\"email\">\n                        <a href=\"mailto:info@whitepencilstudio.com\" class=\"mail\">WRITE TO US</a>\n                    </div>\n                  </div>\n                </section>\n            </div>\n          </div>\n        </div>\n      "),
@@ -50567,9 +50568,10 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var Preloader = /*#__PURE__*/function () {
-  function Preloader() {
+  function Preloader(options) {
     _classCallCheck(this, Preloader);
 
+    this.options = options;
     this.preloaderContainer = document.querySelector('.preloader');
     this.imgs = this.preloaderContainer.querySelector('div');
     this.line = this.preloaderContainer.querySelector('.loader-line');
@@ -50616,6 +50618,11 @@ var Preloader = /*#__PURE__*/function () {
         this.loaderAnime.kill();
       }
 
+      if (part > 3) {
+        part = 3;
+      }
+
+      total = 3;
       this.loaderAnime = _gsap.default.to(this.line, {
         width: "".concat(part * 100 / total, "%"),
         duration: 1.5,
@@ -50625,6 +50632,8 @@ var Preloader = /*#__PURE__*/function () {
             console.log('done');
 
             _this2.removePreloader();
+
+            _this2.options.loaded();
           }
         }
       });
@@ -50733,7 +50742,11 @@ var frame = new _Frame.Frame({
   }
 }, mobileDevice, _slidesData.slidesData[1].length);
 var videos = new _Video.Video(_slidesData.slidesData);
-var preloader = new _Preloader.Preloader();
+var preloader = new _Preloader.Preloader({
+  loaded: function loaded() {
+    cursor.add();
+  }
+});
 var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
   updatePre: function updatePre(part, total) {
     preloader.update(part, total);
@@ -50883,7 +50896,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33575" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35043" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
