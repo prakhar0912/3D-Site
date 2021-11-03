@@ -1138,6 +1138,9 @@ section:nth-of-type(3)>div>img {
   .img-container {
     width: 100%;
   }
+  .loader{
+    width: 90vw;
+  }
   .video>video {
     width: initial;
     height: 100%;
