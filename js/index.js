@@ -186,6 +186,7 @@ const showcase = new Showcase(slidesData, {
 
 const nav = new Nav({
   onSectionSelected: (index) => {
+    showcase.inTransition = true
     showcase.startMoveToSection(showcase.part, index)
   },
   onHidePart3: () => {

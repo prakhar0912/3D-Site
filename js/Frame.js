@@ -291,6 +291,10 @@ class Frame {
             }
         })
     }
+
+    showScroll(){
+
+    }
 }
 
 export { Frame }

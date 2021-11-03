@@ -49869,13 +49869,14 @@ var Nav = /*#__PURE__*/function () {
   }, {
     key: "moveToSection",
     value: function moveToSection(index) {
-      this.textWrappers.forEach(function (ele, i) {
-        if (i === index) {
-          ele.classList.add("active");
-        } else {
-          ele.classList.remove("active");
-        }
-      });
+      // this.textWrappers.forEach((ele, i) => {
+      //     if (i === index) {
+      //         ele.classList.add("active")
+      //     }
+      //     else {
+      //         ele.classList.remove("active")
+      //     }
+      // })
       this.hideNav();
 
       if (this.part === 2) {
@@ -50422,6 +50423,9 @@ var Frame = /*#__PURE__*/function () {
         }
       });
     }
+  }, {
+    key: "showScroll",
+    value: function showScroll() {}
   }]);
 
   return Frame;
@@ -50826,6 +50830,7 @@ var showcase = new _Showcase.Showcase(_slidesData.slidesData, {
 });
 var nav = new _Nav.Nav({
   onSectionSelected: function onSectionSelected(index) {
+    showcase.inTransition = true;
     showcase.startMoveToSection(showcase.part, index);
   },
   onHidePart3: function onHidePart3() {

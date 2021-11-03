@@ -153,14 +153,14 @@ class Nav {
     }
 
     moveToSection(index) {
-        this.textWrappers.forEach((ele, i) => {
-            if (i === index) {
-                ele.classList.add("active")
-            }
-            else {
-                ele.classList.remove("active")
-            }
-        })
+        // this.textWrappers.forEach((ele, i) => {
+        //     if (i === index) {
+        //         ele.classList.add("active")
+        //     }
+        //     else {
+        //         ele.classList.remove("active")
+        //     }
+        // })
         this.hideNav()
         if(this.part === 2){
             this.options.onHidePart3()
