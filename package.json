@@ -4,7 +4,7 @@
   "description": "A sticky image effect for a slideshow inspired by [ultanoir's project showcase slideshow](https://ultranoir.com/en/).",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "parcel build index.html"
   },
   "repository": {
     "type": "git",
@@ -26,7 +26,8 @@
     "three": "^0.132.2"
   },
   "devDependencies": {
-    "cssnano": "^5.0.8",
-    "postcss": "^8.3.8"
+    "cssnano": "^4.1.11",
+    "parcel-bundler": "^1.12.3",
+    "postcss": "^8.3.11"
   }
 }
