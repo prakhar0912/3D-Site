@@ -34,10 +34,10 @@ class Preloader{
         if(this.loaderAnime){
             this.loaderAnime.kill()
         }
-        if(part > 3){
-            part = 3
+        if(part > 4){
+            part = 4
         }
-        total = 3
+        total = 4
         this.loaderAnime = gsap.to(this.line, {
             width: `${part*100/total}%`, duration: 1.5, ease: 'Power4.out', onComplete: () => {
                 if(part === total){
