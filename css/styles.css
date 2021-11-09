@@ -1042,6 +1042,9 @@ section:nth-of-type(3)>div>img {
     /* font-family: celinePeach; */
     font-size: 3.5rem;
   }
+  .line{
+    height: 1px;
+  }
   .slide-title>div {
     margin: 0;
     margin-left: 20px;
@@ -1132,8 +1135,9 @@ section:nth-of-type(3)>div>img {
     font-size: 3rem !important;
   }
   .frame__tip {
-    font-size: 1.2rem;
-    bottom: 20px;
+    font-size: 0.8rem !important;
+    /* bottom: 20px; */
+    font-weight: normal !important;
   }
   .mov>button {
     pointer-events: all;
@@ -1141,6 +1145,24 @@ section:nth-of-type(3)>div>img {
   }
   .mov>button>p {
     padding: 10px 10px 6px 10px
+  }
+  .proj > .num > p{
+    font-size: .8rem;
+  }
+  .arrow-up{
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 4px solid white;
+    transform: translate(-50%, -10px);
+  }
+  .arrow-down{
+    border-left:  4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top:   4px solid white;
+    transform: translate(-50%, 10px);
+  }
+  .proj > .lien{
+    width: 1px;
   }
   .nav {
     grid-template-rows: 85% 15%;
@@ -1152,6 +1174,9 @@ section:nth-of-type(3)>div>img {
   .text {
     font-size: 2.4rem;
     margin: 5px 0;
+  }
+  .cTitle > h1{
+    font-size: 2.6rem;
   }
   .proj {
     height: 130px;

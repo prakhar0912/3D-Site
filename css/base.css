@@ -309,14 +309,14 @@ a:focus {
   outline: none;
 }
 
-.frame {
+/* .frame {
   position: absolute;
   height: 100vh;
   width: 100vw;
   text-align: center;
   z-index: 11;
   pointer-events: none;
-}
+} */
 
 .mov{
   position: absolute;
