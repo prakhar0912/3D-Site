@@ -19,7 +19,9 @@ class Frame {
             this.mobile = true
         }
         this.logo = document.querySelector('.main-logo')
-        this.hintContainer = document.querySelector('.hint')
+        this.hintDiv = document.querySelector('.hint')
+        this.hintContainer = this.hintDiv.querySelector('p')
+        this.hintLine = this.hintDiv.querySelector('.lin')
         this.rotContainer = document.querySelector(".rot")
         this.projContainer = document.querySelector(".proj")
         this.lineTop = this.projContainer.querySelector(".on")
@@ -208,8 +210,10 @@ class Frame {
     killBlow() {
         if (this.blowAnime) {
             this.blowAnime.kill()
-            gsap.to(this.hintContainer, {
-                scale: 1,
+            console.log('yeah')
+            gsap.to(this.hintLine, {
+                width: "100%",
+                opacity: 0.6,
                 duration: 0.3
             })
         }
@@ -217,14 +221,19 @@ class Frame {
 
     blowHint() {
         this.killBlow()
-        this.blowAnime = gsap.timeline({ repeat: 4 })
-        this.blowAnime.to(this.hintContainer, {
-            scale: 1.2,
+        console.log('noienon')
+        this.blowAnime = gsap.timeline({ repeat: 6 })
+        this.blowAnime.to(this.hintLine, {
+            width: "100%",
+            duration: 0.3
+        })
+        this.blowAnime.to(this.hintLine, {
+            width: "20%",
             duration: 1
         })
-        this.blowAnime.to(this.hintContainer, {
-            scale: 1,
-            duration: 1
+        this.blowAnime.to(this.hintLine, {
+            width: "100%",
+            duration: 0.3
         })
     }
 
@@ -234,11 +243,17 @@ class Frame {
             hint = `CLICK &amp; HOLD`
         }
         else if (this.part === 1) {
-            hint = 'CLICK, HOLD THEN DRAG'
+            if(this.mobile){
+                hint = 'SCROLL'
+            }
+            else{
+                hint = 'CLICK, HOLD THEN DRAG'
+            }
         }
         else if (this.part === 2) {
             hint = 'SCROLL'
         }
+        // alert('arst')
         this.hintContainer.innerHTML = hint
         this.blowHint()
     }

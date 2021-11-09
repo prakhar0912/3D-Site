@@ -101,8 +101,6 @@ const preloader = new Preloader({
   }
 })
 
-console.log('arst')
-
 const showcase = new Showcase(slidesData, {
   updatePre: (part, total) => {
     preloader.update(part, total)
