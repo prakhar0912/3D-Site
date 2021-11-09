@@ -927,9 +927,9 @@ section:nth-of-type(3)>div>img {
 }
 
 .hint{
-  font-size: 0.5rem;
-  opacity: 1;
-  position: relative;
+  /* font-size: 0.5rem; */
+  /* opacity: 1; */
+  /* position: relative; */
   /* padding-bottom: 4px; */
 }
 
@@ -1036,7 +1036,7 @@ section:nth-of-type(3)>div>img {
     font-size: 3rem;
     width: max-content;
     max-width: 80vw;
-    text-align: center;
+    /* text-align: center; */
   }
   .slide-title>p:nth-of-type(2) {
     /* font-family: celinePeach; */
@@ -1135,7 +1135,7 @@ section:nth-of-type(3)>div>img {
     font-size: 3rem !important;
   }
   .frame__tip {
-    font-size: 0.8rem !important;
+    font-size: 1rem !important;
     /* bottom: 20px; */
     font-weight: normal !important;
   }
@@ -1172,11 +1172,11 @@ section:nth-of-type(3)>div>img {
     margin-bottom: 20px;
   }
   .text {
-    font-size: 2.4rem;
+    font-size: 3.4rem;
     margin: 5px 0;
   }
   .cTitle > h1{
-    font-size: 2.6rem;
+    /* font-size: 2.6rem; */
   }
   .proj {
     height: 130px;
@@ -1188,6 +1188,9 @@ section:nth-of-type(3)>div>img {
   .contact-container>section {
     max-width: 100%;
     margin: 170px auto;
+  }
+  .mail{
+    padding: 22px;
   }
   .cTitle {
     margin: 20px auto;
