@@ -349,14 +349,14 @@ a:focus {
   transform: translateX(-50%);
   color: white;
   font-size: 0.9rem;
-  font-weight: bold;
-  letter-spacing: 1px;
+  /* font-weight: bold; */
+  /* letter-spacing: 1px; */
 }
 
 .cursor-hint{
   width: max-content;
   position: absolute;
-  margin-top: 10px;
+  margin-top: 15px;
   left: 50%;
   text-align: center;
   transform: translateX(-50%);

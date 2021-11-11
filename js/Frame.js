@@ -247,7 +247,7 @@ class Frame {
                 hint = 'SCROLL'
             }
             else{
-                hint = 'CLICK, HOLD THEN DRAG'
+                hint = ''
             }
         }
         else if (this.part === 2) {

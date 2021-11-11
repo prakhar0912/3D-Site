@@ -106,13 +106,13 @@ const showcase = new Showcase(slidesData, {
     preloader.update(part, total)
   },
   killHint: () => {
-    if (showcase.part === 1) {
-      cursor.killHint()
-    }
+    // if (showcase.part === 1) {
+    //   cursor.killHint()
+    // }
     setTimeout(() => {
       frame.killBlow()
-      cursor.killHint()
-    }, 2000)
+      // cursor.killHint()
+    }, 1000)
   },
   cursorRender: () => {
     if (!mobileDevice) {

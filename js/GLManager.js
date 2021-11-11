@@ -493,6 +493,8 @@ GLManager.prototype.render = function () {
   this.renderer.render(this.scene, this.camera);
 };
 GLManager.prototype.mount = function (container) {
+  this.renderer.domElement.style.height = "100%"
+  this.renderer.domElement.style.width = "100%"
   container.appendChild(this.renderer.domElement);
 };
 GLManager.prototype.unmount = function () {
@@ -508,7 +510,10 @@ GLManager.prototype.unmount = function () {
   this.container = null;
 };
 GLManager.prototype.onResize = function () {
+  
   this.renderer.setSize(window.innerWidth, window.innerHeight);
+  this.renderer.domElement.style.height = "100%"
+  this.renderer.domElement.style.width = "100%"
   for (let i = 0; i < this.meshes.length; i++) {
     this.meshes[i].material.uniforms.u_resolution.value = new THREE.Vector2(window.innerWidth, window.innerHeight);
   }

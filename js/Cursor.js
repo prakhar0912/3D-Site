@@ -83,6 +83,7 @@ class Cursor {
 
     killHint() {
         if(this.touch) return
+        console.log('arsstast')
         if (this.blowAnime) {
             this.blowAnime.kill()
             gsap.to(this.hintContainer, {

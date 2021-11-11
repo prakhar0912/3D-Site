@@ -16,6 +16,7 @@
 @font-face{
   font-family: gothamB;
   src: url(../font/Gotham-Bold.otf);
+  src: url(../font/GothamBold.ttf) format('truetype');
 }
 
 /* width */
@@ -180,15 +181,26 @@ canvas {
   visibility: visible;
   cursor: pointer;
   position: relative;
-  font-family: gothamB, 'Times New Roman', Times, serif;
+  display: grid;
+  grid-template-columns: auto auto;
+  place-items: center;
   /* border-bottom: 1px solid rgb(180, 180, 180); */
 }
 
+.slide-more > p{
+  font-family: gotham, 'Times New Roman', Times, serif;
+  letter-spacing: 1px;
+  margin: 0;
+  padding: 0;
+}
+
 .slide-more>img {
-  position: absolute;
+  /* position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  left: 100%;
+  transform: translateY(-50%); */
   margin-left: 20px;
+  transform: translateY(-0.5px)
 }
 
 .slide-meta, .slide-more {
@@ -931,6 +943,8 @@ section:nth-of-type(3)>div>img {
   /* opacity: 1; */
   /* position: relative; */
   /* padding-bottom: 4px; */
+  z-index: 11;
+
 }
 
 .hint > p{

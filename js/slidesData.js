@@ -47,7 +47,7 @@ const slidesData = [
                 <p>AUTOMOBILE</p>
               </div>
             </div>
-            <a class="slide-more">COMING SOON<img src="${arrow}"></a>
+            <div class="slide-more"><p>COMING SOON</p><img src="${arrow}"></div>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <div class="close">
@@ -71,7 +71,7 @@ const slidesData = [
                 <p>APP DESIGN</p>
               </div>
             </div>
-            <a class="slide-more">COMING SOON<img src="${arrow}"></a>
+            <div class="slide-more"><p>COMING SOON</p><img src="${arrow}"></div>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <div class="close">
@@ -94,7 +94,7 @@ const slidesData = [
                 <p>PETS</p>
               </div>
             </div>
-            <a class="slide-more">COMING SOON<img src="${arrow}"></a>
+            <div class="slide-more"><p>COMING SOON</p><img src="${arrow}"></div>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <div class="close">
@@ -117,7 +117,7 @@ const slidesData = [
                 <p>FOOD</p>
               </div>
             </div>
-            <a class="slide-more">COMING SOON<img src="${arrow}"></a>
+            <div class="slide-more"><p>COMING SOON</p><img src="${arrow}"></div>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <div class="close">
@@ -140,7 +140,7 @@ const slidesData = [
                 <p>SKIN CARE</p>
               </div>
             </div>
-            <a class="slide-more">COMING SOON<img src="${arrow}"></a>
+            <div class="slide-more"><p>COMING SOON</p><img src="${arrow}"></div>
           </div>
           <div class="slide-desc slide-desc-iframe">
             <div class="close">
